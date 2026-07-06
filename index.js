@@ -718,6 +718,23 @@ function addHardWord() {
     }
 }
 
+// Lug'atga asoslangan oddiy "repetitor" javobi (haqiqiy AI emas, lekin foydali)
+function simpleTutorReply(question) {
+    const q = question.toLowerCase();
+    const found = words.find(w => q.includes(w.en.toLowerCase()) || q.includes(w.uz.toLowerCase()));
+    if (found) {
+        return `📖 "${found.en}" — "${found.uz}" degan ma'noni bildiradi.<br><i>Misol: ${found.example}</i>`;
+    }
+    if (/grammar|grammatika/.test(q)) {
+        return "🧠 Grammatika savoli bo'lsa, \"Grammar Checker\" bo'limidan foydalaning — u gapingizni tekshirib beradi.";
+    }
+    if (/salom|hello|hi\b/.test(q)) {
+        return "👋 Salom! Menga biror inglizcha so'z yoki gap haqida yozing — lug'atimizdan javob topib beraman.";
+    }
+    const tip = words[Math.floor(Math.random() * words.length)];
+    return `🤔 Bu savolga aniq javob topa olmadim (to'liq AI hali ulanmagan). Amaliyot uchun bugungi so'z: <b>${tip.en}</b> — ${tip.uz}.`;
+}
+
 // =========================================
 // SUN'IY INTELLEKT BO'LIMI (AI CHAT)
 // =========================================
@@ -737,8 +754,8 @@ if (askAI) {
         if (!questionText) { alert("Savol yozing"); return; }
         aiAnswer.innerHTML = "⏳ AI javob yozmoqda...";
         setTimeout(() => {
-            aiAnswer.innerHTML = "🤖 Sun'iy intellekt integratsiyasi faollashtirilmoqda. API kalitini sozlang.";
-        }, 1500);
+            aiAnswer.innerHTML = simpleTutorReply(questionText);
+        }, 800);
     };
 }
 
@@ -746,8 +763,11 @@ if (generateQuiz) {
     generateQuiz.onclick = () => {
         if (quizResult) quizResult.innerHTML = "⏳ AI test tayyorlamoqda...";
         setTimeout(() => {
-            if (quizResult) quizResult.innerHTML = "🧠 Test muvaffaqiyatli yaratildi (Hozircha demo rejimida).";
-        }, 1500);
+            const picks = [...words].sort(() => Math.random() - 0.5).slice(0, 5);
+            if (quizResult) {
+                quizResult.innerHTML = "🧠 Test tayyor:<br>" + picks.map((w, i) => `${i + 1}. ${w.en} = ?`).join("<br>");
+            }
+        }, 800);
     };
 }
 
@@ -769,10 +789,10 @@ if (sendMessageBtn) {
         setTimeout(() => {
             const aiReplyContainer = document.getElementById(aiLoadingId);
             if (aiReplyContainer) {
-                aiReplyContainer.innerHTML = "🤖 Men sizning shaxsiy o'qituvchingizman. Savolingiz qabul qilindi!";
+                aiReplyContainer.innerHTML = simpleTutorReply(text);
             }
             chatBox.scrollTop = chatBox.scrollHeight;
-        }, 1500);
+        }, 800);
     };
 }
 
@@ -1089,6 +1109,36 @@ if (scanImageBtn) {
 // ==========================
 // TRANSLATE
 // ==========================
+
+// Lug'atga asoslangan so'zma-so'z tarjimon (128 so'zlik bazamiz asosida)
+function dictionaryTranslate(text) {
+    const tokens = text.match(/[A-Za-zʼ'\u0400-\u04FF]+|[^\sA-Za-zʼ'\u0400-\u04FF]+/g) || [];
+    let unknownCount = 0;
+    const translated = tokens.map(tok => {
+        const clean = tok.trim();
+        if (!clean || !/[a-zA-Z\u0400-\u04FF]/.test(clean)) return tok;
+        const lower = clean.toLowerCase();
+        let match = words.find(w => w.en.toLowerCase() === lower);
+        if (match) return match.uz;
+        match = words.find(w => w.uz.toLowerCase() === lower);
+        if (match) return match.en;
+        unknownCount++;
+        return clean;
+    });
+    return { text: translated.join(""), unknownCount, totalWords: tokens.filter(t => /[a-zA-Z\u0400-\u04FF]/.test(t)).length };
+}
+
+function renderTranslation(text, outEl) {
+    if (!outEl) return;
+    if (!text.trim()) { outEl.innerHTML = "Matn kiriting"; return; }
+    const result = dictionaryTranslate(text);
+    let note = "";
+    if (result.unknownCount > 0) {
+        note = `<br><small>ℹ️ ${result.unknownCount}/${result.totalWords} so'z lug'atimizda yo'q (128 so'zlik bazaga asoslangan oddiy tarjima).</small>`;
+    }
+    outEl.innerHTML = `🌍 ${result.text}${note}`;
+}
+
 const translateBtnMain = document.getElementById("translateBtn");
 if (translateBtnMain) {
     translateBtnMain.onclick = async () => {
@@ -1096,7 +1146,7 @@ if (translateBtnMain) {
         const text = input ? input.value : "";
         if (!text) return;
         const out = document.getElementById("translateResult");
-        if (out) out.innerHTML = "Tarjima API ulanmagan.";
+        renderTranslation(text, out);
     };
 }
 
@@ -1201,12 +1251,66 @@ if (askTeacherBtn) {
         const q = teacherQuestion ? teacherQuestion.value.trim() : "";
         if (!q) { alert("Savol yozing"); return; }
         if (teacherAnswer) teacherAnswer.innerHTML = "🤖 AI javob tayyorlamoqda...";
+        setTimeout(() => {
+            if (teacherAnswer) teacherAnswer.innerHTML = simpleTutorReply(q);
+        }, 800);
     };
 }
 
 // ==========================
 // GRAMMAR
 // ==========================
+
+// Qoidalarga asoslangan grammatika tekshiruvchi (API'siz, mahalliy)
+function checkGrammarRules(text) {
+    const issues = [];
+    const trimmed = text.trim();
+
+    if (!trimmed) return ["Matn kiritilmadi."];
+
+    if (/^[a-z]/.test(trimmed)) {
+        issues.push("✏️ Gap bosh harf bilan boshlanishi kerak.");
+    }
+    if (!/[.!?]$/.test(trimmed)) {
+        issues.push("✏️ Gap oxirida tinish belgisi (. ! ?) yo'q.");
+    }
+    if (/  +/.test(trimmed)) {
+        issues.push("✏️ Ortiqcha bo'sh joy (ikki probel) topildi.");
+    }
+    if (/\b(\w+)\s+\1\b/i.test(trimmed)) {
+        issues.push("✏️ Bir xil so'z ketma-ket ikki marta yozilgan.");
+    }
+    if (/\bi\b/.test(trimmed) && !/\bI\b/.test(trimmed)) {
+        issues.push('✏️ "I" olmoshi doim katta harf bilan yoziladi.');
+    }
+    if (/\b(he|she|it)\s+are\b/i.test(trimmed)) {
+        issues.push('✏️ "He/She/It" bilan "are" emas, "is" ishlatiladi.');
+    }
+    if (/\b(you|we|they)\s+is\b/i.test(trimmed)) {
+        issues.push('✏️ "You/We/They" bilan "is" emas, "are" ishlatiladi.');
+    }
+    if (/\bi\s+is\b/i.test(trimmed)) {
+        issues.push('✏️ "I" bilan "is" emas, "am" ishlatiladi.');
+    }
+    if (/\byour\s+(are|is|going|coming|welcome)\b/i.test(trimmed)) {
+        issues.push('✏️ Balki "your" o\'rniga "you\'re" (you are) kerakdir?');
+    }
+    if (/\bthier\b/i.test(trimmed)) {
+        issues.push('✏️ "thier" — to\'g\'ri yozilishi "their".');
+    }
+    if (/\brecieve\b/i.test(trimmed)) {
+        issues.push('✏️ "recieve" — to\'g\'ri yozilishi "receive".');
+    }
+    if (/\bdont\b/i.test(trimmed) || /\bcant\b/i.test(trimmed) || /\bwont\b/i.test(trimmed)) {
+        issues.push("✏️ Qisqartmalarda apostrof unutilgan (don't / can't / won't).");
+    }
+
+    if (issues.length === 0) {
+        issues.push("✅ Aniq xato topilmadi — gap yaxshi ko'rinadi!");
+    }
+    return issues;
+}
+
 const checkGrammarBtn = document.getElementById("checkGrammar");
 if (checkGrammarBtn) {
     checkGrammarBtn.onclick = () => {
@@ -1214,7 +1318,7 @@ if (checkGrammarBtn) {
         const text = grammarInputEl ? grammarInputEl.value : "";
         if (!text) { alert("Gap yozing"); return; }
         const out = document.getElementById("grammarResult");
-        if (out) out.innerHTML = "Grammar API ulanmagan.";
+        if (out) out.innerHTML = checkGrammarRules(text).map(i => `<div>${i}</div>`).join("");
     };
 }
 
@@ -1266,7 +1370,14 @@ if (sendChatBtn) {
         if (!text || !chatMessages) return;
         chatMessages.innerHTML += `<div class="user">👤 ${text}</div>`;
         chatMessageInput.value = "";
-        chatMessages.innerHTML += `<div class="ai">🤖 AI javob yozmoqda...</div>`;
+        const loadingId = "chat2-loading-" + Date.now();
+        chatMessages.innerHTML += `<div class="ai" id="${loadingId}">🤖 AI javob yozmoqda...</div>`;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        setTimeout(() => {
+            const el = document.getElementById(loadingId);
+            if (el) el.innerHTML = "🤖 " + simpleTutorReply(text);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 800);
     };
 }
 
@@ -1280,7 +1391,7 @@ if (translateNowBtn) {
         const text = inputEl ? inputEl.value : "";
         if (!text) { alert("Matn yozing"); return; }
         const out = document.getElementById("liveTranslateResult");
-        if (out) out.innerHTML = "Tarjima API ulanmagan.";
+        renderTranslation(text, out);
     };
 }
 
@@ -1391,7 +1502,7 @@ if (translateAIBtn) {
         const text = inputEl ? inputEl.value : "";
         if (!text) { alert("Matn kiriting"); return; }
         const out = document.getElementById("translateOutput");
-        if (out) out.innerHTML = "🌍 AI Translation API ulanmagan.";
+        renderTranslation(text, out);
     };
 }
 
@@ -2522,7 +2633,7 @@ if (grammarCheckBtn) {
         const text = grammarTextEl ? grammarTextEl.value : "";
         if (!text) { alert("Write something"); return; }
         const out = document.getElementById("grammarAnswer");
-        if (out) out.innerHTML = "🤖 Grammar AI API required.";
+        if (out) out.innerHTML = checkGrammarRules(text).map(i => `<div>${i}</div>`).join("");
     };
 }
 
@@ -2796,7 +2907,7 @@ if (translateBtn2) {
         const text = inputEl ? inputEl.value : "";
         const out = document.getElementById("translateResult2");
         if (!text) { if (out) out.innerHTML = "Matn kiriting"; return; }
-        if (out) out.innerHTML = "🤖 AI Translation API Required";
+        renderTranslation(text, out);
     };
 }
 

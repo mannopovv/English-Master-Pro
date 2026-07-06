@@ -1907,3 +1907,104 @@ transform:scale(1.03);
     font-weight:bold;
     font-size:18px;
 }
+ 
+/* =========================================
+   IDEALLASHTIRISH: UMUMIY DIZAYN YAXSHILANISHI
+   ========================================= */
+
+/* Har bir sahifadagi bo'lim (h2 headerdan keyingi kontent) uchun izchil karta ko'rinishi */
+.page > div:not(.stats):not(.buttons),
+.page section {
+    scroll-margin-top: 20px;
+}
+
+button, input, textarea, select {
+    font-family: 'Poppins', sans-serif;
+}
+
+input[type="text"], input:not([type]), input[type="file"], textarea, select {
+    background: #1e293b;
+    color: #fff;
+    border: 2px solid #334155;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 15px;
+    transition: border-color .2s;
+}
+
+input[type="text"]:focus, input:not([type]):focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #38bdf8;
+}
+
+/* Har qanday oddiy natija/status divlariga izchil karta ko'rinishi */
+.page > div[id] {
+    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+}
+
+/* Nav mobil qurilmalarda gorizontal skroll bilan */
+@media (max-width: 768px) {
+    nav {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
+    }
+    nav::-webkit-scrollbar { height: 4px; }
+    nav::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 4px; }
+    nav button { flex: 0 0 auto; }
+}
+
+/* Barcha 2 va 7 ustunli gridlarni kichik ekranda 1-2 ustunga tushirish */
+@media (max-width: 640px) {
+    #academyMenu,
+    #worldMap,
+    #avatarPreview + select,
+    #gamesMenu {
+        grid-template-columns: repeat(1, 1fr) !important;
+    }
+    #calendar {
+        grid-template-columns: repeat(5, 1fr) !important;
+    }
+    .page {
+        padding: 16px !important;
+    }
+    .page h2 {
+        font-size: 24px !important;
+    }
+    header {
+        padding: 14px !important;
+    }
+    .logo {
+        font-size: 20px !important;
+    }
+    .stats {
+        grid-template-columns: 1fr 1fr !important;
+    }
+    #ultimatePage button,
+    #premiumPage button,
+    #onlinePage button,
+    #backupPage button,
+    #aiToolsPage button,
+    #aiToolsPage2 button,
+    #aiCoachPage button,
+    #learningPage button,
+    #pwaPage button {
+        font-size: 15px !important;
+        padding: 12px !important;
+    }
+}
+
+/* Yuklanish ekrani animatsiyasi allaqachon bor, unga qo'shimcha silliq chiqish effekti */
+#loadingScreen {
+    transition: opacity .4s ease;
+}
+
+/* Barcha sahifalar orasidagi almashinuv animatsiyasi allaqachon .page.active orqali ishlaydi (fade) */
+
+/* Scrollbar umumiy ko'rinishi (desktop) */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
