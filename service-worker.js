@@ -1,5 +1,4 @@
-const CACHE_NAME = "english-master-v1";
-
+const CACHE_NAME = "english-master-v2"; // Versiya yangilandi
 
 const ASSETS = [
   "./",
@@ -10,7 +9,7 @@ const ASSETS = [
   "./icon-192.png"
 ]; 
 
-
+// --- Install Event ---
 self.addEventListener("install", (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME)
@@ -22,7 +21,7 @@ self.addEventListener("install", (e) => {
   );
 });
 
-
+// --- Activate Event ---
 self.addEventListener("activate", (e) => {
   e.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -38,17 +37,17 @@ self.addEventListener("activate", (e) => {
   );
 });
 
-
+// --- Fetch Event (Tuzatilgan qism) ---
 self.addEventListener("fetch", (e) => {
-  
+  // Faqat HTTP/HTTPS so'rovlarni keshga tekshiramiz (chrome-extension va h.k. xatolik bermasligi uchun)
   if (!e.request.url.startsWith("http")) return;
 
   e.respondWith(
     caches.match(e.request).then((cachedResponse) => {
       
+      // Orqafonda tarmoqdan yangi faylni yuklab olish so'rovi
       const fetchPromise = fetch(e.request)
         .then((networkResponse) => {
-          
           if (networkResponse && networkResponse.status === 200) {
             const cacheCopy = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
@@ -58,11 +57,12 @@ self.addEventListener("fetch", (e) => {
           return networkResponse;
         })
         .catch(() => {
-          console.log("📴 Tarmoq xatosi (Foydalanuvchi offlayn bo'lishi mumkin)");
+          console.log("📴 Tarmoq xatosi (Foydalanuvchi offlayn yoki server o'chiq)");
         });
 
-      
-      return cachedResponse || fetchPromise;
+      // MUHIM TUZATISH: Agar keshda eski fayl bo'lsa ham, agar internet bo'lsa 
+      // yangi faylni (fetchPromise) ustun qo'yamiz. Internet yo'q bo'lsagina keshdagini beradi.
+      return fetchPromise || cachedResponse;
     })
   );
 });

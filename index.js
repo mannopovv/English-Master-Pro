@@ -2,6 +2,54 @@
 // ENGLISH MASTER PRO - GLOBAL JAVASCRIPT (TUZATILGAN)
 // =========================================
 
+// -------- Burger Menyu (mobil / planshet) --------
+const burgerBtn = document.getElementById("burgerBtn");
+const mainNav = document.getElementById("mainNav");
+const navOverlay = document.getElementById("navOverlay");
+
+function openNav() {
+    mainNav.classList.add("open");
+    navOverlay.classList.add("active");
+    burgerBtn.classList.add("active");
+    burgerBtn.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+}
+
+function closeNav() {
+    mainNav.classList.remove("open");
+    navOverlay.classList.remove("active");
+    burgerBtn.classList.remove("active");
+    burgerBtn.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+}
+
+if (burgerBtn && mainNav && navOverlay) {
+    burgerBtn.addEventListener("click", () => {
+        mainNav.classList.contains("open") ? closeNav() : openNav();
+    });
+
+    navOverlay.addEventListener("click", closeNav);
+
+    // Nav ichidagi istalgan tugma bosilganda menyu yopilsin (mobil/planshetda)
+    mainNav.addEventListener("click", (e) => {
+        if (e.target.tagName === "BUTTON") {
+            closeNav();
+        }
+    });
+
+    // Ekran kengaytirilsa (desktopga o'tilsa) menyu avtomatik yopilsin
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 1024) {
+            closeNav();
+        }
+    });
+
+    // Escape tugmasi bilan yopish
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeNav();
+    });
+}
+
 // -------- Sahifalar va Navigatsiya --------
 const pages = document.querySelectorAll(".page");
 
@@ -36,9 +84,33 @@ Object.keys(menuButtons).forEach(btnId => {
                 loadQuiz();
                 startTimer();
             }
+            syncBottomNav(menuButtons[btnId]);
         };
     }
 });
+
+// -------- Pastki navigatsiya (mobil) --------
+const bottomNavButtons = document.querySelectorAll("#bottomNav button[data-target]");
+
+function syncBottomNav(pageId) {
+    bottomNavButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.target === pageId);
+    });
+}
+
+bottomNavButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const target = btn.dataset.target;
+        openPage(target);
+        if (target === "quizPage") {
+            loadQuiz();
+            startTimer();
+        }
+        syncBottomNav(target);
+    });
+});
+
+syncBottomNav("homePage");
 
 // -------- Ma'lumotlar bazasi (So'zlar) --------
 const words = [
@@ -2460,8 +2532,11 @@ if (playClickSoundBtn) {
 const loadingScreenEl = document.getElementById("loadingScreen");
 window.addEventListener("load", () => {
     setTimeout(() => {
-        if (loadingScreenEl) loadingScreenEl.style.display = "none";
-    }, 2000);
+        if (loadingScreenEl) {
+            loadingScreenEl.classList.add("fade-out");
+            setTimeout(() => { loadingScreenEl.style.display = "none"; }, 500);
+        }
+    }, 1200);
 });
 
 const languageSelectEl = document.getElementById("languageSelect");

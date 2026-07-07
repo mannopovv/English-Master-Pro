@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="uz">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,21 +13,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     
-    
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
- 
+
 <body>
- 
+
+    <div id="loadingScreen">
+        <div class="loader"></div>
+        <p>Loading English Master...</p>
+    </div>
+
     <header>
         <div class="logo">
             <i class="fa-solid fa-graduation-cap"></i>
             English Master Pro
         </div>
-        <nav>
+
+        <button id="burgerBtn" class="burger-btn" aria-label="Menyuni ochish" aria-expanded="false" aria-controls="mainNav">
+            <span></span><span></span><span></span>
+        </button>
+
+        <nav id="mainNav">
             <button id="homeBtn">🏠 Bosh sahifa</button>
             <button id="flashBtn">📚 Kartochka</button>
             <button id="quizBtn">📝 Test</button>
@@ -37,16 +46,15 @@
             <button id="settingsBtn">⚙️ Sozlamalar</button>
         </nav>
     </header>
- 
+    <div id="navOverlay" class="nav-overlay"></div>
+
     <main>
-       
         <section id="homePage" class="page active">
             <h1>English Master Pro</h1>
             <p>Ingliz tilini zamonaviy usulda o'rganing.</p>
             <button id="startBtn">Boshlash</button>
         </section>
- 
-        
+
         <section id="flashPage" class="page">
             <div class="card">
                 <h2 id="englishWord">Hello</h2>
@@ -59,14 +67,12 @@
                 </div>
             </div>
         </section>
- 
-        
+
         <section id="quizPage" class="page">
             <h2 id="question">Question</h2>
             <div id="answers"></div>
         </section>
- 
-       
+
         <section id="aiPage" class="page">
             <h2>🤖 AI Teacher</h2>
             <textarea id="aiQuestion" placeholder="Savolingizni yozing..."></textarea>
@@ -77,8 +83,7 @@
             <button id="generateQuiz">Test yaratish</button>
             <div id="quizResult"></div>
         </section>
- 
-        <!-- AI ASSISTANT (OCR & VOICE) -->
+
         <section id="assistantPage" class="page">
             <h2>🤖 AI Assistant</h2>
             <div id="chatBox"></div>
@@ -94,8 +99,7 @@
             <h2>🎤 Voice Assistant</h2>
             <button id="voiceAssistant">Boshlash</button>
         </section>
- 
-        
+
         <section id="statsPage" class="page">
             <h2>Statistika</h2>
             <div class="stats">
@@ -105,18 +109,705 @@
                 <div>Streak <h1 id="streak">0🔥</h1></div>
             </div>
         </section>
- 
-        
+
         <section id="settingsPage" class="page">
             <h2>Sozlamalar</h2>
             <button id="darkMode">🌙 Dark Mode</button>
             <button id="syncBtn">☁️ Cloud Sync</button>
             <button id="installApp">📱 Ilovani o'rnatish</button>
             <button id="resetData">🗑 Progressni tozalash</button>
+            <hr>
+            <h2>🎵 Background Music</h2>
+            <audio id="bgMusic" loop>
+                <source src="assets/audio/background.mp3" type="audio/mpeg">
+            </audio>
+            <button id="playMusic">▶️ Play</button>
+            <button id="pauseMusic">⏸️ Pause</button>
+            <hr>
+            <h2>🔊 Sound Effects</h2>
+            <button id="playClickSound">Click Sound</button>
+            <audio id="clickSound">
+                <source src="assets/audio/click.mp3" type="audio/mpeg">
+            </audio>
+            <hr>
+            <h2>🌍 Language</h2>
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="uz">O'zbek</option>
+                <option value="ru">Русский</option>
+                <option value="tr">Türkçe</option>
+                <option value="ar">العربية</option>
+            </select>
+            <hr>
+            <h2>⚙️ Qo'shimcha Sozlamalar</h2>
+            <label>
+                <input type="checkbox" id="notificationToggle"> Push Notification
+            </label>
+            <br><br>
+            <label>
+                <input type="checkbox" id="animationToggle" checked> Animations
+            </label>
+        </section>
+
+        <section id="coursePage" class="page">
+            <h2>📚 English Course</h2>
+            <div id="courseList"></div>
+            <hr>
+            <h2>🎧 Listening Test</h2>
+            <audio id="lessonAudio" controls>
+                <source src="audio/lesson1.mp3" type="audio/mpeg">
+            </audio>
+            <input type="text" id="listeningAnswer" placeholder="Eshitgan gapingizni yozing">
+            <button id="checkListening">Tekshirish</button>
+            <hr>
+            <h2>📖 Dictionary</h2>
+            <input id="dictionarySearch" placeholder="Word...">
+            <div id="dictionaryResult"></div>
+        </section>
+
+        <section id="aiToolsPage" class="page">
+            <h2>📷 OCR Translator</h2>
+            <input type="file" id="ocrImage" accept="image/*">
+            <button id="scanImage">Scan Image</button>
+            <div id="ocrText"></div>
+            <hr>
+            <h2>🌍 Translate</h2>
+            <textarea id="translateInput" placeholder="Matn yozing"></textarea>
+            <button id="translateBtn">Translate</button>
+            <div id="translateResult"></div>
+            <hr>
+            <h2>📄 PDF Reader</h2>
+            <input type="file" id="pdfFile" accept=".pdf">
+            <div id="pdfStatus"></div>
+            <hr>
+            <h2>🎙️ Speech To Text</h2>
+            <button id="speechBtn">Start Recording</button>
+            <div id="speechResult2"></div>
+            <hr>
+            <h2>🔊 Text To Speech</h2>
+            <textarea id="ttsText" placeholder="Write text..."></textarea>
+            <button id="ttsBtn">Speak</button>
+            <hr>
+            <h2>📷 OCR Scanner Pro</h2>
+            <input type="file" id="ocrImage2" accept="image/*">
+            <button id="scanImage2">Scan Image</button>
+            <div id="ocrResult2"></div>
+            <hr>
+            <h2>📚 Smart Dictionary</h2>
+            <input id="dictionaryWord" placeholder="Word">
+            <button id="searchWord">Search</button>
+            <div id="dictionaryResult2"></div>
+            <hr>
+            <h2>📝 AI Vocabulary Builder</h2>
+            <button id="generateWords2">Generate Words</button>
+            <div id="wordList"></div>
+        </section>
+
+        <section id="speakingPage" class="page">
+            <h2>🎤 AI Speaking Test</h2>
+            <button id="startSpeaking">Start Speaking</button>
+            <div id="speechResult"></div>
+            <hr>
+            <h2>📝 Essay Checker</h2>
+            <textarea id="essayInput" placeholder="Write your essay here..."></textarea>
+            <button id="checkEssay">Check Essay</button>
+            <div id="essayResult"></div>
+            <hr>
+            <h2>📖 Reading Test</h2>
+            <p id="readingText">Learning English every day improves your communication skills.</p>
+            <input id="readingAnswer" placeholder="What improves your communication skills?">
+            <button id="checkReading">Check</button>
+            <div id="readingResult"></div>
+        </section>
+
+        <section id="aiTeacherPage" class="page">
+            <h2>🤖 AI Teacher Pro</h2>
+            <textarea id="teacherQuestion" placeholder="Savolingizni yozing..."></textarea>
+            <button id="askTeacher">AI Teacher</button>
+            <div id="teacherAnswer"></div>
+            <hr>
+            <h2>📚 Grammar Checker</h2>
+            <textarea id="grammarInput" placeholder="Write a sentence..."></textarea>
+            <button id="checkGrammar">Check Grammar</button>
+            <div id="grammarResult"></div>
+            <hr>
+            <h2>🎯 Study Plan</h2>
+            <button id="createPlan">Generate Study Plan</button>
+            <div id="studyPlan"></div>
+            <hr>
+            <h2>📖 Vocabulary Generator</h2>
+            <button id="generateWords">Generate 10 Words</button>
+            <div id="generatedWords"></div>
+        </section>
+
+        <section id="aiChatPage" class="page">
+            <h2>💬 AI Chat</h2>
+            <div id="chatMessages"></div>
+            <input type="text" id="chatMessage" placeholder="Savolingizni yozing...">
+            <button id="sendChat">Yuborish</button>
+            <hr>
+            <h2>🌍 Live Translator</h2>
+            <textarea id="liveTranslateInput" placeholder="Matn kiriting..."></textarea>
+            <button id="translateNow">Tarjima qilish</button>
+            <div id="liveTranslateResult"></div>
+            <hr>
+            <h2>🧠 AI Quiz Creator</h2>
+            <select id="quizLevel">
+                <option>A1</option>
+                <option>A2</option>
+                <option>B1</option>
+                <option>B2</option>
+                <option>C1</option>
+                <option>C2</option>
+            </select>
+            <button id="createQuiz">Quiz yaratish</button>
+            <div id="quizOutput"></div>
+        </section>
+
+        <section id="multiplayerPage" class="page">
+            <h2>🎮 Multiplayer</h2>
+            <input id="roomCode" placeholder="Room Code">
+            <button id="createRoom">Create Room</button>
+            <button id="joinRoom">Join Room</button>
+            <div id="roomStatus"></div>
+            <hr>
+            <h2>💬 Friend Chat</h2>
+            <div id="friendMessages"></div>
+            <input id="friendInput" placeholder="Message">
+            <button id="sendFriend">Send</button>
+            <hr>
+            <h2>🏆 Tournament</h2>
+            <button id="startTournament">Start Tournament</button>
+            <div id="tournamentStatus"></div>
+            <hr>
+            <h2>🌍 World Ranking</h2>
+            <div id="worldRanking"></div>
+        </section>
+
+        <section id="cameraToolsPage" class="page">
+            <h2>📷 Camera OCR Pro</h2>
+            <input type="file" id="ocrFile" accept="image/*">
+            <button id="scanOCR">Scan OCR</button>
+            <div id="ocrOutput"></div>
+            <hr>
+            <h2>🌍 AI Live Translate</h2>
+            <textarea id="translateText" placeholder="Matn kiriting..."></textarea>
+            <button id="translateAI">Translate</button>
+            <div id="translateOutput"></div>
+            <hr>
+            <h2>🔍 QR Scanner</h2>
+            <input type="file" id="qrFile" accept="image/*">
+            <button id="scanQR">Scan QR</button>
+            <div id="qrResult"></div>
+            <hr>
+            <h2>📄 PDF Translator</h2>
+            <input type="file" id="pdfTranslate" accept=".pdf">
+            <button id="translatePDF">Translate PDF</button>
+            <div id="pdfTranslateResult"></div>
+        </section>
+
+        <section id="smartAiPage" class="page">
+            <h2>🎥 Live Camera Translate</h2>
+            <video id="cameraView" autoplay playsinline></video>
+            <button id="startCamera">Start Camera</button>
+            <button id="captureFrame">Translate Frame</button>
+            <div id="cameraResult"></div>
+            <hr>
+            <h2>🧠 AI Image Recognition</h2>
+            <input type="file" id="imageRecognition" accept="image/*">
+            <button id="detectObject">Detect Objects</button>
+            <div id="objectResult"></div>
+            <hr>
+            <h2>🗣️ Voice Translator</h2>
+            <button id="startVoiceTranslate">Start Voice Translate</button>
+            <div id="voiceResult"></div>
+            <hr>
+            <h2>🎙️ Pronunciation Coach</h2>
+            <button id="startPronunciation">Check Pronunciation</button>
+            <div id="pronunciationScore"></div>
+        </section>
+
+        <section id="academyPage" class="page">
+            <h2>🎓 English Academy</h2>
+            <div id="academyMenu">
+                <button id="ieltsBtn">IELTS</button>
+                <button id="grammarBtn">Grammar</button>
+                <button id="listeningBtn">Listening</button>
+                <button id="writingBtn">Writing</button>
+                <button id="certificateBtn">Certificate</button>
+            </div>
+            <hr>
+            <div id="academyContent"></div>
+            <hr>
+            <h2>📺 Video Lesson</h2>
+            <iframe id="lessonVideo" width="100%" height="350" allowfullscreen></iframe>
+        </section>
+
+        <section id="achievementPage" class="page">
+            <h2>🏆 Achievements</h2>
+            <div id="achievementList"></div>
+            <hr>
+            <h2>🎖️ Badges</h2>
+            <div id="badgeList"></div>
+            <hr>
+            <h2>📅 Learning Calendar</h2>
+            <div id="calendar"></div>
+            <hr>
+            <h2>📈 Progress</h2>
+            <canvas id="progressChart"></canvas>
+            <hr>
+            <h2>🎁 Daily Reward</h2>
+            <button id="dailyReward">Claim Reward</button>
+            <div id="rewardStatus"></div>
+        </section>
+
+        <section id="socialPage" class="page">
+            <h2>👥 Friend Profile</h2>
+            <div id="friendProfile"></div>
+            <button id="addFriendBtn">➕ Add Friend</button>
+            <hr>
+            <h2>💬 Global Chat</h2>
+            <div id="globalChat"></div>
+            <input id="globalMessage" placeholder="Message...">
+            <button id="sendGlobal">Send</button>
+            <hr>
+            <h2>🎮 Quiz Battle</h2>
+            <button id="findOpponent">Find Opponent</button>
+            <div id="battleStatus"></div>
+            <hr>
+            <h2>🏆 Season Pass</h2>
+            <div id="seasonPass"></div>
+            <hr>
+            <h2>🎁 Weekly Reward</h2>
+            <button id="claimWeekly">Claim Weekly Reward</button>
+            <div id="weeklyRewardStatus"></div>
+        </section>
+
+        <section id="guildPage" class="page">
+            <h2>👨‍👩‍👧 Guild System</h2>
+            <input id="guildName" placeholder="Guild Name">
+            <button id="createGuild">Create Guild</button>
+            <button id="joinGuild">Join Guild</button>
+            <div id="guildStatus"></div>
+            <hr>
+            <h2>💬 Guild Chat</h2>
+            <div id="guildMessages"></div>
+            <input id="guildMessage" placeholder="Message">
+            <button id="sendGuild">Send</button>
+            <hr>
+            <h2>🎯 Guild Missions</h2>
+            <div id="guildMission"></div>
+            <button id="completeGuildMission">Complete Mission</button>
+            <hr>
+            <h2>🏆 Guild Ranking</h2>
+            <div id="guildRanking"></div>
+        </section>
+
+        <section id="battlePage" class="page">
+            <h2>⚔️ 1v1 Quiz Battle</h2>
+            <button id="startBattle">Start Battle</button>
+            <div id="battleInfo"></div>
+            <hr>
+            <h2>❤️ Health</h2>
+            <div class="hpBar">
+                <div id="myHP"></div>
+            </div>
+            <div class="hpBar">
+                <div id="enemyHP"></div>
+            </div>
+            <hr>
+            <h2>🛡️ Skills</h2>
+            <button id="healSkill">❤️ Heal</button>
+            <button id="doubleXP">⚡ Double Attack</button>
+            <button id="shieldSkill">🛡️ Shield</button>
+            <hr>
+            <h2>📊 Battle History</h2>
+            <div id="battleHistory"></div>
+        </section>
+
+        <section id="bossPage" class="page">
+            <h2>🐉 Boss Battle</h2>
+            <div id="bossInfo">
+                <h3>🐲 Dragon King</h3>
+                <div class="bossBar">
+                    <div id="bossHP"></div>
+                </div>
+            </div>
+            <button id="attackBoss">⚔️ Attack</button>
+            <button id="magicAttack">✨ Magic</button>
+            <button id="healPotion">🧪 Heal Potion</button>
+            <hr>
+            <h2>🎒 Inventory</h2>
+            <div id="inventory"></div>
+            <hr>
+            <h2>⚔️ Weapons</h2>
+            <div id="weapons"></div>
+            <hr>
+            <h2>🛡️ Armor</h2>
+            <div id="armors"></div>
+            <hr>
+            <h2>💎 Rare Items</h2>
+            <div id="rareItems"></div>
+        </section>
+
+        <section id="worldPage" class="page">
+            <h2>🌍 Open World</h2>
+            <div id="worldMap">
+                <button class="map-btn" id="villageBtn">🏘️ Village</button>
+                <button class="map-btn" id="forestBtn">🌲 Forest</button>
+                <button class="map-btn" id="castleBtn">🏰 Castle</button>
+                <button class="map-btn" id="dungeonBtn">🕳️ Dungeon</button>
+                <button class="map-btn" id="portalBtn">🌀 Portal</button>
+            </div>
+            <hr>
+            <h2>🧙 NPC Teacher</h2>
+            <div id="npcDialog">Welcome adventurer!</div>
+            <button id="talkNpc">Talk</button>
+            <hr>
+            <h2>📦 Treasure Chest</h2>
+            <button id="openChest">Open Chest</button>
+            <div id="chestReward"></div>
+            <hr>
+            <h2>🎯 Side Quest</h2>
+            <div id="sideQuest"></div>
+            <button id="finishQuest">Complete Quest</button>
+        </section>
+
+        <section id="kingdomPage" class="page">
+            <h2>🏰 Kingdom</h2>
+            <div id="kingdomInfo"></div>
+            <button id="upgradeCastle">Upgrade Castle</button>
+            <hr>
+            <h2>🏡 House</h2>
+            <div id="houseInfo"></div>
+            <button id="upgradeHouse">Upgrade House</button>
+            <hr>
+            <h2>🐉 Pet System</h2>
+            <div id="petInfo"></div>
+            <button id="feedPet">Feed Pet</button>
+            <button id="trainPet">Train Pet</button>
+            <hr>
+            <h2>🥚 Egg Hatch</h2>
+            <button id="hatchEgg">Hatch Egg</button>
+            <div id="eggResult"></div>
+            <hr>
+            <h2>🐴 Mount</h2>
+            <div id="mountInfo"></div>
+            <button id="rideMount">Ride</button>
+            <hr>
+            <h2>🌾 Farm</h2>
+            <button id="collectFarm">Collect Coins</button>
+            <div id="farmCoins"></div>
+            <hr>
+            <h2>🛒 Market</h2>
+            <div id="market"></div>
+        </section>
+
+        <section id="eventPage" class="page">
+            <h2>🎡 Lucky Wheel</h2>
+            <button id="spinWheel">🎡 Spin</button>
+            <div id="wheelResult"></div>
+            <hr>
+            <h2>🎰 Slot Machine</h2>
+            <div id="slotDisplay">🍒 🍒 🍒</div>
+            <button id="playSlot">Play</button>
+            <div id="slotResult"></div>
+            <hr>
+            <h2>🎁 Mystery Box</h2>
+            <button id="openMystery">Open Box</button>
+            <div id="mysteryReward"></div>
+            <hr>
+            <h2>💎 Diamonds</h2>
+            <div id="diamondCount">💎 0</div>
+            <hr>
+            <h2>🎟️ Battle Pass</h2>
+            <div id="battlePassStatus">Free Pass</div>
+            <button id="buyPass">Buy VIP Pass</button>
+            <hr>
+            <h2>🎊 Daily Event</h2>
+            <div id="dailyEvent"></div>
+            <hr>
+            <h2>👑 VIP Membership</h2>
+            <div id="vipStatus">Standard User</div>
+        </section>
+
+        <section id="marketPage" class="page">
+            <h2>🌍 Global Market</h2>
+            <div id="marketList"></div>
+            <hr>
+            <h2>💱 Player Trading</h2>
+            <input id="tradePlayer" placeholder="Player Name">
+            <select id="tradeItem">
+                <option>🧪 Potion</option>
+                <option>⚔️ Sword</option>
+                <option>🛡️ Shield</option>
+                <option>💎 Diamond</option>
+            </select>
+            <button id="sendTrade">Send Trade</button>
+            <div id="tradeStatus"></div>
+            <hr>
+            <h2>📧 Mail</h2>
+            <div id="mailBox"></div>
+            <button id="claimMail">Claim Rewards</button>
+            <hr>
+            <h2>🏦 Bank</h2>
+            <div id="bankCoins">Coins: 0</div>
+            <button id="depositCoins">Deposit 500</button>
+            <button id="withdrawCoins">Withdraw 500</button>
+            <hr>
+            <h2>💰 Auction House</h2>
+            <div id="auctionList"></div>
+            <button id="bidAuction">Bid</button>
+        </section>
+
+        <section id="avatarPage" class="page">
+            <h2>🎨 Avatar Creator</h2>
+            <div id="avatarPreview">😀</div>
+            <select id="avatarSelect">
+                <option>😀 Smile</option>
+                <option>😎 Cool</option>
+                <option>🤖 Robot</option>
+                <option>🦸 Hero</option>
+                <option>🧙 Wizard</option>
+            </select>
+            <button id="saveAvatar">Save Avatar</button>
+            <hr>
+            <h2>👕 Character Skins</h2>
+            <div id="skins"></div>
+            <hr>
+            <h2>🌈 Themes</h2>
+            <button id="darkTheme">Dark</button>
+            <button id="lightTheme">Light</button>
+            <button id="neonTheme">Neon</button>
+            <hr>
+            <h2>✨ Profile Effects</h2>
+            <div id="effects"></div>
+            <hr>
+            <h2>🏅 Animated Badges</h2>
+            <div id="animatedBadges"></div>
+            <hr>
+            <h2>🖼️ Backgrounds</h2>
+            <div id="backgrounds"></div>
+        </section>
+
+        <section id="adminPage" class="page">
+            <h2>👨‍💼 Admin Panel</h2>
+            <div id="adminStats"></div>
+            <hr>
+            <h2>👥 Users</h2>
+            <div id="userList"></div>
+            <button id="refreshUsers">Refresh Users</button>
+            <hr>
+            <h2>📢 Announcement</h2>
+            <textarea id="announcementText" placeholder="Write announcement..."></textarea>
+            <button id="sendAnnouncement">Send</button>
+            <div id="announcementStatus"></div>
+            <hr>
+            <h2>🚫 User Control</h2>
+            <input id="banUser" placeholder="Username">
+            <button id="banBtn">Ban</button>
+            <button id="unbanBtn">Unban</button>
+            <div id="banStatus"></div>
+            <hr>
+            <h2>📝 Feedback</h2>
+            <div id="feedbackList"></div>
+        </section>
+
+        <section id="pwaPage" class="page">
+            <h2>🔔 Push Notification</h2>
+            <button id="enableNotification">Enable Notifications</button>
+            <div id="notificationStatus"></div>
+            <hr>
+            <h2>📱 Install App</h2>
+            <button id="installAppPWA">Install PWA</button>
+            <div id="installStatus"></div>
+            <hr>
+            <h2>☁️ Cloud Sync</h2>
+            <button id="syncCloud">Sync Now</button>
+            <div id="syncStatus"></div>
+            <hr>
+            <h2>📦 Cache Manager</h2>
+            <button id="clearCache">Clear Cache</button>
+            <div id="cacheStatus"></div>
+            <hr>
+            <h2>🌐 Offline Mode</h2>
+            <div id="offlineStatus">Checking...</div>
+        </section>
+
+        <section id="aiCoachPage" class="page">
+            <h2>🤖 AI Voice Teacher</h2>
+            <button id="startVoiceTeacher">🎤 Start Speaking</button>
+            <div id="voiceTeacherResult"></div>
+            <hr>
+            <h2>🧠 AI Grammar Corrector</h2>
+            <textarea id="grammarText" placeholder="Write English here..."></textarea>
+            <button id="grammarCheck">Check Grammar</button>
+            <div id="grammarAnswer"></div>
+            <hr>
+            <h2>✍️ AI Essay Score</h2>
+            <textarea id="essayText" placeholder="Write your essay..."></textarea>
+            <button id="essayScore">Check Essay</button>
+            <div id="essayResult2"></div>
+            <hr>
+            <h2>📖 Reading Coach</h2>
+            <p id="readingLesson">English is one of the most spoken languages in the world.</p>
+            <button id="readingTest">Start Reading Test</button>
+            <div id="readingScore"></div>
+            <hr>
+            <h2>🎯 Personal AI Plan</h2>
+            <button id="generatePlanAI">Generate Plan</button>
+            <div id="studyPlanAI"></div>
+        </section>
+
+        <section id="miniGamesPage" class="page">
+            <h2>🧩 Mini Games Center</h2>
+            <div id="gamesMenu">
+                <button id="memoryGameBtn">🧠 Memory Match</button>
+                <button id="typingGameBtn">⌨️ Typing Test</button>
+                <button id="wordPuzzleBtn">🔤 Word Puzzle</button>
+                <button id="hangmanBtn">🔠 Hangman</button>
+            </div>
+            <hr>
+            <div id="gameContainer"></div>
+            <hr>
+            <h2>🎯 Daily Challenge</h2>
+            <div id="dailyChallenge">Complete 10 Quiz Questions</div>
+            <button id="completeChallenge">Complete</button>
+            <hr>
+            <h2>🏆 Weekly Championship</h2>
+            <div id="weeklyRank"></div>
+        </section>
+
+        <section id="backupPage" class="page">
+            <h2>💾 Backup & Restore</h2>
+            <button id="backupBtn">💾 Backup</button>
+            <button id="restoreBtn">♻️ Restore</button>
+            <div id="backupStatus"></div>
+            <hr>
+            <h2>☁️ Google Drive Sync</h2>
+            <button id="googleSync">Sync Google Drive</button>
+            <div id="googleStatus"></div>
+            <hr>
+            <h2>📤 Export Progress</h2>
+            <button id="exportData">Export JSON</button>
+            <hr>
+            <h2>📥 Import Progress</h2>
+            <input type="file" id="importFile" accept=".json">
+            <button id="importData">Import</button>
+            <div id="importStatus"></div>
+            <hr>
+            <h2>📊 Statistics</h2>
+            <div id="statistics"></div>
+            <hr>
+            <h2>🏅 Graduation</h2>
+            <button id="graduate">Graduate</button>
+            <div id="graduateStatus"></div>
+        </section>
+
+        <section id="onlinePage" class="page">
+            <h2>🌍 Online Multiplayer</h2>
+            <div id="serverStatus">🔴 Offline</div>
+            <button id="connectServer">Connect Server</button>
+            <hr>
+            <h2>🤖 AI Matchmaking</h2>
+            <button id="findMatch">Find Match</button>
+            <div id="matchStatus"></div>
+            <hr>
+            <h2>⚡ Real-Time PvP</h2>
+            <button id="startPvP">Start PvP</button>
+            <div id="pvpStatus"></div>
+            <hr>
+            <h2>🏆 Global Leaderboard</h2>
+            <div id="leaderboard"></div>
+            <hr>
+            <h2>🎮 Esports Mode</h2>
+            <button id="joinTournament">Join Tournament</button>
+            <div id="tournamentStatus2"></div>
+            <hr>
+            <h2>🌐 Cross Platform Login</h2>
+            <button id="googleLogin">Google</button>
+            <button id="guestLogin">Guest</button>
+            <div id="loginStatus"></div>
+        </section>
+
+        <section id="learningPage" class="page">
+            <h2>🎥 AI Video Lesson</h2>
+            <video id="lessonVideo2" controls width="100%">
+                <source src="assets/video/lesson1.mp4" type="video/mp4">
+            </video>
+            <button id="nextLesson">Next Lesson</button>
+            <hr>
+            <h2>🧪 Pronunciation Analyzer</h2>
+            <button id="startPronunciation2">Start Speaking</button>
+            <div id="pronunciationScore2">Score: --</div>
+            <hr>
+            <h2>🎯 IELTS / CEFR Mock Test</h2>
+            <button id="startMock">Start Test</button>
+            <div id="mockStatus"></div>
+            <hr>
+            <h2>📜 PDF Lesson</h2>
+            <input type="file" id="pdfFile2" accept=".pdf">
+            <button id="openPDF">Open PDF</button>
+            <div id="pdfStatus2"></div>
+            <hr>
+            <h2>📥 Offline Lessons</h2>
+            <button id="downloadLesson">Download Lesson</button>
+            <div id="downloadStatus"></div>
+            <hr>
+            <h2>🏆 Learning Analytics</h2>
+            <div id="analyticsBox"></div>
+            <hr>
+            <h2>🤖 Personal AI Mentor</h2>
+            <button id="askMentor">Get Advice</button>
+            <div id="mentorAnswer"></div>
+        </section>
+
+        <section id="premiumPage" class="page">
+            <h2>🌍 3D Globe Learning</h2>
+            <div id="globeViewer">🌎 Interactive Globe</div>
+            <button id="openGlobe">Open Globe</button>
+            <hr>
+            <h2>🥽 AR Learning</h2>
+            <button id="startAR">Start AR</button>
+            <div id="arStatus"></div>
+            <hr>
+            <h2>🥽 VR Classroom</h2>
+            <button id="startVR">Enter VR</button>
+            <div id="vrStatus"></div>
+            <hr>
+            <h2>🤝 Live Classroom</h2>
+            <button id="joinClass">Join Class</button>
+            <div id="classStatus"></div>
+            <hr>
+            <h2>👨‍🏫 Teacher Dashboard</h2>
+            <div id="teacherPanel"></div>
+            <hr>
+            <h2>🏫 School Management</h2>
+            <div id="schoolPanel"></div>
+            <hr>
+            <h2>📜 AI Certificate</h2>
+            <button id="generateCertificate">Generate Certificate</button>
+            <div id="certificateStatus"></div>
+            <hr>
+            <h2>🚀 Enterprise Edition</h2>
+            <div id="enterpriseInfo">Enterprise features available.</div>
+        </section>
+
+        <section id="ultimatePage" class="page">
+            <h2>🚀 English Master Ultimate</h2>
+            <button id="aiAssistant">🤖 AI Assistant</button>
+            <button id="voiceCall">🎙️ AI Voice Call</button>
+            <button id="scanHomework">📷 Scan Homework</button>
+            <button id="careerMode">💼 Career Mode</button>
+            <button id="universityPrep">🎓 University Prep</button>
+            <button id="jobInterview">🗣️ AI Interview</button>
+            <button id="smartRevision">🧠 Smart Revision</button>
+            <button id="lifeStatistics">📊 Life Statistics</button>
+            <hr>
+            <div id="ultimateResult"></div>
         </section>
     </main>
- 
-    
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { 
@@ -126,16 +817,13 @@
             signOut, 
             onAuthStateChanged 
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        
-        
         import { 
             getFirestore, 
             doc, 
             setDoc, 
             getDoc 
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
- 
-        
+
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_DOMAIN",
@@ -144,12 +832,12 @@
             messagingSenderId: "YOUR_ID",
             appId: "YOUR_APP_ID"
         };
- 
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
- 
-        
+
+        // Global o'zgaruvchilar (index.js daxlsiz ishlashi uchun)
         window.auth = auth;
         window.db = db;
         window.doc = doc;
@@ -161,1743 +849,18 @@
         window.signOut = signOut;
         window.onAuthStateChanged = onAuthStateChanged;
     </script>
-    <section id="coursePage" class="page">
- 
-<h2>📚 English Course</h2>
- 
-<div id="courseList"></div>
- 
-<hr>
- 
-<h2>🎧 Listening Test</h2>
- 
-<audio id="lessonAudio" controls>
-<source src="audio/lesson1.mp3" type="audio/mpeg">
-</audio>
- 
-<input
-type="text"
-id="listeningAnswer"
-placeholder="Eshitgan gapingizni yozing">
- 
-<button id="checkListening">
-Tekshirish
-</button>
- 
-<hr>
- 
-<h2>📖 Dictionary</h2>
- 
-<input
-id="dictionarySearch"
-placeholder="Word...">
- 
-<div id="dictionaryResult"></div>
- 
-</section>
-<section id="aiToolsPage" class="page">
- 
-<h2>📷 OCR Translator</h2>
- 
-<input
-type="file"
-id="ocrImage"
-accept="image/*">
- 
-<button id="scanImage">
-Scan Image
-</button>
- 
-<div id="ocrText"></div>
- 
-<hr>
- 
-<h2>🌍 Translate</h2>
- 
-<textarea
-id="translateInput"
-placeholder="Matn yozing">
-</textarea>
- 
-<button id="translateBtn">
-Translate
-</button>
- 
-<div id="translateResult"></div>
- 
-<hr>
- 
-<h2>📄 PDF Reader</h2>
- 
-<input
-type="file"
-id="pdfFile"
-accept=".pdf">
- 
-<div id="pdfStatus"></div>
- 
-</section>
-<section id="speakingPage" class="page">
- 
-<h2>🎤 AI Speaking Test</h2>
- 
-<button id="startSpeaking">
-Start Speaking
-</button>
- 
-<div id="speechResult"></div>
- 
-<hr>
- 
-<h2>📝 Essay Checker</h2>
- 
-<textarea
-id="essayInput"
-placeholder="Write your essay here...">
-</textarea>
- 
-<button id="checkEssay">
-Check Essay
-</button>
- 
-<div id="essayResult"></div>
- 
-<hr>
- 
-<h2>📖 Reading Test</h2>
- 
-<p id="readingText">
- 
-Learning English every day improves your communication skills.
- 
-</p>
- 
-<input
-id="readingAnswer"
-placeholder="What improves your communication skills?">
- 
-<button id="checkReading">
-Check
-</button>
- 
-<div id="readingResult"></div>
- 
-</section>
-<section id="aiTeacherPage" class="page">
- 
-<h2>🤖 AI Teacher Pro</h2>
- 
-<textarea
-id="teacherQuestion"
-placeholder="Savolingizni yozing..."></textarea>
- 
-<button id="askTeacher">
-AI Teacher
-</button>
- 
-<div id="teacherAnswer"></div>
- 
-<hr>
- 
-<h2>📚 Grammar Checker</h2>
- 
-<textarea
-id="grammarInput"
-placeholder="Write a sentence..."></textarea>
- 
-<button id="checkGrammar">
-Check Grammar
-</button>
- 
-<div id="grammarResult"></div>
- 
-<hr>
- 
-<h2>🎯 Study Plan</h2>
- 
-<button id="createPlan">
-Generate Study Plan
-</button>
- 
-<div id="studyPlan"></div>
- 
-<hr>
- 
-<h2>📖 Vocabulary Generator</h2>
- 
-<button id="generateWords">
-Generate 10 Words
-</button>
- 
-<div id="generatedWords"></div>
- 
-</section>
-<section id="aiChatPage" class="page">
- 
-<h2>💬 AI Chat</h2>
- 
-<div id="chatMessages"></div>
- 
-<input
-type="text"
-id="chatMessage"
-placeholder="Savolingizni yozing...">
- 
-<button id="sendChat">
-Yuborish
-</button>
- 
-<hr>
- 
-<h2>🌍 Live Translator</h2>
- 
-<textarea
-id="liveTranslateInput"
-placeholder="Matn kiriting..."></textarea>
- 
-<button id="translateNow">
-Tarjima qilish
-</button>
- 
-<div id="liveTranslateResult"></div>
- 
-<hr>
- 
-<h2>🧠 AI Quiz Creator</h2>
- 
-<select id="quizLevel">
-<option>A1</option>
-<option>A2</option>
-<option>B1</option>
-<option>B2</option>
-<option>C1</option>
-<option>C2</option>
-</select>
- 
-<button id="createQuiz">
-Quiz yaratish
-</button>
- 
-<div id="quizOutput"></div>
- 
-</section>
-<section id="multiplayerPage" class="page">
- 
-<h2>🎮 Multiplayer</h2>
- 
-<input
-id="roomCode"
-placeholder="Room Code">
- 
-<button id="createRoom">
-Create Room
-</button>
- 
-<button id="joinRoom">
-Join Room
-</button>
- 
-<div id="roomStatus"></div>
- 
-<hr>
- 
-<h2>💬 Friend Chat</h2>
- 
-<div id="friendMessages"></div>
- 
-<input
-id="friendInput"
-placeholder="Message">
- 
-<button id="sendFriend">
-Send
-</button>
- 
-<hr>
- 
-<h2>🏆 Tournament</h2>
- 
-<button id="startTournament">
-Start Tournament
-</button>
- 
-<div id="tournamentStatus"></div>
- 
-<hr>
- 
-<h2>🌍 World Ranking</h2>
- 
-<div id="worldRanking"></div>
- 
-</section>
-<section id="cameraToolsPage" class="page">
- 
-<h2>📷 Camera OCR Pro</h2>
- 
-<input
-type="file"
-id="ocrFile"
-accept="image/*">
- 
-<button id="scanOCR">
-Scan OCR
-</button>
- 
-<div id="ocrOutput"></div>
- 
-<hr>
- 
-<h2>🌍 AI Live Translate</h2>
- 
-<textarea
-id="translateText"
-placeholder="Matn kiriting..."></textarea>
- 
-<button id="translateAI">
-Translate
-</button>
- 
-<div id="translateOutput"></div>
- 
-<hr>
- 
-<h2>🔍 QR Scanner</h2>
- 
-<input
-type="file"
-id="qrFile"
-accept="image/*">
- 
-<button id="scanQR">
-Scan QR
-</button>
- 
-<div id="qrResult"></div>
- 
-<hr>
- 
-<h2>📄 PDF Translator</h2>
- 
-<input
-type="file"
-id="pdfTranslate"
-accept=".pdf">
- 
-<button id="translatePDF">
-Translate PDF
-</button>
- 
-<div id="pdfTranslateResult"></div>
- 
-</section>
-<section id="smartAiPage" class="page">
- 
-<h2>🎥 Live Camera Translate</h2>
- 
-<video
-id="cameraView"
-autoplay
-playsinline>
-</video>
- 
-<button id="startCamera">
-Start Camera
-</button>
- 
-<button id="captureFrame">
-Translate Frame
-</button>
- 
-<div id="cameraResult"></div>
- 
-<hr>
- 
-<h2>🧠 AI Image Recognition</h2>
- 
-<input
-type="file"
-id="imageRecognition"
-accept="image/*">
- 
-<button id="detectObject">
-Detect Objects
-</button>
- 
-<div id="objectResult"></div>
- 
-<hr>
- 
-<h2>🗣️ Voice Translator</h2>
- 
-<button id="startVoiceTranslate">
-Start Voice Translate
-</button>
- 
-<div id="voiceResult"></div>
- 
-<hr>
- 
-<h2>🎙️ Pronunciation Coach</h2>
- 
-<button id="startPronunciation">
-Check Pronunciation
-</button>
- 
-<div id="pronunciationScore"></div>
- 
-</section>
-<section id="academyPage" class="page">
- 
-<h2>🎓 English Academy</h2>
- 
-<div id="academyMenu">
- 
-<button id="ieltsBtn">IELTS</button>
- 
-<button id="grammarBtn">Grammar</button>
- 
-<button id="listeningBtn">Listening</button>
- 
-<button id="writingBtn">Writing</button>
- 
-<button id="certificateBtn">Certificate</button>
- 
-</div>
- 
-<hr>
- 
-<div id="academyContent"></div>
- 
-<hr>
- 
-<h2>📺 Video Lesson</h2>
- 
-<iframe
- 
-id="lessonVideo"
- 
-width="100%"
- 
-height="350"
- 
-allowfullscreen>
- 
-</iframe>
- 
-</section>
-<section id="achievementPage" class="page">
- 
-<h2>🏆 Achievements</h2>
- 
-<div id="achievementList"></div>
- 
-<hr>
- 
-<h2>🎖️ Badges</h2>
- 
-<div id="badgeList"></div>
- 
-<hr>
- 
-<h2>📅 Learning Calendar</h2>
- 
-<div id="calendar"></div>
- 
-<hr>
- 
-<h2>📈 Progress</h2>
- 
-<canvas id="progressChart"></canvas>
- 
-<hr>
- 
-<h2>🎁 Daily Reward</h2>
- 
-<button id="dailyReward">
- 
-Claim Reward
- 
-</button>
- 
-<div id="rewardStatus"></div>
- 
-</section>
-<section id="socialPage" class="page">
- 
-<h2>👥 Friend Profile</h2>
- 
-<div id="friendProfile"></div>
- 
-<button id="addFriendBtn">
-➕ Add Friend
-</button>
- 
-<hr>
- 
-<h2>💬 Global Chat</h2>
- 
-<div id="globalChat"></div>
- 
-<input
-id="globalMessage"
-placeholder="Message...">
- 
-<button id="sendGlobal">
-Send
-</button>
- 
-<hr>
- 
-<h2>🎮 Quiz Battle</h2>
- 
-<button id="findOpponent">
-Find Opponent
-</button>
- 
-<div id="battleStatus"></div>
- 
-<hr>
- 
-<h2>🏆 Season Pass</h2>
- 
-<div id="seasonPass"></div>
- 
-<hr>
- 
-<h2>🎁 Weekly Reward</h2>
- 
-<button id="claimWeekly">
-Claim Weekly Reward
-</button>
- 
-<div id="weeklyRewardStatus"></div>
- 
-</section>
-<section id="guildPage" class="page">
- 
-<h2>👨‍👩‍👧 Guild System</h2>
- 
-<input
-id="guildName"
-placeholder="Guild Name">
- 
-<button id="createGuild">
-Create Guild
-</button>
- 
-<button id="joinGuild">
-Join Guild
-</button>
- 
-<div id="guildStatus"></div>
- 
-<hr>
- 
-<h2>💬 Guild Chat</h2>
- 
-<div id="guildMessages"></div>
- 
-<input
-id="guildMessage"
-placeholder="Message">
- 
-<button id="sendGuild">
-Send
-</button>
- 
-<hr>
- 
-<h2>🎯 Guild Missions</h2>
- 
-<div id="guildMission"></div>
- 
-<button id="completeGuildMission">
-Complete Mission
-</button>
- 
-<hr>
- 
-<h2>🏆 Guild Ranking</h2>
- 
-<div id="guildRanking"></div>
- 
-</section>
-<section id="battlePage" class="page">
- 
-<h2>⚔️ 1v1 Quiz Battle</h2>
- 
-<button id="startBattle">
-Start Battle
-</button>
- 
-<div id="battleInfo"></div>
- 
-<hr>
- 
-<h2>❤️ Health</h2>
- 
-<div class="hpBar">
- 
-<div id="myHP"></div>
- 
-</div>
- 
-<div class="hpBar">
- 
-<div id="enemyHP"></div>
- 
-</div>
- 
-<hr>
- 
-<h2>🛡️ Skills</h2>
- 
-<button id="healSkill">
-❤️ Heal
-</button>
- 
-<button id="doubleXP">
-⚡ Double Attack
-</button>
- 
-<button id="shieldSkill">
-🛡️ Shield
-</button>
- 
-<hr>
- 
-<h2>📊 Battle History</h2>
- 
-<div id="battleHistory"></div>
- 
-</section>
-<section id="bossPage" class="page">
- 
-<h2>🐉 Boss Battle</h2>
- 
-<div id="bossInfo">
- 
-<h3>🐲 Dragon King</h3>
- 
-<div class="bossBar">
-<div id="bossHP"></div>
-</div>
- 
-</div>
- 
-<button id="attackBoss">
-⚔️ Attack
-</button>
- 
-<button id="magicAttack">
-✨ Magic
-</button>
- 
-<button id="healPotion">
-🧪 Heal Potion
-</button>
- 
-<hr>
- 
-<h2>🎒 Inventory</h2>
- 
-<div id="inventory"></div>
- 
-<hr>
- 
-<h2>⚔️ Weapons</h2>
- 
-<div id="weapons"></div>
- 
-<hr>
- 
-<h2>🛡️ Armor</h2>
- 
-<div id="armors"></div>
- 
-<hr>
- 
-<h2>💎 Rare Items</h2>
- 
-<div id="rareItems"></div>
- 
-</section>
-<section id="worldPage" class="page">
- 
-<h2>🌍 Open World</h2>
- 
-<div id="worldMap">
- 
-<button class="map-btn" id="villageBtn">🏘️ Village</button>
- 
-<button class="map-btn" id="forestBtn">🌲 Forest</button>
- 
-<button class="map-btn" id="castleBtn">🏰 Castle</button>
- 
-<button class="map-btn" id="dungeonBtn">🕳️ Dungeon</button>
- 
-<button class="map-btn" id="portalBtn">🌀 Portal</button>
- 
-</div>
- 
-<hr>
- 
-<h2>🧙 NPC Teacher</h2>
- 
-<div id="npcDialog">
- 
-Welcome adventurer!
- 
-</div>
- 
-<button id="talkNpc">
- 
-Talk
- 
-</button>
- 
-<hr>
- 
-<h2>📦 Treasure Chest</h2>
- 
-<button id="openChest">
- 
-Open Chest
- 
-</button>
- 
-<div id="chestReward"></div>
- 
-<hr>
- 
-<h2>🎯 Side Quest</h2>
- 
-<div id="sideQuest"></div>
- 
-<button id="finishQuest">
- 
-Complete Quest
- 
-</button>
- 
-</section>
-<section id="kingdomPage" class="page">
- 
-<h2>🏰 Kingdom</h2>
- 
-<div id="kingdomInfo"></div>
- 
-<button id="upgradeCastle">
-Upgrade Castle
-</button>
- 
-<hr>
- 
-<h2>🏡 House</h2>
- 
-<div id="houseInfo"></div>
- 
-<button id="upgradeHouse">
-Upgrade House
-</button>
- 
-<hr>
- 
-<h2>🐉 Pet System</h2>
- 
-<div id="petInfo"></div>
- 
-<button id="feedPet">
-Feed Pet
-</button>
- 
-<button id="trainPet">
-Train Pet
-</button>
- 
-<hr>
- 
-<h2>🥚 Egg Hatch</h2>
- 
-<button id="hatchEgg">
- 
-Hatch Egg
- 
-</button>
- 
-<div id="eggResult"></div>
- 
-<hr>
- 
-<h2>🐴 Mount</h2>
- 
-<div id="mountInfo"></div>
- 
-<button id="rideMount">
- 
-Ride
- 
-</button>
- 
-<hr>
- 
-<h2>🌾 Farm</h2>
- 
-<button id="collectFarm">
- 
-Collect Coins
- 
-</button>
- 
-<div id="farmCoins"></div>
- 
-<hr>
- 
-<h2>🛒 Market</h2>
- 
-<div id="market"></div>
- 
-</section>
-<section id="eventPage" class="page">
- 
-<h2>🎡 Lucky Wheel</h2>
- 
-<button id="spinWheel">
-🎡 Spin
-</button>
- 
-<div id="wheelResult"></div>
- 
-<hr>
- 
-<h2>🎰 Slot Machine</h2>
- 
-<div id="slotDisplay">
-🍒 🍒 🍒
-</div>
- 
-<button id="playSlot">
-Play
-</button>
- 
-<div id="slotResult"></div>
- 
-<hr>
- 
-<h2>🎁 Mystery Box</h2>
- 
-<button id="openMystery">
-Open Box
-</button>
- 
-<div id="mysteryReward"></div>
- 
-<hr>
- 
-<h2>💎 Diamonds</h2>
- 
-<div id="diamondCount">
-💎 0
-</div>
- 
-<hr>
- 
-<h2>🎟️ Battle Pass</h2>
- 
-<div id="battlePassStatus">
-Free Pass
-</div>
- 
-<button id="buyPass">
-Buy VIP Pass
-</button>
- 
-<hr>
- 
-<h2>🎊 Daily Event</h2>
- 
-<div id="dailyEvent"></div>
- 
-<hr>
- 
-<h2>👑 VIP Membership</h2>
- 
-<div id="vipStatus">
-Standard User
-</div>
- 
-</section>
-<section id="marketPage" class="page">
- 
-<h2>🌍 Global Market</h2>
- 
-<div id="marketList"></div>
- 
-<hr>
- 
-<h2>💱 Player Trading</h2>
- 
-<input
-id="tradePlayer"
-placeholder="Player Name">
- 
-<select id="tradeItem">
- 
-<option>🧪 Potion</option>
-<option>⚔️ Sword</option>
-<option>🛡️ Shield</option>
-<option>💎 Diamond</option>
- 
-</select>
- 
-<button id="sendTrade">
-Send Trade
-</button>
- 
-<div id="tradeStatus"></div>
- 
-<hr>
- 
-<h2>📧 Mail</h2>
- 
-<div id="mailBox"></div>
- 
-<button id="claimMail">
-Claim Rewards
-</button>
- 
-<hr>
- 
-<h2>🏦 Bank</h2>
- 
-<div id="bankCoins">
- 
-Coins: 0
- 
-</div>
- 
-<button id="depositCoins">
-Deposit 500
-</button>
- 
-<button id="withdrawCoins">
-Withdraw 500
-</button>
- 
-<hr>
- 
-<h2>💰 Auction House</h2>
- 
-<div id="auctionList"></div>
- 
-<button id="bidAuction">
-Bid
-</button>
- 
-</section>
-<section id="avatarPage" class="page">
- 
-<h2>🎨 Avatar Creator</h2>
- 
-<div id="avatarPreview">
- 
-😀
- 
-</div>
- 
-<select id="avatarSelect">
- 
-<option>😀 Smile</option>
-<option>😎 Cool</option>
-<option>🤖 Robot</option>
-<option>🦸 Hero</option>
-<option>🧙 Wizard</option>
- 
-</select>
- 
-<button id="saveAvatar">
- 
-Save Avatar
- 
-</button>
- 
-<hr>
- 
-<h2>👕 Character Skins</h2>
- 
-<div id="skins"></div>
- 
-<hr>
- 
-<h2>🌈 Themes</h2>
- 
-<button id="darkTheme">
- 
-Dark
- 
-</button>
- 
-<button id="lightTheme">
- 
-Light
- 
-</button>
- 
-<button id="neonTheme">
- 
-Neon
- 
-</button>
- 
-<hr>
- 
-<h2>✨ Profile Effects</h2>
- 
-<div id="effects"></div>
- 
-<hr>
- 
-<h2>🏅 Animated Badges</h2>
- 
-<div id="animatedBadges"></div>
- 
-<hr>
- 
-<h2>🖼️ Backgrounds</h2>
- 
-<div id="backgrounds"></div>
- 
-</section>
-<section id="settingsPage2" class="page">
- 
-<h2>🎵 Background Music</h2>
- 
-<audio id="bgMusic" loop>
-<source src="assets/audio/background.mp3" type="audio/mpeg">
-</audio>
- 
-<button id="playMusic">▶️ Play</button>
-<button id="pauseMusic">⏸️ Pause</button>
- 
-<hr>
- 
-<h2>🔊 Sound Effects</h2>
- 
-<button id="playClickSound">
-Click Sound
-</button>
- 
-<audio id="clickSound">
-<source src="assets/audio/click.mp3" type="audio/mpeg">
-</audio>
- 
-<hr>
- 
-<h2>🌟 Loading Screen</h2>
- 
-<div id="loadingScreen">
- 
-<div class="loader"></div>
- 
-<p>Loading English Master...</p>
- 
-</div>
- 
-<hr>
- 
-<h2>🌍 Language</h2>
- 
-<select id="languageSelect">
- 
-<option value="en">English</option>
- 
-<option value="uz">O'zbek</option>
- 
-<option value="ru">Русский</option>
- 
-<option value="tr">Türkçe</option>
- 
-<option value="ar">العربية</option>
- 
-</select>
- 
-<hr>
- 
-<h2>⚙️ Settings</h2>
- 
-<label>
- 
-<input type="checkbox" id="notificationToggle">
- 
-Push Notification
- 
-</label>
- 
-<br><br>
- 
-<label>
- 
-<input type="checkbox" id="animationToggle" checked>
- 
-Animations
- 
-</label>
- 
-</section>
-<section id="adminPage" class="page">
- 
-<h2>👨‍💼 Admin Panel</h2>
- 
-<div id="adminStats"></div>
- 
-<hr>
- 
-<h2>👥 Users</h2>
- 
-<div id="userList"></div>
- 
-<button id="refreshUsers">
-Refresh Users
-</button>
- 
-<hr>
- 
-<h2>📢 Announcement</h2>
- 
-<textarea
-id="announcementText"
-placeholder="Write announcement..."></textarea>
- 
-<button id="sendAnnouncement">
-Send
-</button>
- 
-<div id="announcementStatus"></div>
- 
-<hr>
- 
-<h2>🚫 User Control</h2>
- 
-<input
-id="banUser"
-placeholder="Username">
- 
-<button id="banBtn">
-Ban
-</button>
- 
-<button id="unbanBtn">
-Unban
-</button>
- 
-<div id="banStatus"></div>
- 
-<hr>
- 
-<h2>📝 Feedback</h2>
- 
-<div id="feedbackList"></div>
- 
-</section>
-<section id="pwaPage" class="page">
- 
-<h2>🔔 Push Notification</h2>
- 
-<button id="enableNotification">
-Enable Notifications
-</button>
- 
-<div id="notificationStatus"></div>
- 
-<hr>
- 
-<h2>📱 Install App</h2>
- 
-<button id="installAppPWA">
-Install PWA
-</button>
- 
-<div id="installStatus"></div>
- 
-<hr>
- 
-<h2>☁️ Cloud Sync</h2>
- 
-<button id="syncCloud">
-Sync Now
-</button>
- 
-<div id="syncStatus"></div>
- 
-<hr>
- 
-<h2>📦 Cache Manager</h2>
- 
-<button id="clearCache">
-Clear Cache
-</button>
- 
-<div id="cacheStatus"></div>
- 
-<hr>
- 
-<h2>🌐 Offline Mode</h2>
- 
-<div id="offlineStatus">
- 
-Checking...
- 
-</div>
- 
-</section>
-<section id="aiCoachPage" class="page">
- 
-<h2>🤖 AI Voice Teacher</h2>
- 
-<button id="startVoiceTeacher">
-🎤 Start Speaking
-</button>
- 
-<div id="voiceTeacherResult"></div>
- 
-<hr>
- 
-<h2>🧠 AI Grammar Corrector</h2>
- 
-<textarea
-id="grammarText"
-placeholder="Write English here..."></textarea>
- 
-<button id="grammarCheck">
-Check Grammar
-</button>
- 
-<div id="grammarAnswer"></div>
- 
-<hr>
- 
-<h2>✍️ AI Essay Score</h2>
- 
-<textarea
-id="essayText"
-placeholder="Write your essay..."></textarea>
- 
-<button id="essayScore">
-Check Essay
-</button>
- 
-<div id="essayResult2"></div>
- 
-<hr>
- 
-<h2>📖 Reading Coach</h2>
- 
-<p id="readingLesson">
- 
-English is one of the most spoken languages in the world.
- 
-</p>
- 
-<button id="readingTest">
- 
-Start Reading Test
- 
-</button>
- 
-<div id="readingScore"></div>
- 
-<hr>
- 
-<h2>🎯 Personal AI Plan</h2>
- 
-<button id="generatePlan">
- 
-Generate Plan
- 
-</button>
- 
-<div id="studyPlanAI"></div>
- 
-</section>
-<section id="miniGamesPage" class="page">
- 
-<h2>🧩 Mini Games Center</h2>
- 
-<div id="gamesMenu">
- 
-<button id="memoryGameBtn">🧠 Memory Match</button>
- 
-<button id="typingGameBtn">⌨️ Typing Test</button>
- 
-<button id="wordPuzzleBtn">🔤 Word Puzzle</button>
- 
-<button id="hangmanBtn">🔠 Hangman</button>
- 
-</div>
- 
-<hr>
- 
-<div id="gameContainer"></div>
- 
-<hr>
- 
-<h2>🎯 Daily Challenge</h2>
- 
-<div id="dailyChallenge">
- 
-Complete 10 Quiz Questions
- 
-</div>
- 
-<button id="completeChallenge">
- 
-Complete
- 
-</button>
- 
-<hr>
- 
-<h2>🏆 Weekly Championship</h2>
- 
-<div id="weeklyRank"></div>
- 
-</section>
-<section id="backupPage" class="page">
- 
-<h2>💾 Backup & Restore</h2>
- 
-<button id="backupBtn">
-💾 Backup
-</button>
- 
-<button id="restoreBtn">
-♻️ Restore
-</button>
- 
-<div id="backupStatus"></div>
- 
-<hr>
- 
-<h2>☁️ Google Drive Sync</h2>
- 
-<button id="googleSync">
-Sync Google Drive
-</button>
- 
-<div id="googleStatus"></div>
- 
-<hr>
- 
-<h2>📤 Export Progress</h2>
- 
-<button id="exportData">
-Export JSON
-</button>
- 
-<hr>
- 
-<h2>📥 Import Progress</h2>
- 
-<input
-type="file"
-id="importFile"
-accept=".json">
- 
-<button id="importData">
-Import
-</button>
- 
-<div id="importStatus"></div>
- 
-<hr>
- 
-<h2>📊 Statistics</h2>
- 
-<div id="statistics"></div>
- 
-<hr>
- 
-<h2>🏅 Graduation</h2>
- 
-<button id="graduate">
-Graduate
-</button>
- 
-<div id="graduateStatus"></div>
- 
-</section>
-<section id="onlinePage" class="page">
- 
-<h2>🌍 Online Multiplayer</h2>
- 
-<div id="serverStatus">
- 
-🔴 Offline
- 
-</div>
- 
-<button id="connectServer">
- 
-Connect Server
- 
-</button>
- 
-<hr>
- 
-<h2>🤖 AI Matchmaking</h2>
- 
-<button id="findMatch">
- 
-Find Match
- 
-</button>
- 
-<div id="matchStatus"></div>
- 
-<hr>
- 
-<h2>⚡ Real-Time PvP</h2>
- 
-<button id="startPvP">
- 
-Start PvP
- 
-</button>
- 
-<div id="pvpStatus"></div>
- 
-<hr>
- 
-<h2>🏆 Global Leaderboard</h2>
- 
-<div id="leaderboard"></div>
- 
-<hr>
- 
-<h2>🎮 Esports Mode</h2>
- 
-<button id="joinTournament">
- 
-Join Tournament
- 
-</button>
- 
-<div id="tournamentStatus2"></div>
- 
-<hr>
- 
-<h2>🌐 Cross Platform Login</h2>
- 
-<button id="googleLogin">
- 
-Google
- 
-</button>
- 
-<button id="guestLogin">
- 
-Guest
- 
-</button>
- 
-<div id="loginStatus"></div>
- 
-</section>
-<section id="aiToolsPage2" class="page">
- 
-<h2>🧠 AI Translator</h2>
- 
-<textarea id="translateInput2"
-placeholder="Enter text..."></textarea>
- 
-<button id="translateBtn2">
-Translate
-</button>
- 
-<div id="translateResult2"></div>
- 
-<hr>
- 
-<h2>🎙️ Speech To Text</h2>
- 
-<button id="speechBtn">
-Start Recording
-</button>
- 
-<div id="speechResult2"></div>
- 
-<hr>
- 
-<h2>🔊 Text To Speech</h2>
- 
-<textarea id="ttsText"
-placeholder="Write text..."></textarea>
- 
-<button id="ttsBtn">
-Speak
-</button>
- 
-<hr>
- 
-<h2>📷 OCR Scanner</h2>
- 
-<input type="file"
-id="ocrImage2"
-accept="image/*">
- 
-<button id="scanImage2">
-Scan Image
-</button>
- 
-<div id="ocrResult2"></div>
- 
-<hr>
- 
-<h2>📚 Smart Dictionary</h2>
- 
-<input id="dictionaryWord"
-placeholder="Word">
- 
-<button id="searchWord">
-Search
-</button>
- 
-<div id="dictionaryResult2"></div>
- 
-<hr>
- 
-<h2>📝 AI Vocabulary Builder</h2>
- 
-<button id="generateWords2">
-Generate Words
-</button>
- 
-<div id="wordList"></div>
- 
-</section>
-<section id="learningPage" class="page">
- 
-<h2>🎥 AI Video Lesson</h2>
- 
-<video id="lessonVideo2" controls width="100%">
- 
-<source src="assets/video/lesson1.mp4" type="video/mp4">
- 
-</video>
- 
-<button id="nextLesson">
- 
-Next Lesson
- 
-</button>
- 
-<hr>
- 
-<h2>🧪 Pronunciation Analyzer</h2>
- 
-<button id="startPronunciation2">
- 
-Start Speaking
- 
-</button>
- 
-<div id="pronunciationScore2">
- 
-Score: --
- 
-</div>
- 
-<hr>
- 
-<h2>🎯 IELTS / CEFR Mock Test</h2>
- 
-<button id="startMock">
- 
-Start Test
- 
-</button>
- 
-<div id="mockStatus"></div>
- 
-<hr>
- 
-<h2>📜 PDF Lesson</h2>
- 
-<input type="file"
- 
-id="pdfFile2"
- 
-accept=".pdf">
- 
-<button id="openPDF">
- 
-Open PDF
- 
-</button>
- 
-<div id="pdfStatus2"></div>
- 
-<hr>
- 
-<h2>📥 Offline Lessons</h2>
- 
-<button id="downloadLesson">
- 
-Download Lesson
- 
-</button>
- 
-<div id="downloadStatus"></div>
- 
-<hr>
- 
-<h2>🏆 Learning Analytics</h2>
- 
-<div id="analyticsBox"></div>
- 
-<hr>
- 
-<h2>🤖 Personal AI Mentor</h2>
- 
-<button id="askMentor">
- 
-Get Advice
- 
-</button>
- 
-<div id="mentorAnswer"></div>
- 
-</section>
-<section id="premiumPage" class="page">
- 
-<h2>🌍 3D Globe Learning</h2>
- 
-<div id="globeViewer">
- 
-🌎 Interactive Globe
- 
-</div>
- 
-<button id="openGlobe">
- 
-Open Globe
- 
-</button>
- 
-<hr>
- 
-<h2>🥽 AR Learning</h2>
- 
-<button id="startAR">
- 
-Start AR
- 
-</button>
- 
-<div id="arStatus"></div>
- 
-<hr>
- 
-<h2>🥽 VR Classroom</h2>
- 
-<button id="startVR">
- 
-Enter VR
- 
-</button>
- 
-<div id="vrStatus"></div>
- 
-<hr>
- 
-<h2>🤝 Live Classroom</h2>
- 
-<button id="joinClass">
- 
-Join Class
- 
-</button>
- 
-<div id="classStatus"></div>
- 
-<hr>
- 
-<h2>👨‍🏫 Teacher Dashboard</h2>
- 
-<div id="teacherPanel"></div>
- 
-<hr>
- 
-<h2>🏫 School Management</h2>
- 
-<div id="schoolPanel"></div>
- 
-<hr>
- 
-<h2>📜 AI Certificate</h2>
- 
-<button id="generateCertificate">
- 
-Generate Certificate
- 
-</button>
- 
-<div id="certificateStatus"></div>
- 
-<hr>
- 
-<h2>🚀 Enterprise Edition</h2>
- 
-<div id="enterpriseInfo">
- 
-Enterprise features available.
- 
-</div>
- 
-</section>
-<section id="ultimatePage" class="page">
- 
-<h2>🚀 English Master Ultimate</h2>
- 
-<button id="aiAssistant">
-🤖 AI Assistant
-</button>
- 
-<button id="voiceCall">
-🎙️ AI Voice Call
-</button>
- 
-<button id="scanHomework">
-📷 Scan Homework
-</button>
- 
-<button id="careerMode">
-💼 Career Mode
-</button>
- 
-<button id="universityPrep">
-🎓 University Prep
-</button>
- 
-<button id="jobInterview">
-🗣️ AI Interview
-</button>
- 
-<button id="smartRevision">
-🧠 Smart Revision
-</button>
- 
-<button id="lifeStatistics">
-📊 Life Statistics
-</button>
- 
-<hr>
- 
-<div id="ultimateResult"></div>
- 
-</section>
-    
+
+    <nav id="bottomNav" aria-label="Pastki navigatsiya">
+        <div class="bottom-nav-inner">
+            <button id="bottomHomeBtn" data-target="homePage"><i class="fa-solid fa-house"></i>Bosh</button>
+            <button id="bottomFlashBtn" data-target="flashPage"><i class="fa-solid fa-layer-group"></i>Karta</button>
+            <button id="bottomQuizBtn" data-target="quizPage"><i class="fa-solid fa-pen"></i>Test</button>
+            <button id="bottomAiBtn" data-target="aiPage"><i class="fa-solid fa-robot"></i>AI</button>
+            <button id="bottomSettingsBtn" data-target="settingsPage"><i class="fa-solid fa-gear"></i>Sozlama</button>
+        </div>
+    </nav>
+
     <script src="index.js"></script>
 </body>
- 
+
 </html>

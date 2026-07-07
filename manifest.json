@@ -4,10 +4,11 @@
   "description": "Learn English vocabulary, play quizzes, and practice with AI tutor.",
   "start_url": "./index.html",
   "display": "standalone",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "background_color": "#1e293b",
   "theme_color": "#2563eb",
   "lang": "uz",
+  "id": "/english-master-pro-pwa",
   "icons": [
     {
       "src": "icon-192.png",
