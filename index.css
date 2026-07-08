@@ -1,6 +1,3 @@
-/* =========================================
-   1. UMUMIY VA BAZAVIY STILLAR
-   ========================================= */
 * {
     margin: 0;
     padding: 0;
@@ -9,66 +6,42 @@
 }
  
 body {
-    background: #0f172a;
+    background: radial-gradient(circle at 15% 0%, #17233d 0%, #0f172a 45%, #0b1222 100%);
     color: #fff;
     min-height: 100vh;
     transition: background 0.3s, color 0.3s;
 }
+ 
 
-button, input, textarea, select {
-    font-family: 'Poppins', sans-serif;
-}
-
-button {
-    cursor: pointer;
-    transition: .3s;
-}
-
-button:hover {
-    transform: scale(1.05);
-}
-
-hr {
-    border: none;
-    border-top: 1px solid #334155;
-    margin: 40px 0;
-}
-
-/* Scrollbar dizayni */
-::-webkit-scrollbar { 
-    width: 8px; 
-    height: 8px; 
-}
-::-webkit-scrollbar-track { 
-    background: #0f172a; 
-}
-::-webkit-scrollbar-thumb { 
-    background: #334155; 
-    border-radius: 8px; 
-}
-::-webkit-scrollbar-thumb:hover { 
-    background: #475569; 
-}
-
-/* =========================================
-   2. HEADER VA NAVIGATSIYA
-   ========================================= */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
-    background: #1e293b;
-    box-shadow: 0 5px 15px rgba(0,0,0,.3);
+    padding: 18px 40px;
+    background: rgba(30, 41, 59, .75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 5px 20px rgba(0,0,0,.35);
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    border-bottom: 1px solid rgba(148, 163, 184, .12);
 }
  
 .logo {
     font-size: 26px;
     font-weight: 700;
-    color: #38bdf8;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.logo i {
+    color: #38bdf8;
+    -webkit-text-fill-color: #38bdf8;
 }
  
 nav {
@@ -81,20 +54,27 @@ nav button {
     padding: 10px 18px;
     border: none;
     border-radius: 10px;
-    background: #2563eb;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
     color: white;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
     font-size: 14px;
     font-weight: 500;
 }
  
 nav button:hover {
-    background: #1d4ed8;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
     transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, .35);
 }
 
-/* =========================================
-   3. SAHIFALAR VA ANIMATSIYALAR
-   ========================================= */
+#mainNav button.active {
+    background: #38bdf8;
+    color: #0f172a;
+    font-weight: 700;
+}
+ 
+
 .page {
     display: none;
     padding: 40px;
@@ -112,11 +92,13 @@ nav button:hover {
     margin-bottom: 25px;
     color: #38bdf8;
 }
-
-.page > div[id] {
-    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+ 
+hr {
+    border: none;
+    border-top: 1px solid #334155;
+    margin: 40px 0;
 }
-
+ 
 @keyframes fade {
     from {
         opacity: 0;
@@ -128,6 +110,7 @@ nav button:hover {
     }
 }
  
+
 #homePage {
     text-align: center;
     padding-top: 80px;
@@ -154,6 +137,8 @@ nav button:hover {
     border-radius: 15px;
     background: #22c55e;
     color: white;
+    cursor: pointer;
+    transition: .3s;
     font-weight: 600;
     box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
 }
@@ -162,80 +147,127 @@ nav button:hover {
     transform: scale(1.05);
     background: #16a34a;
 }
+ 
 
-/* =========================================
-   4. FORMA ELEMENTLARI (INPUT / TEXTAREA)
-   ========================================= */
-input[type="text"], input:not([type]), input[type="file"], textarea, select {
-    background: #1e293b;
-    color: #fff;
-    border: 2px solid #334155;
-    border-radius: 10px;
-    padding: 12px;
-    font-size: 15px;
-    transition: border-color .2s;
-    width: 100%;
-}
-
-input[type="text"]:focus, input:not([type]):focus, textarea:focus, select:focus {
-    outline: none;
-    border-color: #38bdf8;
-}
-
-textarea {
-    height: 150px;
-    resize: vertical;
-}
-
-#essayInput, #essayText, #grammarInput, #teacherQuestion, #grammarText, #essayText2 {
-    width: 100%;
-    padding: 15px;
-    border-radius: 12px;
-    resize: vertical;
-}
-
-#essayInput, #essayText, #essayText2 {
-    height: 180px;
-}
-
-#grammarInput, #teacherQuestion, #grammarText {
-    min-height: 120px;
-    margin-top: 10px;
-}
-
-input[type="file"] {
-    border: 1px dashed #38bdf8;
-    color: #cbd5e1;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-#dictionarySearch {
-    padding: 15px;
-    width: 100%;
-    margin-top: 20px;
-    border-radius: 10px;
-}
-
-/* =========================================
-   5. KARTALAR VA VIKTORINALAR
-   ========================================= */
 .card {
-    background: white;
+    position: relative;
+    background: linear-gradient(160deg, #ffffff, #f1f5f9);
     color: #1e293b;
     max-width: 600px;
     margin: auto;
-    padding: 40px;
-    border-radius: 20px;
+    padding: 44px 40px;
+    border-radius: 24px;
     text-align: center;
-    box-shadow: 0 10px 40px rgba(0,0,0,.3);
-    transition: background 0.3s;
+    box-shadow: 0 20px 50px rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.4);
+    transition: background 0.3s, transform .2s;
+    animation: cardPop .4s ease;
+}
+
+@keyframes cardPop {
+    from { opacity: 0; transform: scale(.94) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.card-category {
+    display: inline-block;
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+}
+
+.fav-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(15,23,42,.06);
+    color: #cbd5e1;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform .2s, color .2s, background .2s;
+}
+
+.fav-btn:hover {
+    transform: scale(1.1);
+}
+
+.fav-btn.active {
+    color: #f59e0b;
+    background: rgba(245,158,11,.15);
+}
+
+.card-counter {
+    text-align: center;
+    margin-top: 18px;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.flash-toolbar {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+#categoryFilter {
+    flex: 1;
+    min-width: 160px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(148,163,184,.25);
+    background: #1e293b;
+    color: #e2e8f0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.fav-only-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #cbd5e1;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.fav-only-toggle input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.card h2 {
+    font-size: 48px;
+    color: #0f172a;
 }
  
-.card h2 { font-size: 48px; color: #0f172a; }
-.card h3 { margin-top: 15px; font-size: 30px; color: #2563eb; }
-.card p { margin-top: 20px; font-size: 18px; color: #64748b; font-style: italic; }
+.card h3 {
+    margin-top: 15px;
+    font-size: 30px;
+    color: #2563eb;
+}
+ 
+.card p {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #64748b;
+    font-style: italic;
+}
  
 .buttons {
     margin-top: 35px;
@@ -251,12 +283,32 @@ input[type="file"] {
     border-radius: 12px;
     background: #2563eb;
     color: white;
+    cursor: pointer;
+    transition: .3s;
 }
-.buttons button:hover { background: #1d4ed8; transform: scale(1.05); }
+ 
+.buttons button:hover {
+    background: #1d4ed8;
+    transform: scale(1.05);
+}
+ 
 
-#quizPage { text-align: center; }
-#question { font-size: 36px; margin-bottom: 30px; }
-#answers { max-width: 600px; margin: auto; display: grid; gap: 15px; }
+#quizPage {
+    text-align: center;
+}
+ 
+#question {
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+ 
+#answers {
+    max-width: 600px;
+    margin: auto;
+    display: grid;
+    gap: 15px;
+}
+ 
 .answer {
     padding: 18px;
     border: 2px solid #334155;
@@ -269,71 +321,133 @@ input[type="file"] {
     transition: .2s;
     text-align: left;
 }
-.answer:hover { background: #38bdf8; color: white; border-color: #38bdf8; }
-
-#askAI, #generateQuiz, #voiceAssistant, #spinWheel, #playSlot, #openMystery, #buyPass {
+ 
+.answer:hover {
+    background: #38bdf8;
+    color: white;
+    border-color: #38bdf8;
+}
+ 
+textarea {
+    width: 100%;
+    height: 120px;
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid #334155;
+    background: #1e293b;
+    color: white;
+    font-size: 16px;
+    resize: none;
+    margin-bottom: 15px;
+}
+ 
+textarea:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: #38bdf8;
+}
+ 
+#askAI, #generateQuiz, #voiceAssistant {
     padding: 12px 28px;
     font-size: 16px;
     border: none;
     border-radius: 10px;
     background: #22c55e;
     color: white;
+    cursor: pointer;
+    transition: .3s;
     font-weight: 500;
 }
-#askAI:hover, #generateQuiz:hover, #voiceAssistant:hover { background: #16a34a; }
-
-/* Katta harakat tugmalari guruhlari */
-#ultimatePage button, #premiumPage button, #onlinePage button, #backupPage button,
-#aiToolsPage button, #aiToolsPage2 button, #aiCoachPage button, #learningPage button,
-#pwaPage button {
-    width: 100%;
-    padding: 15px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 12px;
-    font-size: 17px;
+ 
+#askAI:hover, #generateQuiz:hover, #voiceAssistant:hover {
+    background: #16a34a;
 }
-#ultimatePage button { padding: 16px; border-radius: 14px; font-size: 18px; }
-
-/* =========================================
-   6. BARCHA NATIJA VA STATUS BLOKLARI (ID BO'YICHA BIRMA-BIR)
-   ========================================= */
-#aiAnswer, #quizResult, #ocrResult, #ocrText, #translateResult, #pdfStatus,
-#speechResult, #essayResult, #readingResult, #teacherAnswer, #grammarResult,
-#studyPlan, #generatedWords, #liveTranslateResult, #quizOutput, #ocrOutput,
-#translateOutput, #qrResult, #pdfTranslateResult, #cameraResult, #objectResult,
-#voiceResult, #pronunciationScore, #academyContent, #worldRanking, #guildMission,
-#guildRanking, #battleHistory, #npcDialog, #chestReward, #sideQuest, #kingdomInfo,
-#houseInfo, #petInfo, #eggResult, #mountInfo, #farmCoins, #wheelResult, #slotResult,
-#mysteryReward, #diamondCount, #battlePassStatus, #vipStatus, #dailyEvent,
-#tradeStatus, #bankCoins, #adminStats, #announcementStatus, #banStatus,
-#notificationStatus, #installStatus, #syncStatus, #cacheStatus, #offlineStatus,
-#voiceTeacherResult, #grammarAnswer, #essayResult2, #readingScore, #studyPlanAI, 
-#gameContainer, #dailyChallenge, #weeklyRank, #backupStatus, #googleStatus, 
-#importStatus, #statistics, #graduateStatus, #serverStatus, #matchStatus, 
-#pvpStatus, #tournamentStatus, #tournamentStatus2, #loginStatus, #wordList, #mockStatus, 
-#downloadStatus, #analyticsBox, #mentorAnswer, #globeViewer, #arStatus, #vrStatus, 
-#classStatus, #teacherPanel, #schoolPanel, #certificateStatus, #enterpriseInfo, 
-#ultimateResult, #translateResult2, #speechResult2, #ocrResult2, #dictionaryResult2,
-#pdfStatus2, #pronunciationScore2 {
-    background: #1e293b;
+ 
+#aiAnswer, #quizResult, #ocrResult {
+    margin-top: 20px;
     padding: 20px;
-    border-radius: 15px;
-    margin-top: 15px;
-    min-height: 60px;
+    background: #1e293b;
+    border-radius: 12px;
     border-left: 5px solid #38bdf8;
     line-height: 1.6;
 }
+ 
 
-#dictionaryResult, #dictionaryResult2 {
-    margin-top: 15px;
-    font-size: 20px;
-    font-weight: bold;
+#chatBox {
+    height: 350px;
+    overflow-y: auto;
+    padding: 20px;
+    background: #1e293b;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
+ 
+.user, .ai {
+    padding: 12px 16px;
+    border-radius: 12px;
+    max-width: 80%;
+    line-height: 1.5;
+}
+ 
+.user {
+    background: #2563eb;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+}
+ 
+.ai {
+    background: #334155;
+    color: white;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+    border-left: 3px solid #22c55e;
+}
+ 
+.chat-input-container {
+    display: flex;
+    gap: 10px;
+}
+ 
+#chatInput {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    border: 2px solid #334155;
+    background: #1e293b;
+    color: white;
+    font-size: 16px;
+}
+ 
+#sendMessage {
+    padding: 0 25px;
+    border-radius: 10px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+ 
+#sendMessage:hover {
+    background: #1d4ed8;
+}
+ 
 
-/* =========================================
-   7. GRID TIZIMLARI VA STATISTIKALAR
-   ========================================= */
+input[type="file"] {
+    background: #1e293b;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px dashed #38bdf8;
+    color: #cbd5e1;
+    cursor: pointer;
+}
+ 
+
 .stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -355,122 +469,56 @@ input[type="file"] {
     font-size: 42px;
     color: #38bdf8;
 }
-
-#academyMenu, #gamesMenu, #worldMap {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-#academyMenu button, #gamesMenu button, .map-btn {
-    padding: 15px;
-    border: none;
-    border-radius: 12px;
-    background: #2563eb;
-    color: white;
-    font-size: 16px;
-}
-.map-btn { font-size: 18px; border-radius: 15px; }
-
-#calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    margin-top: 20px;
-}
  
-.day {
-    padding: 15px;
-    background: #1e293b;
-    border-radius: 10px;
+
+#settingsPage {
     text-align: center;
 }
  
-#progressChart {
-    width: 100%;
-    height: 300px;
-    background: #1e293b;
-    border-radius: 15px;
-    margin-top: 20px;
-}
-
-/* =========================================
-   8. CHAT VA INTERFEYS XABARLARI
-   ========================================= */
-#chatBox, #chatMessages, #friendMessages {
-    height: 350px;
-    overflow-y: auto;
-    padding: 20px;
-    background: #1e293b;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #334155;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-#friendMessages { height: 250px; }
- 
-.user, .ai, .me, .guild-chat, .chat, .feedback {
-    padding: 12px 16px;
-    border-radius: 12px;
-    max-width: 80%;
-    line-height: 1.5;
-}
- 
-.user, .me, .chat {
-    background: #2563eb;
-    color: white;
-    align-self: flex-end;
-    border-bottom-right-radius: 2px;
-}
- 
-.ai {
-    background: #334155;
-    color: white;
-    align-self: flex-start;
-    border-bottom-left-radius: 2px;
-    border-left: 3px solid #22c55e;
-}
-
-.guild-chat, .feedback {
-    background: #0f766e;
-    color: white;
-    border-radius: 12px;
-    margin: 10px 0;
-}
- 
-.chat-input-container {
-    display: flex;
-    gap: 10px;
-}
- 
-#chatInput {
-    flex: 1;
-    padding: 14px;
-    border-radius: 10px;
-}
- 
-#sendMessage {
-    padding: 0 25px;
-    border-radius: 10px;
-    border: none;
-    background: #2563eb;
-    color: white;
+#settingsPage button {
+    margin: 12px;
+    padding: 14px 30px;
     font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    background: #f59e0b;
+    color: white;
+    cursor: pointer;
+    transition: .3s;
+    font-weight: 500;
 }
-#sendMessage:hover { background: #1d4ed8; }
+ 
+#settingsPage button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+}
+ 
+#settingsPage #resetData {
+    background: #ef4444;
+}
+#settingsPage #resetData:hover {
+    background: #dc2626;
+}
+ 
+#settingsPage #syncBtn {
+    background: #06b6d4;
+}
+#settingsPage #syncBtn:hover {
+    background: #0891b2;
+}
+ 
 
-/* =========================================
-   9. PROFIL, DO'KON VA RPG ELEMENTLARI
-   ========================================= */
-.profile {
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 20px;
+#progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 5px;
+    width: 0;
+    background: #22c55e;
+    z-index: 9999;
+    transition: .4s;
 }
+ 
 
 .rank {
     font-size: 26px;
@@ -485,28 +533,14 @@ input[type="file"] {
     margin: 20px auto;
     display: block;
 }
-
-#avatarPreview {
-    width: 120px;
-    height: 120px;
-    margin: auto;
-    font-size: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #1e293b;
-    border-radius: 50%;
-}
-
-.premium, .coin, #weeklyRewardStatus {
+ 
+.premium {
     color: #fbbf24; 
     font-weight: bold;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
 }
-.premium { text-shadow: 0 0 10px rgba(251, 191, 36, 0.3); }
-.coin { font-size: 28px; }
-
-/* Kartalar va jurnallar */
-.shop-item, .lesson, .achievement, .marketItem, .marketCard, .mail, .auctionItem, .rankCard, .wordCard, .adminCard {
+ 
+.shop-item {
     padding: 20px;
     margin: 15px 0;
     border-radius: 12px;
@@ -514,117 +548,21 @@ input[type="file"] {
     border: 1px solid #334155;
     transition: transform 0.2s, border-color 0.2s;
 }
-.shop-item:hover { transform: translateY(-3px); border-color: #38bdf8; }
-.badge { display: inline-block; padding: 12px; margin: 10px; background: #2563eb; border-radius: 12px; }
-.rare { background: #7c3aed; color: white; font-weight: bold; }
-.skin, .effect, .bg { padding: 15px; margin: 10px 0; background: #1e293b; border-radius: 12px; cursor: pointer; }
-
-/* Media oynatgichlar va Kameralar */
-iframe, video, #cameraView {
-    border-radius: 15px;
-    width: 100%;
-    max-width: 500px;
-    background: black;
-    border: none;
-}
-#cameraView { margin-bottom: 20px; }
-
-#seasonPass {
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 20px;
-}
-
-/* HP Barlar */
-.hpBar, .bossBar {
-    width: 100%;
-    height: 30px;
-    background: #374151;
-    border-radius: 20px;
-    margin: 15px 0;
-    overflow: hidden;
-}
-.bossBar { height: 35px; margin: 20px 0; }
  
-#myHP, #enemyHP, #bossHP {
-    height: 100%;
-    text-align: center;
-    line-height: 30px;
+.shop-item:hover {
+    transform: translateY(-3px);
+    border-color: #38bdf8;
+}
+ 
+.coin {
+    color: #fbbf24;
+    font-size: 28px;
     font-weight: bold;
 }
-#myHP { background: #22c55e; }
-#enemyHP { background: #ef4444; }
-#bossHP { background: #dc2626; color: white; line-height: 35px; width: 100%; }
+ 
 
 /* =========================================
-   10. SOZLAMALAR VA PROGRESS BAR
-   ========================================= */
-#settingsPage, #settingsPage2 {
-    text-align: center;
-}
-
-#settingsPage button, #settingsPage2 button {
-    margin: 12px;
-    padding: 14px 30px;
-    font-size: 16px;
-    border: none;
-    border-radius: 12px;
-    background: #f59e0b;
-    color: white;
-    font-weight: 500;
-}
-#settingsPage button:hover, #settingsPage2 button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3); }
-#settingsPage #resetData { background: #ef4444; }
-#settingsPage #resetData:hover { background: #dc2626; }
-#settingsPage #syncBtn { background: #06b6d4; }
-#settingsPage #syncBtn:hover { background: #0891b2; }
- 
-#progress {
-    position: fixed;
-    top: 0; left: 0; height: 5px; width: 0;
-    background: #22c55e;
-    z-index: 9999;
-    transition: .4s;
-}
-
-/* =========================================
-   11. LOADING SCREEN (YUKLANISH EKRANI)
-   ========================================= */
-#loadingScreen {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: #0f172a;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    color: white;
-    transition: opacity .5s ease;
-}
-
-#loadingScreen.fade-out {
-    opacity: 0;
-    pointer-events: none;
-}
- 
-.loader {
-    width: 70px;
-    height: 70px;
-    border: 8px solid #334155;
-    border-top: 8px solid #3b82f6;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
- 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* =========================================
-   12. BURGER MENYU (RESPONSIVE)
+   BURGER MENYU (mobil / planshet)
    ========================================= */
 .burger-btn {
     display: none;
@@ -668,8 +606,1965 @@ iframe, video, #cameraView {
     pointer-events: auto;
 }
 
+
+@media (max-width: 1024px) {
+    header {
+        padding: 16px 24px;
+    }
+
+    .burger-btn {
+        display: flex;
+    }
+
+    #mainNav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100dvh;
+        width: 300px;
+        max-width: 82%;
+        background: #1e293b;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        gap: 10px;
+        padding: 90px 20px 30px;
+        box-shadow: -8px 0 30px rgba(0,0,0,.45);
+        transition: right .35s ease;
+        z-index: 1000;
+        overflow-y: auto;
+    }
+
+    #mainNav.open {
+        right: 0;
+    }
+
+    #mainNav button {
+        width: 100%;
+        text-align: left;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        gap: 20px;
+        padding: 16px 18px;
+    }
+ 
+    .page {
+        padding: 20px;
+    }
+ 
+    #homePage h1 {
+        font-size: 36px;
+    }
+ 
+    #homePage p {
+        font-size: 18px;
+    }
+ 
+    .card {
+        padding: 25px;
+    }
+ 
+    .card h2 {
+        font-size: 34px;
+    }
+ 
+    .card h3 {
+        font-size: 24px;
+    }
+ 
+    .buttons {
+        flex-direction: column;
+    }
+ 
+    .buttons button {
+        width: 100%;
+    }
+ 
+    .chat-input-container {
+        flex-direction: column;
+    }
+ 
+    #sendMessage {
+        padding: 12px;
+    }
+}
+.lesson{
+ 
+padding:20px;
+ 
+background:#1e293b;
+ 
+margin:20px;
+ 
+border-radius:15px;
+ 
+}
+ 
+iframe{
+ 
+border-radius:15px;
+ 
+width:100%;
+ 
+max-width:500px;
+ 
+}
+ 
+#dictionarySearch{
+ 
+padding:15px;
+ 
+width:100%;
+ 
+margin-top:20px;
+ 
+border-radius:10px;
+ 
+}
+ 
+#dictionaryResult{
+ 
+margin-top:15px;
+ 
+font-size:20px;
+ 
+font-weight:bold;
+ 
+}
+#ocrText,
+#translateResult,
+#pdfStatus{
+ 
+padding:15px;
+ 
+background:#1e293b;
+ 
+border-radius:12px;
+ 
+margin-top:15px;
+ 
+min-height:50px;
+ 
+}
+ 
+textarea{
+ 
+width:100%;
+ 
+min-height:120px;
+ 
+padding:15px;
+ 
+border-radius:10px;
+ 
+}
+#speechResult,
+#essayResult,
+#readingResult{
+ 
+padding:15px;
+ 
+background:#1e293b;
+ 
+border-radius:12px;
+ 
+margin-top:15px;
+ 
+min-height:50px;
+ 
+}
+ 
+#essayInput{
+ 
+width:100%;
+ 
+height:180px;
+ 
+padding:15px;
+ 
+border-radius:12px;
+ 
+resize:vertical;
+ 
+}
+#teacherAnswer,
+#grammarResult,
+#studyPlan,
+#generatedWords{
+ 
+padding:20px;
+ 
+background:#1e293b;
+ 
+border-radius:15px;
+ 
+margin-top:15px;
+ 
+min-height:60px;
+ 
+}
+ 
+#teacherQuestion,
+#grammarInput{
+ 
+width:100%;
+ 
+min-height:120px;
+ 
+padding:15px;
+ 
+border-radius:12px;
+ 
+margin-top:10px;
+ 
+resize:vertical;
+ 
+}
+#chatMessages{
+ 
+height:350px;
+ 
+overflow:auto;
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin-bottom:20px;
+ 
+}
+ 
+.user{
+ 
+background:#2563eb;
+ 
+padding:12px;
+ 
+margin:10px 0;
+ 
+border-radius:10px;
+ 
+}
+ 
+.ai{
+ 
+background:#22c55e;
+ 
+padding:12px;
+ 
+margin:10px 0;
+ 
+border-radius:10px;
+ 
+}
+ 
+#liveTranslateResult,
+#quizOutput{
+ 
+background:#1e293b;
+ 
+padding:15px;
+ 
+margin-top:15px;
+ 
+border-radius:12px;
+ 
+}
+#friendMessages{
+ 
+height:250px;
+ 
+overflow:auto;
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+}
+ 
+.me{
+ 
+background:#2563eb;
+ 
+padding:12px;
+ 
+margin:10px 0;
+ 
+border-radius:12px;
+ 
+}
+ 
+#worldRanking{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin-top:20px;
+ 
+}
+#ocrOutput,
+#translateOutput,
+#qrResult,
+#pdfTranslateResult{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin-top:15px;
+ 
+min-height:60px;
+ 
+}
+ 
+textarea{
+ 
+width:100%;
+ 
+height:150px;
+ 
+padding:15px;
+ 
+border-radius:12px;
+ 
+resize:vertical;
+ 
+}
+#cameraView{
+ 
+width:100%;
+ 
+max-width:500px;
+ 
+border-radius:15px;
+ 
+background:black;
+ 
+margin-bottom:20px;
+ 
+}
+ 
+#cameraResult,
+#objectResult,
+#voiceResult,
+#pronunciationScore{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin-top:15px;
+ 
+min-height:60px;
+ 
+}
+#academyMenu{
+ 
+display:grid;
+ 
+grid-template-columns:repeat(2,1fr);
+ 
+gap:15px;
+ 
+margin-bottom:20px;
+ 
+}
+ 
+#academyMenu button{
+ 
+padding:15px;
+ 
+border:none;
+ 
+border-radius:12px;
+ 
+background:#2563eb;
+ 
+color:white;
+ 
+font-size:16px;
+ 
+cursor:pointer;
+ 
+}
+ 
+#academyContent{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin:20px 0;
+ 
+}
+ 
+iframe{
+ 
+border-radius:15px;
+ 
+border:none;
+ 
+background:black;
+ 
+}
+.achievement{
+ 
+padding:15px;
+ 
+background:#1e293b;
+ 
+margin:10px 0;
+ 
+border-radius:12px;
+ 
+}
+ 
+.badge{
+ 
+display:inline-block;
+ 
+padding:12px;
+ 
+margin:10px;
+ 
+background:#2563eb;
+ 
+border-radius:12px;
+ 
+}
+ 
+#calendar{
+ 
+display:grid;
+ 
+grid-template-columns:repeat(7,1fr);
+ 
+gap:10px;
+ 
+margin-top:20px;
+ 
+}
+ 
+.day{
+ 
+padding:15px;
+ 
+background:#1e293b;
+ 
+border-radius:10px;
+ 
+text-align:center;
+ 
+}
+ 
+#progressChart{
+ 
+width:100%;
+ 
+height:300px;
+ 
+background:#1e293b;
+ 
+border-radius:15px;
+ 
+margin-top:20px;
+ 
+}
+.profile{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin-bottom:20px;
+ 
+}
+ 
+.chat{
+ 
+background:#2563eb;
+ 
+padding:12px;
+ 
+margin:10px 0;
+ 
+border-radius:10px;
+ 
+}
+ 
+#seasonPass{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin-top:20px;
+ 
+}
+ 
+#weeklyRewardStatus{
+ 
+margin-top:15px;
+ 
+font-size:20px;
+ 
+font-weight:bold;
+ 
+color:gold;
+ 
+}
+.guild-chat{
+ 
+background:#0f766e;
+ 
+padding:12px;
+ 
+margin:10px 0;
+ 
+border-radius:12px;
+ 
+color:white;
+ 
+}
+ 
+#guildMission{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin:20px 0;
+ 
+font-size:18px;
+ 
+font-weight:bold;
+ 
+}
+ 
+#guildRanking{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin-top:20px;
+ 
+}
+.hpBar{
+ 
+width:100%;
+ 
+height:30px;
+ 
+background:#374151;
+ 
+border-radius:20px;
+ 
+margin:15px 0;
+ 
+overflow:hidden;
+ 
+}
+ 
+#myHP{
+ 
+height:100%;
+ 
+background:#22c55e;
+ 
+text-align:center;
+ 
+line-height:30px;
+ 
+font-weight:bold;
+ 
+}
+ 
+#enemyHP{
+ 
+height:100%;
+ 
+background:#ef4444;
+ 
+text-align:center;
+ 
+line-height:30px;
+ 
+font-weight:bold;
+ 
+}
+ 
+#battleHistory{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin-top:20px;
+ 
+min-height:120px;
+ 
+}
+.bossBar{
+ 
+width:100%;
+ 
+height:35px;
+ 
+background:#374151;
+ 
+border-radius:20px;
+ 
+overflow:hidden;
+ 
+margin:20px 0;
+ 
+}
+ 
+#bossHP{
+ 
+height:100%;
+ 
+width:100%;
+ 
+background:#dc2626;
+ 
+text-align:center;
+ 
+line-height:35px;
+ 
+font-weight:bold;
+ 
+color:white;
+ 
+}
+ 
+.item{
+ 
+padding:15px;
+ 
+margin:10px;
+ 
+background:#1e293b;
+ 
+border-radius:12px;
+ 
+display:inline-block;
+ 
+}
+ 
+.rare{
+ 
+background:#7c3aed;
+ 
+color:white;
+ 
+font-weight:bold;
+ 
+}
+#worldMap{
+ 
+display:grid;
+ 
+grid-template-columns:repeat(2,1fr);
+ 
+gap:15px;
+ 
+margin:20px 0;
+ 
+}
+ 
+.map-btn{
+ 
+padding:20px;
+ 
+font-size:18px;
+ 
+border:none;
+ 
+border-radius:15px;
+ 
+background:#2563eb;
+ 
+color:white;
+ 
+cursor:pointer;
+ 
+}
+ 
+#npcDialog,
+#chestReward,
+#sideQuest{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin:20px 0;
+ 
+min-height:60px;
+ 
+}
+.marketItem{
+ 
+padding:15px;
+ 
+margin:10px;
+ 
+background:#1e293b;
+ 
+border-radius:15px;
+ 
+}
+ 
+#kingdomInfo,
+#houseInfo,
+#petInfo,
+#eggResult,
+#mountInfo,
+#farmCoins{
+ 
+padding:20px;
+ 
+background:#1e293b;
+ 
+border-radius:15px;
+ 
+margin:15px 0;
+ 
+font-size:18px;
+ 
+font-weight:bold;
+ 
+}
+#wheelResult,
+#slotResult,
+#mysteryReward,
+#diamondCount,
+#battlePassStatus,
+#vipStatus,
+#dailyEvent{
+ 
+background:#1e293b;
+ 
+padding:18px;
+ 
+margin:15px 0;
+ 
+border-radius:15px;
+ 
+font-size:18px;
+ 
+font-weight:bold;
+ 
+}
+ 
+#spinWheel,
+#playSlot,
+#openMystery,
+#buyPass{
+ 
+width:100%;
+ 
+padding:15px;
+ 
+font-size:18px;
+ 
+border:none;
+ 
+border-radius:12px;
+ 
+cursor:pointer;
+ 
+}
+.marketCard,
+.mail,
+.auctionItem{
+ 
+background:#1e293b;
+ 
+padding:15px;
+ 
+margin:10px 0;
+ 
+border-radius:12px;
+ 
+font-size:17px;
+ 
+}
+ 
+#tradeStatus,
+#bankCoins{
+ 
+background:#0f172a;
+ 
+padding:15px;
+ 
+margin-top:15px;
+ 
+border-radius:12px;
+ 
+font-weight:bold;
+ 
+}
+#avatarPreview{
+ 
+width:120px;
+ 
+height:120px;
+ 
+margin:auto;
+ 
+font-size:70px;
+ 
+display:flex;
+ 
+align-items:center;
+ 
+justify-content:center;
+ 
+background:#1e293b;
+ 
+border-radius:50%;
+ 
+}
+ 
+.skin,
+.effect,
+.badge,
+.bg{
+ 
+padding:15px;
+ 
+margin:10px 0;
+ 
+background:#1e293b;
+ 
+border-radius:12px;
+ 
+cursor:pointer;
+ 
+}
+ 
+body[data-theme="dark"]{
+ 
+background:#0f172a;
+ 
+color:white;
+ 
+}
+ 
+body[data-theme="light"]{
+ 
+background:white;
+ 
+color:black;
+ 
+}
+ 
+body[data-theme="neon"]{
+ 
+background:black;
+ 
+color:#00ffcc;
+ 
+}
+#loadingScreen{
+ 
+position:fixed;
+ 
+top:0;
+ 
+left:0;
+ 
+width:100%;
+ 
+height:100%;
+ 
+background:#0f172a;
+ 
+display:flex;
+ 
+flex-direction:column;
+ 
+justify-content:center;
+ 
+align-items:center;
+ 
+z-index:9999;
+ 
+color:white;
+
+transition: opacity .5s ease;
+ 
+}
+
+#loadingScreen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+ 
+.loader{
+ 
+width:70px;
+ 
+height:70px;
+ 
+border:8px solid #334155;
+ 
+border-top:8px solid #3b82f6;
+ 
+border-radius:50%;
+ 
+animation:spin 1s linear infinite;
+ 
+}
+ 
+@keyframes spin{
+ 
+0%{
+ 
+transform:rotate(0deg);
+ 
+}
+ 
+100%{
+ 
+transform:rotate(360deg);
+ 
+}
+ 
+}
+ 
+button{
+ 
+cursor:pointer;
+ 
+transition:.3s;
+ 
+}
+ 
+button:hover{
+ 
+transform:scale(1.05);
+ 
+}   
+.adminCard{
+ 
+padding:15px;
+ 
+background:#1e293b;
+ 
+margin:10px 0;
+ 
+border-radius:12px;
+ 
+}
+ 
+.feedback{
+ 
+padding:15px;
+ 
+background:#0f766e;
+ 
+margin:10px 0;
+ 
+border-radius:12px;
+ 
+color:white;
+ 
+}
+ 
+#adminStats,
+#announcementStatus,
+#banStatus{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin:20px 0;
+ 
+font-size:18px;
+ 
+}
+#notificationStatus,
+#installStatus,
+#syncStatus,
+#cacheStatus,
+#offlineStatus{
+ 
+padding:20px;
+ 
+background:#1e293b;
+ 
+border-radius:15px;
+ 
+margin:15px 0;
+ 
+font-size:18px;
+ 
+font-weight:bold;
+ 
+}
+ 
+#pwaPage button{
+ 
+width:100%;
+ 
+padding:15px;
+ 
+margin:10px 0;
+ 
+border:none;
+ 
+border-radius:12px;
+ 
+cursor:pointer;
+ 
+font-size:17px;
+ 
+}
+#voiceTeacherResult,
+#grammarAnswer,
+#essayResult,
+#readingScore,
+#studyPlanAI{
+ 
+padding:20px;
+ 
+background:#1e293b;
+ 
+border-radius:15px;
+ 
+margin-top:15px;
+ 
+min-height:70px;
+ 
+}
+ 
+#grammarText,
+#essayText{
+ 
+width:100%;
+ 
+height:180px;
+ 
+padding:15px;
+ 
+border-radius:12px;
+ 
+resize:vertical;
+ 
+margin-top:10px;
+ 
+}
+ 
+#aiCoachPage button{
+ 
+width:100%;
+ 
+padding:15px;
+ 
+margin-top:15px;
+ 
+border:none;
+ 
+border-radius:12px;
+ 
+font-size:17px;
+ 
+cursor:pointer;
+ 
+}
+#gamesMenu{
+ 
+display:grid;
+ 
+grid-template-columns:repeat(2,1fr);
+ 
+gap:15px;
+ 
+margin-bottom:20px;
+ 
+}
+ 
+#gamesMenu button{
+ 
+padding:15px;
+ 
+border:none;
+ 
+border-radius:12px;
+ 
+cursor:pointer;
+ 
+font-size:16px;
+ 
+}
+ 
+#gameContainer{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+min-height:220px;
+ 
+margin:20px 0;
+ 
+}
+ 
+#dailyChallenge,
+#weeklyRank{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin-top:20px;
+ 
+}
+#backupStatus,
+#googleStatus,
+#importStatus,
+#statistics,
+#graduateStatus{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin:15px 0;
+ 
+font-size:18px;
+ 
+font-weight:bold;
+ 
+}
+ 
+#backupPage button{
+ 
+width:100%;
+ 
+padding:15px;
+ 
+margin:10px 0;
+ 
+border:none;
+ 
+border-radius:12px;
+ 
+font-size:17px;
+ 
+cursor:pointer;
+ 
+}
+.rankCard{
+ 
+background:#1e293b;
+ 
+padding:15px;
+ 
+margin:10px 0;
+ 
+border-radius:12px;
+ 
+font-size:18px;
+ 
+}
+ 
+#serverStatus,
+#matchStatus,
+#pvpStatus,
+#tournamentStatus,
+#loginStatus{
+ 
+background:#0f172a;
+ 
+padding:20px;
+ 
+border-radius:15px;
+ 
+margin:15px 0;
+ 
+font-weight:bold;
+ 
+font-size:18px;
+ 
+}
+ 
+#onlinePage button{
+ 
+width:100%;
+ 
+padding:15px;
+ 
+margin:10px 0;
+ 
+border:none;
+ 
+border-radius:12px;
+ 
+cursor:pointer;
+ 
+font-size:17px;
+ 
+}
+.wordCard{
+ 
+background:#1e293b;
+ 
+padding:15px;
+ 
+margin:10px 0;
+ 
+border-radius:12px;
+ 
+font-size:18px;
+ 
+}
+ 
+#translateResult,
+#speechResult,
+#ocrResult,
+#dictionaryResult,
+#wordList{
+ 
+background:#0f172a;
+ 
+padding:20px;
+ 
+margin-top:15px;
+ 
+border-radius:15px;
+ 
+min-height:70px;
+ 
+}
+ 
+#aiToolsPage textarea,
+#aiToolsPage input{
+ 
+width:100%;
+ 
+padding:12px;
+ 
+margin-top:10px;
+ 
+border-radius:10px;
+ 
+}
+ 
+#aiToolsPage button{
+ 
+width:100%;
+ 
+padding:15px;
+ 
+margin-top:15px;
+ 
+border:none;
+ 
+border-radius:12px;
+ 
+cursor:pointer;
+ 
+font-size:17px;
+ 
+}
+#pronunciationScore,
+#mockStatus,
+#pdfStatus,
+#downloadStatus,
+#analyticsBox,
+#mentorAnswer{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+margin:15px 0;
+ 
+border-radius:15px;
+ 
+font-size:18px;
+ 
+}
+ 
+#learningPage button{
+ 
+width:100%;
+ 
+padding:15px;
+ 
+margin:10px 0;
+ 
+border:none;
+ 
+border-radius:12px;
+ 
+cursor:pointer;
+ 
+font-size:17px;
+ 
+}
+ 
+video{
+ 
+border-radius:15px;
+ 
+margin-bottom:20px;
+ 
+}
+#globeViewer,
+#arStatus,
+#vrStatus,
+#classStatus,
+#teacherPanel,
+#schoolPanel,
+#certificateStatus,
+#enterpriseInfo{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+margin:15px 0;
+ 
+border-radius:15px;
+ 
+font-size:18px;
+ 
+}
+ 
+#premiumPage button{
+ 
+width:100%;
+ 
+padding:15px;
+ 
+margin:10px 0;
+ 
+border:none;
+ 
+border-radius:12px;
+ 
+font-size:17px;
+ 
+cursor:pointer;
+ 
+}
+#ultimateResult{
+ 
+background:#1e293b;
+ 
+padding:20px;
+ 
+margin-top:20px;
+ 
+border-radius:15px;
+ 
+min-height:200px;
+ 
+font-size:18px;
+ 
+}
+ 
+#ultimatePage button{
+ 
+width:100%;
+ 
+padding:16px;
+ 
+margin:10px 0;
+ 
+border:none;
+ 
+border-radius:14px;
+ 
+cursor:pointer;
+ 
+font-size:18px;
+ 
+transition:.3s;
+ 
+}
+ 
+#ultimatePage button:hover{
+ 
+transform:scale(1.03);
+ 
+}
+ 
+
+#settingsPage2{
+    text-align:center;
+}
+ 
+#settingsPage2 button{
+    margin:12px;
+    padding:14px 30px;
+    font-size:16px;
+    border:none;
+    border-radius:12px;
+    background:#f59e0b;
+    color:white;
+    cursor:pointer;
+    transition:.3s;
+    font-weight:500;
+}
+ 
+#settingsPage2 button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 5px 15px rgba(245, 158, 11, 0.3);
+}
+ 
+#aiToolsPage2 textarea,
+#aiToolsPage2 input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:10px;
+}
+ 
+#aiToolsPage2 button{
+    width:100%;
+    padding:15px;
+    margin-top:15px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:17px;
+}
+ 
+#translateResult2,
+#speechResult2,
+#ocrResult2,
+#dictionaryResult2,
+#essayResult2{
+    background:#0f172a;
+    padding:20px;
+    margin-top:15px;
+    border-radius:15px;
+    min-height:70px;
+}
+ 
+#pdfStatus2,
+#pronunciationScore2{
+    background:#1e293b;
+    padding:20px;
+    margin:15px 0;
+    border-radius:15px;
+    font-size:18px;
+}
+ 
+#tournamentStatus2{
+    background:#0f172a;
+    padding:20px;
+    border-radius:15px;
+    margin:15px 0;
+    font-weight:bold;
+    font-size:18px;
+}
+ 
 /* =========================================
-   13. PASTKI NAVIGATSIYA (MOBILE BOTTOM NAV)
+   IDEALLASHTIRISH: UMUMIY DIZAYN YAXSHILANISHI
+   ========================================= */
+
+/* Har bir sahifadagi bo'lim (h2 headerdan keyingi kontent) uchun izchil karta ko'rinishi */
+.page > div:not(.stats):not(.buttons),
+.page section {
+    scroll-margin-top: 20px;
+}
+
+button, input, textarea, select {
+    font-family: 'Poppins', sans-serif;
+}
+
+input[type="text"], input:not([type]), input[type="file"], textarea, select {
+    background: #1e293b;
+    color: #fff;
+    border: 2px solid #334155;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 15px;
+    transition: border-color .2s;
+}
+
+input[type="text"]:focus, input:not([type]):focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #38bdf8;
+}
+
+/* Har qanday oddiy natija/status divlariga izchil karta ko'rinishi */
+.page > div[id] {
+    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+}
+
+/* Eski gorizontal skroll qoidasi endi faqat #mainNav ochiq holatda emas paytlar uchun ishlatilmaydi (vertikal panelga almashtirildi) */
+@media (max-width: 768px) {
+    #mainNav::-webkit-scrollbar { width: 4px; }
+    #mainNav::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 4px; }
+}
+
+/* Barcha 2 va 7 ustunli gridlarni kichik ekranda 1-2 ustunga tushirish */
+@media (max-width: 640px) {
+    #academyMenu,
+    #worldMap,
+    #avatarPreview + select,
+    #gamesMenu {
+        grid-template-columns: repeat(1, 1fr) !important;
+    }
+    #calendar {
+        grid-template-columns: repeat(5, 1fr) !important;
+    }
+    .page {
+        padding: 16px !important;
+    }
+    .page h2 {
+        font-size: 24px !important;
+    }
+    header {
+        padding: 14px !important;
+    }
+    .logo {
+        font-size: 20px !important;
+    }
+    .stats {
+        grid-template-columns: 1fr 1fr !important;
+    }
+    #ultimatePage button,
+    #premiumPage button,
+    #onlinePage button,
+    #backupPage button,
+    #aiToolsPage button,
+    #aiToolsPage2 button,
+    #aiCoachPage button,
+    #learningPage button,
+    #pwaPage button {
+        font-size: 15px !important;
+        padding: 12px !important;
+    }
+}
+
+/* Yuklanish ekrani animatsiyasi allaqachon bor, unga qo'shimcha silliq chiqish effekti */
+#loadingScreen {
+    transition: opacity .4s ease;
+}
+
+/* Barcha sahifalar orasidagi almashinuv animatsiyasi allaqachon .page.active orqali ishlaydi (fade) */
+
+/* =========================================
+   TIL TANLASH (English / Русский)
+   ========================================= */
+.lang-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.lang-btn {
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 1px solid rgba(148,163,184,.2);
+    background: #1e293b;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.lang-btn:hover {
+    border-color: #38bdf8;
+    color: #e2e8f0;
+}
+
+.lang-btn.active {
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 6px 16px rgba(37,99,235,.35);
+}
+
+/* =========================================
+   OFFLINE BANNER
+   ========================================= */
+#offlineBanner {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1200;
+    background: linear-gradient(90deg, #b45309, #d97706);
+    color: #fff;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 12px;
+}
+
+#offlineBanner.show {
+    display: block;
+}
+
+/* =========================================
+   ONBOARDING MODAL
+   ========================================= */
+#onboardingModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 9, 20, .75);
+    backdrop-filter: blur(6px);
+    z-index: 1500;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+#onboardingModal.show {
+    display: flex;
+}
+
+.onboarding-card {
+    background: #1e293b;
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 20px;
+    padding: 36px 30px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    animation: fade .4s ease;
+}
+
+.onboarding-card h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.onboarding-card p {
+    color: #94a3b8;
+    margin-bottom: 24px;
+    font-size: 14px;
+}
+
+.onboarding-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.onboarding-options button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border: 1px solid rgba(148,163,184,.2);
+    border-radius: 14px;
+    background: #0f172a;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform .2s, border-color .2s, background .2s;
+}
+
+.onboarding-options button span {
+    font-size: 20px;
+}
+
+.onboarding-options button:hover {
+    transform: translateY(-2px);
+    border-color: #38bdf8;
+    background: #16233d;
+}
+
+/* =========================================
+   BOSH SAHIFA — KUNLIK MAQSAD KARTASI
+   ========================================= */
+.daily-goal-card {
+    max-width: 460px;
+    margin: 0 auto 30px;
+    background: linear-gradient(145deg, rgba(30,41,59,.9), rgba(15,23,42,.9));
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 18px;
+    padding: 22px 24px;
+    text-align: left;
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+}
+
+.daily-goal-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+    color: #cbd5e1;
+    margin-bottom: 10px;
+}
+
+.daily-goal-track {
+    height: 10px;
+    background: #0f172a;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 18px;
+}
+
+.daily-goal-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #38bdf8, #22c55e);
+    border-radius: 20px;
+    transition: width .5s ease;
+}
+
+.home-mini-stats {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 14px;
+    color: #e2e8f0;
+}
+
+.home-mini-stats div {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.home-mini-stats i {
+    color: #38bdf8;
+}
+
+/* =========================================
+   TAVSIYA KARTASI (statistika sahifasi)
+   ========================================= */
+.recommendation-card {
+    max-width: 600px;
+    margin: 30px auto 0;
+    background: rgba(56, 189, 248, .08);
+    border: 1px solid rgba(56, 189, 248, .3);
+    border-radius: 16px;
+    padding: 20px 22px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #e2e8f0;
+    text-align: left;
+    display: none;
+}
+
+.recommendation-card.show {
+    display: block;
+}
+
+/* =========================================
+   SOZLAMALAR — TUGMALAR VA HOLAT XABARI
+   ========================================= */
+#settingsPage button,
+#importLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 340px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 12px;
+    background: #1e293b;
+    border: 1px solid rgba(148,163,184,.15);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform .2s, border-color .2s;
+}
+
+#settingsPage button:hover,
+#importLabel:hover {
+    transform: translateY(-2px);
+    border-color: #38bdf8;
+}
+
+#resetData {
+    border-color: rgba(239,68,68,.3) !important;
+    color: #fca5a5;
+}
+
+#resetData:hover {
+    border-color: #ef4444 !important;
+}
+
+#settingsStatus {
+    max-width: 340px;
+    font-size: 13px;
+    color: #4ade80;
+    min-height: 18px;
+}
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* =========================================
+   LIGHT MODE — TO'LIQ QAYTA RANGLASH
+   ========================================= */
+body[data-theme="light"] header {
+    background: #f1f5f9;
+    box-shadow: 0 5px 15px rgba(0,0,0,.08);
+}
+
+body[data-theme="light"] #mainNav {
+    background: #f1f5f9;
+}
+
+body[data-theme="light"] #mainNav button {
+    background: #2563eb;
+    color: #fff;
+}
+
+body[data-theme="light"] .burger-btn span {
+    background: #2563eb;
+}
+
+body[data-theme="light"] textarea,
+body[data-theme="light"] input[type="text"],
+body[data-theme="light"] input:not([type]),
+body[data-theme="light"] input[type="file"],
+body[data-theme="light"] select {
+    background: #f8fafc;
+    color: #0f172a;
+    border-color: #cbd5e1;
+}
+
+body[data-theme="light"] #chatBox,
+body[data-theme="light"] #aiAnswer,
+body[data-theme="light"] #quizResult,
+body[data-theme="light"] #ocrResult,
+body[data-theme="light"] .stats div,
+body[data-theme="light"] .shop-item,
+body[data-theme="light"] .wordCard,
+body[data-theme="light"] .rankCard,
+body[data-theme="light"] .lesson,
+body[data-theme="light"] .page > div[id] {
+    background: #f1f5f9;
+    color: #0f172a;
+    border-color: #e2e8f0;
+}
+
+body[data-theme="light"] .ai {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+body[data-theme="light"] hr {
+    border-top-color: #cbd5e1;
+}
+
+body[data-theme="light"] #bottomNav {
+    background: #f1f5f9;
+    border-top-color: #e2e8f0;
+}
+
+body[data-theme="light"] #bottomNav button {
+    color: #64748b;
+}
+
+body[data-theme="light"] #bottomNav button.active {
+    color: #2563eb;
+}
+
+/* =========================================
+   YUQORIGA QAYTISH TUGMASI
+   ========================================= */
+#scrollTopBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 30px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(15px);
+    pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease, background .2s;
+    z-index: 997;
+}
+
+#scrollTopBtn.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+#scrollTopBtn:hover {
+    background: #1d4ed8;
+}
+
+@media (max-width: 768px) {
+    #scrollTopBtn {
+        bottom: 82px;
+        right: 16px;
+        width: 42px;
+        height: 42px;
+    }
+}
+
+/* =========================================
+   PASTKI NAVIGATSIYA (mobil uchun bottom nav)
    ========================================= */
 #bottomNav {
     display: none;
@@ -713,197 +2608,12 @@ iframe, video, #cameraView {
     color: #38bdf8;
 }
 
-/* =========================================
-   14. MOSLASHUVCHAN DIZAYN (RESPONSIVE)
-   ========================================= */
-@media (max-width: 1024px) {
-    header {
-        padding: 16px 24px;
-    }
-
-    .burger-btn {
-        display: flex;
-    }
-
-    nav {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        height: 100dvh;
-        width: 300px;
-        max-width: 82%;
-        background: #1e293b;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        align-items: stretch;
-        gap: 10px;
-        padding: 90px 20px 30px;
-        box-shadow: -8px 0 30px rgba(0,0,0,.45);
-        transition: right .35s ease;
-        z-index: 1000;
-        overflow-y: auto;
-    }
-
-    nav.open {
-        right: 0;
-    }
-
-    nav button {
-        width: 100%;
-        text-align: left;
-        font-size: 15px;
-    }
-}
-
 @media (max-width: 768px) {
-    header {
-        gap: 20px;
-        padding: 16px 18px;
-    }
- 
-    .page {
-        padding: 20px;
-    }
- 
-    #homePage h1 {
-        font-size: 36px;
-    }
- 
-    #homePage p {
-        font-size: 18px;
-    }
- 
-    .card {
-        padding: 25px;
-    }
- 
-    .card h2 { font-size: 34px; }
-    .card h3 { font-size: 24px; }
- 
-    .buttons {
-        flex-direction: column;
-    }
- 
-    .buttons button {
-        width: 100%;
-    }
- 
-    .chat-input-container {
-        flex-direction: column;
-    }
- 
-    #sendMessage {
-        padding: 12px;
-    }
-
-    nav {
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 6px;
-    }
-    nav::-webkit-scrollbar { height: 4px; }
-    nav::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 4px; }
-    nav button { flex: 0 0 auto; }
-
     #bottomNav {
         display: block;
     }
- 
+
     main {
         padding-bottom: 70px;
     }
-}
-
-@media (max-width: 640px) {
-    #academyMenu,
-    #worldMap,
-    #avatarPreview + select,
-    #gamesMenu {
-        grid-template-columns: repeat(1, 1fr) !important;
-    }
-    #calendar {
-        grid-template-columns: repeat(5, 1fr) !important;
-    }
-    .page {
-        padding: 16px !important;
-    }
-    .page h2 {
-        font-size: 24px !important;
-    }
-    header {
-        padding: 14px !important;
-    }
-    .logo {
-        font-size: 20px !important;
-    }
-    .stats {
-        grid-template-columns: 1fr 1fr !important;
-    }
-}
-
-/* =========================================
-   15. MAVZULAR (THEMES)
-   ========================================= */
-/* LIGHT MODE (YORUG' MAVZU) */
-body[data-theme="light"] {
-    background: white;
-    color: black;
-}
-body[data-theme="light"] header {
-    background: #f1f5f9;
-    box-shadow: 0 5px 15px rgba(0,0,0,.08);
-}
-body[data-theme="light"] nav, body[data-theme="light"] #bottomNav {
-    background: #f1f5f9;
-}
-body[data-theme="light"] nav button {
-    background: #2563eb;
-    color: #fff;
-}
-body[data-theme="light"] .burger-btn span {
-    background: #2563eb;
-}
-body[data-theme="light"] textarea,
-body[data-theme="light"] input,
-body[data-theme="light"] select {
-    background: #f8fafc;
-    color: #0f172a;
-    border-color: #cbd5e1;
-}
-body[data-theme="light"] #chatBox,
-body[data-theme="light"] #chatMessages,
-body[data-theme="light"] #friendMessages,
-body[data-theme="light"] .stats div,
-body[data-theme="light"] .shop-item,
-body[data-theme="light"] .lesson,
-body[data-theme="light"] .page > div[id] {
-    background: #f1f5f9;
-    color: #0f172a;
-    border-color: #e2e8f0;
-}
-body[data-theme="light"] .ai {
-    background: #e2e8f0;
-    color: #0f172a;
-}
-body[data-theme="light"] hr {
-    border-top-color: #cbd5e1;
-}
-body[data-theme="light"] #bottomNav button {
-    color: #64748b;
-}
-body[data-theme="light"] #bottomNav button.active {
-    color: #2563eb;
-}
-
-/* NEON MODE (NEON MAVZU) */
-body[data-theme="neon"] {
-    background: black;
-    color: #00ffcc;
-}
-body[data-theme="neon"] button {
-    border: 1px solid #00ffcc;
-    background: transparent;
-    color: #00ffcc;
 }

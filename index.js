@@ -1,8 +1,98 @@
-// =========================================
-// ENGLISH MASTER PRO - GLOBAL JAVASCRIPT (TUZATILGAN)
-// =========================================
 
-// -------- Burger Menyu (mobil / planshet) --------
+const onboardingModal = document.getElementById("onboardingModal");
+if (onboardingModal) {
+    const savedLevel = localStorage.getItem("userLevel");
+    if (!savedLevel) {
+        onboardingModal.classList.add("show");
+    }
+    onboardingModal.querySelectorAll("[data-level]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            localStorage.setItem("userLevel", btn.dataset.level);
+            onboardingModal.classList.remove("show");
+            const subtitleEl = document.getElementById("homeSubtitle");
+            const labels = { beginner: "Boshlang'ich", intermediate: "O'rta", advanced: "Yuqori" };
+            if (subtitleEl) subtitleEl.innerHTML = `Darajangiz: ${labels[btn.dataset.level]} — sizga mos mashqlar tayyor!`;
+        });
+    });
+
+    const subtitleEl = document.getElementById("homeSubtitle");
+    if (subtitleEl && savedLevel) {
+        const labels = { beginner: "Boshlang'ich", intermediate: "O'rta", advanced: "Yuqori" };
+        subtitleEl.innerHTML = `Darajangiz: ${labels[savedLevel] || savedLevel} — sizga mos mashqlar tayyor!`;
+    }
+}
+
+
+const offlineBanner = document.getElementById("offlineBanner");
+function updateOnlineStatus() {
+    if (!offlineBanner) return;
+    offlineBanner.classList.toggle("show", !navigator.onLine);
+}
+window.addEventListener("online", updateOnlineStatus);
+window.addEventListener("offline", updateOnlineStatus);
+updateOnlineStatus();
+
+const notifyBtn = document.getElementById("notifyBtn");
+const settingsStatusEl = document.getElementById("settingsStatus");
+if (notifyBtn) {
+    notifyBtn.addEventListener("click", async () => {
+        if (!("Notification" in window)) {
+            if (settingsStatusEl) settingsStatusEl.innerHTML = "❌ Brauzeringiz bildirishnomani qo'llamaydi";
+            return;
+        }
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+            localStorage.setItem("dailyReminder", "true");
+            if (settingsStatusEl) settingsStatusEl.innerHTML = "✅ Kunlik eslatma yoqildi";
+            new Notification("English Master Pro", { body: "Bugungi so'zlaringizni o'rganishni unutmang! 📚" });
+        } else {
+            if (settingsStatusEl) settingsStatusEl.innerHTML = "⚠️ Ruxsat berilmadi";
+        }
+    });
+}
+
+
+const exportBtn = document.getElementById("exportBtn");
+const importInput = document.getElementById("importInput");
+
+if (exportBtn) {
+    exportBtn.addEventListener("click", () => {
+        const data = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            data[key] = localStorage.getItem(key);
+        }
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `english-master-backup-${getTodayStr()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        if (settingsStatusEl) settingsStatusEl.innerHTML = "✅ Progress fayl qilib yuklab olindi";
+    });
+}
+
+if (importInput) {
+    importInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            try {
+                const data = JSON.parse(reader.result);
+                Object.keys(data).forEach(key => localStorage.setItem(key, data[key]));
+                if (settingsStatusEl) settingsStatusEl.innerHTML = "✅ Progress tiklandi, sahifa yangilanmoqda...";
+                setTimeout(() => location.reload(), 1000);
+            } catch (err) {
+                if (settingsStatusEl) settingsStatusEl.innerHTML = "❌ Fayl noto'g'ri formatda";
+            }
+        };
+        reader.readAsText(file);
+    });
+}
+
+
 const burgerBtn = document.getElementById("burgerBtn");
 const mainNav = document.getElementById("mainNav");
 const navOverlay = document.getElementById("navOverlay");
@@ -30,27 +120,37 @@ if (burgerBtn && mainNav && navOverlay) {
 
     navOverlay.addEventListener("click", closeNav);
 
-    // Nav ichidagi istalgan tugma bosilganda menyu yopilsin (mobil/planshetda)
+  
     mainNav.addEventListener("click", (e) => {
         if (e.target.tagName === "BUTTON") {
             closeNav();
         }
     });
 
-    // Ekran kengaytirilsa (desktopga o'tilsa) menyu avtomatik yopilsin
+    
     window.addEventListener("resize", () => {
         if (window.innerWidth > 1024) {
             closeNav();
         }
     });
 
-    // Escape tugmasi bilan yopish
+  
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeNav();
     });
 }
 
-// -------- Sahifalar va Navigatsiya --------
+
+const scrollTopBtn = document.getElementById("scrollTopBtn");
+if (scrollTopBtn) {
+    window.addEventListener("scroll", () => {
+        scrollTopBtn.classList.toggle("show", window.scrollY > 300);
+    });
+    scrollTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}
+
 const pages = document.querySelectorAll(".page");
 
 function openPage(id) {
@@ -61,9 +161,20 @@ function openPage(id) {
     if (targetPage) {
         targetPage.classList.add("active");
     }
+
+    
+    document.querySelectorAll("#mainNav button").forEach(btn => {
+        btn.classList.toggle("active", menuButtons[btn.id] === id);
+    });
+
+   
+    syncBottomNav(id);
+
+   
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// Menyu tugmalariga hodisalarni ulash
+
 const menuButtons = {
     "homeBtn": "homePage",
     "flashBtn": "flashPage",
@@ -89,7 +200,7 @@ Object.keys(menuButtons).forEach(btnId => {
     }
 });
 
-// -------- Pastki navigatsiya (mobil) --------
+
 const bottomNavButtons = document.querySelectorAll("#bottomNav button[data-target]");
 
 function syncBottomNav(pageId) {
@@ -112,149 +223,148 @@ bottomNavButtons.forEach(btn => {
 
 syncBottomNav("homePage");
 
-// -------- Ma'lumotlar bazasi (So'zlar) --------
 const words = [
-    // Oila (Family)
-    { en: "Family", uz: "Oila", example: "I love my family.", category: "Oila" },
-    { en: "Mother", uz: "Ona", example: "My mother is a doctor.", category: "Oila" },
-    { en: "Father", uz: "Ota", example: "My father works hard.", category: "Oila" },
-    { en: "Sister", uz: "Opa/Singil", example: "My sister is younger.", category: "Oila" },
-    { en: "Brother", uz: "Aka/Uka", example: "My brother is tall.", category: "Oila" },
-    { en: "Grandmother", uz: "Buvi", example: "My grandmother cooks well.", category: "Oila" },
-    { en: "Grandfather", uz: "Bobo", example: "My grandfather tells stories.", category: "Oila" },
-    { en: "Son", uz: "O'g'il", example: "Their son is smart.", category: "Oila" },
-    { en: "Daughter", uz: "Qiz", example: "Her daughter sings well.", category: "Oila" },
-    { en: "Wife", uz: "Xotin", example: "His wife is a teacher.", category: "Oila" },
-    { en: "Husband", uz: "Er", example: "Her husband is an engineer.", category: "Oila" },
-    { en: "Friend", uz: "Do'st", example: "He is my best friend.", category: "Oila" },
-    // Ovqat (Food)
-    { en: "Apple", uz: "Olma", example: "I eat an apple.", category: "Ovqat" },
-    { en: "Bread", uz: "Non", example: "We buy fresh bread.", category: "Ovqat" },
-    { en: "Water", uz: "Suv", example: "Drink water every day.", category: "Ovqat" },
-    { en: "Milk", uz: "Sut", example: "Children drink milk.", category: "Ovqat" },
-    { en: "Rice", uz: "Guruch", example: "We cook rice for dinner.", category: "Ovqat" },
-    { en: "Meat", uz: "Go'sht", example: "He doesn't eat meat.", category: "Ovqat" },
-    { en: "Egg", uz: "Tuxum", example: "I eat an egg for breakfast.", category: "Ovqat" },
-    { en: "Tea", uz: "Choy", example: "We drink tea every morning.", category: "Ovqat" },
-    { en: "Coffee", uz: "Qahva", example: "She likes strong coffee.", category: "Ovqat" },
-    { en: "Sugar", uz: "Shakar", example: "Add sugar to the tea.", category: "Ovqat" },
-    { en: "Salt", uz: "Tuz", example: "Add some salt to the soup.", category: "Ovqat" },
-    { en: "Fruit", uz: "Meva", example: "Fruit is good for health.", category: "Ovqat" },
-    { en: "Vegetable", uz: "Sabzavot", example: "I eat vegetables daily.", category: "Ovqat" },
-    { en: "Soup", uz: "Sho'rva", example: "This soup is delicious.", category: "Ovqat" },
-    // Uy va Kiyim (Home & Clothes)
-    { en: "House", uz: "Uy", example: "This is our new house.", category: "Uy" },
-    { en: "Room", uz: "Xona", example: "My room is clean.", category: "Uy" },
-    { en: "Door", uz: "Eshik", example: "Please close the door.", category: "Uy" },
-    { en: "Window", uz: "Deraza", example: "Open the window, please.", category: "Uy" },
-    { en: "Table", uz: "Stol", example: "The book is on the table.", category: "Uy" },
-    { en: "Chair", uz: "Stul", example: "Sit on the chair.", category: "Uy" },
-    { en: "Bed", uz: "Karavot", example: "I sleep on my bed.", category: "Uy" },
-    { en: "Kitchen", uz: "Oshxona", example: "Mother is in the kitchen.", category: "Uy" },
-    { en: "Shirt", uz: "Ko'ylak", example: "He is wearing a blue shirt.", category: "Kiyim" },
-    { en: "Shoes", uz: "Poyabzal", example: "These shoes are new.", category: "Kiyim" },
-    { en: "Hat", uz: "Shlyapa", example: "She wears a hat in summer.", category: "Kiyim" },
-    { en: "Jacket", uz: "Kurtka", example: "Wear your jacket, it's cold.", category: "Kiyim" },
-    // Maktab va Ish (School & Work)
-    { en: "School", uz: "Maktab", example: "I go to school.", category: "Maktab" },
-    { en: "Teacher", uz: "O'qituvchi", example: "My teacher is kind.", category: "Maktab" },
-    { en: "Student", uz: "O'quvchi", example: "She is a good student.", category: "Maktab" },
-    { en: "Book", uz: "Kitob", example: "This is my book.", category: "Maktab" },
-    { en: "Pen", uz: "Ruchka", example: "I write with a pen.", category: "Maktab" },
-    { en: "Pencil", uz: "Qalam", example: "Draw with a pencil.", category: "Maktab" },
-    { en: "Notebook", uz: "Daftar", example: "Write it in your notebook.", category: "Maktab" },
-    { en: "Lesson", uz: "Dars", example: "Today's lesson is interesting.", category: "Maktab" },
-    { en: "Exam", uz: "Imtihon", example: "The exam is tomorrow.", category: "Maktab" },
-    { en: "Homework", uz: "Uyga vazifa", example: "I finished my homework.", category: "Maktab" },
-    { en: "Work", uz: "Ish", example: "He goes to work every day.", category: "Ish" },
-    { en: "Job", uz: "Kasb", example: "She has a good job.", category: "Ish" },
-    { en: "Office", uz: "Ofis", example: "I work in an office.", category: "Ish" },
-    { en: "Money", uz: "Pul", example: "He saves his money.", category: "Ish" },
-    { en: "Manager", uz: "Menejer", example: "The manager is busy today.", category: "Ish" },
-    // Sayohat (Travel)
-    { en: "Car", uz: "Mashina", example: "My car is blue.", category: "Sayohat" },
-    { en: "Bus", uz: "Avtobus", example: "We took the bus to school.", category: "Sayohat" },
-    { en: "Train", uz: "Poyezd", example: "The train is fast.", category: "Sayohat" },
-    { en: "Airport", uz: "Aeroport", example: "We arrived at the airport.", category: "Sayohat" },
-    { en: "Ticket", uz: "Chipta", example: "I bought two tickets.", category: "Sayohat" },
-    { en: "City", uz: "Shahar", example: "Tashkent is a big city.", category: "Sayohat" },
-    { en: "Country", uz: "Mamlakat", example: "Uzbekistan is my country.", category: "Sayohat" },
-    { en: "Street", uz: "Ko'cha", example: "This street is busy.", category: "Sayohat" },
-    { en: "Map", uz: "Xarita", example: "Look at the map.", category: "Sayohat" },
-    { en: "Hotel", uz: "Mehmonxona", example: "We stayed at a hotel.", category: "Sayohat" },
-    // Tabiat va Ob-havo (Nature & Weather)
-    { en: "Dog", uz: "It", example: "The dog is running.", category: "Tabiat" },
-    { en: "Cat", uz: "Mushuk", example: "The cat is sleeping.", category: "Tabiat" },
-    { en: "Bird", uz: "Qush", example: "The bird can fly.", category: "Tabiat" },
-    { en: "Tree", uz: "Daraxt", example: "There is a tree in the yard.", category: "Tabiat" },
-    { en: "Flower", uz: "Gul", example: "She gave me a flower.", category: "Tabiat" },
-    { en: "Sun", uz: "Quyosh", example: "The sun is bright today.", category: "Tabiat" },
-    { en: "Moon", uz: "Oy", example: "The moon is beautiful tonight.", category: "Tabiat" },
-    { en: "Rain", uz: "Yomg'ir", example: "It is raining outside.", category: "Ob-havo" },
-    { en: "Snow", uz: "Qor", example: "Snow is falling in winter.", category: "Ob-havo" },
-    { en: "Wind", uz: "Shamol", example: "The wind is strong today.", category: "Ob-havo" },
-    { en: "Cold", uz: "Sovuq", example: "It is cold in winter.", category: "Ob-havo" },
-    { en: "Hot", uz: "Issiq", example: "It is hot in summer.", category: "Ob-havo" },
-    // Vaqt va Sonlar (Time & Numbers)
-    { en: "Today", uz: "Bugun", example: "Today is a good day.", category: "Vaqt" },
-    { en: "Tomorrow", uz: "Ertaga", example: "See you tomorrow.", category: "Vaqt" },
-    { en: "Yesterday", uz: "Kecha", example: "I saw him yesterday.", category: "Vaqt" },
-    { en: "Morning", uz: "Ertalab", example: "I wake up in the morning.", category: "Vaqt" },
-    { en: "Night", uz: "Kecha (tun)", example: "I sleep at night.", category: "Vaqt" },
-    { en: "Week", uz: "Hafta", example: "There are seven days in a week.", category: "Vaqt" },
-    { en: "Month", uz: "Oy (kalendar)", example: "This month is busy.", category: "Vaqt" },
-    { en: "Year", uz: "Yil", example: "Next year will be great.", category: "Vaqt" },
-    { en: "One", uz: "Bir", example: "I have one book.", category: "Sonlar" },
-    { en: "Two", uz: "Ikki", example: "She has two sisters.", category: "Sonlar" },
-    { en: "Three", uz: "Uch", example: "There are three chairs.", category: "Sonlar" },
-    { en: "Ten", uz: "O'n", example: "He counted to ten.", category: "Sonlar" },
-    // His-tuyg'u va Sifatlar (Feelings & Adjectives)
-    { en: "Happy", uz: "Baxtli", example: "She is very happy today.", category: "His-tuyg'u" },
-    { en: "Sad", uz: "Xafa", example: "He looks sad.", category: "His-tuyg'u" },
-    { en: "Angry", uz: "Jahldor", example: "Don't be angry with me.", category: "His-tuyg'u" },
-    { en: "Tired", uz: "Charchagan", example: "I am very tired.", category: "His-tuyg'u" },
-    { en: "Beautiful", uz: "Chiroyli", example: "What a beautiful garden!", category: "Sifat" },
-    { en: "Big", uz: "Katta", example: "This is a big house.", category: "Sifat" },
-    { en: "Small", uz: "Kichik", example: "The kitten is small.", category: "Sifat" },
-    { en: "Fast", uz: "Tez", example: "He runs very fast.", category: "Sifat" },
-    { en: "Slow", uz: "Sekin", example: "The turtle is slow.", category: "Sifat" },
-    { en: "Strong", uz: "Kuchli", example: "He is very strong.", category: "Sifat" },
-    { en: "Smart", uz: "Aqlli", example: "She is a smart student.", category: "Sifat" },
-    { en: "Kind", uz: "Mehribon", example: "My teacher is kind.", category: "Sifat" },
-    // Fe'llar (Verbs)
-    { en: "Run", uz: "Yugurmoq", example: "Children love to run.", category: "Fe'l" },
-    { en: "Eat", uz: "Yemoq", example: "We eat lunch at noon.", category: "Fe'l" },
-    { en: "Drink", uz: "Ichmoq", example: "Drink water every day.", category: "Fe'l" },
-    { en: "Sleep", uz: "Uxlamoq", example: "I sleep eight hours.", category: "Fe'l" },
-    { en: "Study", uz: "O'qimoq (o'rganmoq)", example: "I study English every day.", category: "Fe'l" },
-    { en: "Write", uz: "Yozmoq", example: "She writes a letter.", category: "Fe'l" },
-    { en: "Read", uz: "O'qimoq (kitob)", example: "He reads a book every night.", category: "Fe'l" },
-    { en: "Speak", uz: "Gapirmoq", example: "She speaks English well.", category: "Fe'l" },
-    { en: "Listen", uz: "Tinglamoq", example: "Listen to the teacher.", category: "Fe'l" },
-    { en: "Watch", uz: "Tomosha qilmoq", example: "We watch movies together.", category: "Fe'l" },
-    { en: "Play", uz: "O'ynamoq", example: "Children play in the park.", category: "Fe'l" },
-    { en: "Buy", uz: "Sotib olmoq", example: "I want to buy a new phone.", category: "Fe'l" },
-    { en: "Sell", uz: "Sotmoq", example: "He sells fruit at the market.", category: "Fe'l" },
-    { en: "Help", uz: "Yordam bermoq", example: "Can you help me, please?", category: "Fe'l" },
-    { en: "Learn", uz: "O'rganmoq", example: "I want to learn English.", category: "Fe'l" },
-    { en: "Teach", uz: "O'qitmoq", example: "She teaches math.", category: "Fe'l" },
-    { en: "Travel", uz: "Sayohat qilmoq", example: "They love to travel.", category: "Fe'l" },
-    { en: "Cook", uz: "Ovqat pishirmoq", example: "My mother cooks well.", category: "Fe'l" },
-    { en: "Clean", uz: "Tozalamoq", example: "I clean my room every week.", category: "Fe'l" },
-    { en: "Open", uz: "Ochmoq", example: "Please open the window.", category: "Fe'l" },
-    { en: "Close", uz: "Yopmoq", example: "Close the door, please.", category: "Fe'l" },
-    // Texnologiya (Technology)
-    { en: "Computer", uz: "Kompyuter", example: "I use a computer for work.", category: "Texnologiya" },
-    { en: "Phone", uz: "Telefon", example: "My phone is new.", category: "Texnologiya" },
-    { en: "Internet", uz: "Internet", example: "I use the internet every day.", category: "Texnologiya" },
-    { en: "Camera", uz: "Kamera", example: "She has a good camera.", category: "Texnologiya" },
-    { en: "Language", uz: "Til", example: "English is a global language.", category: "Texnologiya" },
-    { en: "Success", uz: "Muvaffaqiyat", example: "Hard work leads to success.", category: "Texnologiya" },
-    { en: "Knowledge", uz: "Bilim", example: "Knowledge is power.", category: "Texnologiya" },
-    { en: "Hello", uz: "Salom", example: "Hello my friend.", category: "Umumiy" }
+    
+    { en: "Family", uz: "Oila", example: "I love my family.", ru: "Семья", ruExample: "Я люблю свою семью.", category: "Oila" },
+    { en: "Mother", uz: "Ona", example: "My mother is a doctor.", ru: "Мать", ruExample: "Моя мать врач.", category: "Oila" },
+    { en: "Father", uz: "Ota", example: "My father works hard.", ru: "Отец", ruExample: "Мой отец много работает.", category: "Oila" },
+    { en: "Sister", uz: "Opa/Singil", example: "My sister is younger.", ru: "Сестра", ruExample: "Моя сестра младше меня.", category: "Oila" },
+    { en: "Brother", uz: "Aka/Uka", example: "My brother is tall.", ru: "Брат", ruExample: "Мой брат высокий.", category: "Oila" },
+    { en: "Grandmother", uz: "Buvi", example: "My grandmother cooks well.", ru: "Бабушка", ruExample: "Моя бабушка хорошо готовит.", category: "Oila" },
+    { en: "Grandfather", uz: "Bobo", example: "My grandfather tells stories.", ru: "Дедушка", ruExample: "Мой дедушка рассказывает истории.", category: "Oila" },
+    { en: "Son", uz: "O'g'il", example: "Their son is smart.", ru: "Сын", ruExample: "Их сын умный.", category: "Oila" },
+    { en: "Daughter", uz: "Qiz", example: "Her daughter sings well.", ru: "Дочь", ruExample: "Её дочь хорошо поёт.", category: "Oila" },
+    { en: "Wife", uz: "Xotin", example: "His wife is a teacher.", ru: "Жена", ruExample: "Его жена учительница.", category: "Oila" },
+    { en: "Husband", uz: "Er", example: "Her husband is an engineer.", ru: "Муж", ruExample: "Её муж инженер.", category: "Oila" },
+    { en: "Friend", uz: "Do'st", example: "He is my best friend.", ru: "Друг", ruExample: "Он мой лучший друг.", category: "Oila" },
+    
+    { en: "Apple", uz: "Olma", example: "I eat an apple.", ru: "Яблоко", ruExample: "Я ем яблоко.", category: "Ovqat" },
+    { en: "Bread", uz: "Non", example: "We buy fresh bread.", ru: "Хлеб", ruExample: "Мы покупаем свежий хлеб.", category: "Ovqat" },
+    { en: "Water", uz: "Suv", example: "Drink water every day.", ru: "Вода", ruExample: "Пей воду каждый день.", category: "Ovqat" },
+    { en: "Milk", uz: "Sut", example: "Children drink milk.", ru: "Молоко", ruExample: "Дети пьют молоко.", category: "Ovqat" },
+    { en: "Rice", uz: "Guruch", example: "We cook rice for dinner.", ru: "Рис", ruExample: "Мы готовим рис на ужин.", category: "Ovqat" },
+    { en: "Meat", uz: "Go'sht", example: "He doesn't eat meat.", ru: "Мясо", ruExample: "Он не ест мясо.", category: "Ovqat" },
+    { en: "Egg", uz: "Tuxum", example: "I eat an egg for breakfast.", ru: "Яйцо", ruExample: "Я ем яйцо на завтрак.", category: "Ovqat" },
+    { en: "Tea", uz: "Choy", example: "We drink tea every morning.", ru: "Чай", ruExample: "Мы пьём чай каждое утро.", category: "Ovqat" },
+    { en: "Coffee", uz: "Qahva", example: "She likes strong coffee.", ru: "Кофе", ruExample: "Она любит крепкий кофе.", category: "Ovqat" },
+    { en: "Sugar", uz: "Shakar", example: "Add sugar to the tea.", ru: "Сахар", ruExample: "Добавь сахар в чай.", category: "Ovqat" },
+    { en: "Salt", uz: "Tuz", example: "Add some salt to the soup.", ru: "Соль", ruExample: "Добавь немного соли в суп.", category: "Ovqat" },
+    { en: "Fruit", uz: "Meva", example: "Fruit is good for health.", ru: "Фрукты", ruExample: "Фрукты полезны для здоровья.", category: "Ovqat" },
+    { en: "Vegetable", uz: "Sabzavot", example: "I eat vegetables daily.", ru: "Овощи", ruExample: "Я ем овощи каждый день.", category: "Ovqat" },
+    { en: "Soup", uz: "Sho'rva", example: "This soup is delicious.", ru: "Суп", ruExample: "Этот суп вкусный.", category: "Ovqat" },
+    
+    { en: "House", uz: "Uy", example: "This is our new house.", ru: "Дом", ruExample: "Это наш новый дом.", category: "Uy" },
+    { en: "Room", uz: "Xona", example: "My room is clean.", ru: "Комната", ruExample: "Моя комната чистая.", category: "Uy" },
+    { en: "Door", uz: "Eshik", example: "Please close the door.", ru: "Дверь", ruExample: "Пожалуйста, закрой дверь.", category: "Uy" },
+    { en: "Window", uz: "Deraza", example: "Open the window, please.", ru: "Окно", ruExample: "Открой окно, пожалуйста.", category: "Uy" },
+    { en: "Table", uz: "Stol", example: "The book is on the table.", ru: "Стол", ruExample: "Книга на столе.", category: "Uy" },
+    { en: "Chair", uz: "Stul", example: "Sit on the chair.", ru: "Стул", ruExample: "Сядь на стул.", category: "Uy" },
+    { en: "Bed", uz: "Karavot", example: "I sleep on my bed.", ru: "Кровать", ruExample: "Я сплю на своей кровати.", category: "Uy" },
+    { en: "Kitchen", uz: "Oshxona", example: "Mother is in the kitchen.", ru: "Кухня", ruExample: "Мама на кухне.", category: "Uy" },
+    { en: "Shirt", uz: "Ko'ylak", example: "He is wearing a blue shirt.", ru: "Рубашка", ruExample: "Он носит синюю рубашку.", category: "Kiyim" },
+    { en: "Shoes", uz: "Poyabzal", example: "These shoes are new.", ru: "Обувь", ruExample: "Эта обувь новая.", category: "Kiyim" },
+    { en: "Hat", uz: "Shlyapa", example: "She wears a hat in summer.", ru: "Шляпа", ruExample: "Она носит шляпу летом.", category: "Kiyim" },
+    { en: "Jacket", uz: "Kurtka", example: "Wear your jacket, it's cold.", ru: "Куртка", ruExample: "Надень куртку, холодно.", category: "Kiyim" },
+  
+    { en: "School", uz: "Maktab", example: "I go to school.", ru: "Школа", ruExample: "Я хожу в школу.", category: "Maktab" },
+    { en: "Teacher", uz: "O'qituvchi", example: "My teacher is kind.", ru: "Учитель", ruExample: "Мой учитель добрый.", category: "Maktab" },
+    { en: "Student", uz: "O'quvchi", example: "She is a good student.", ru: "Ученик", ruExample: "Она хорошая ученица.", category: "Maktab" },
+    { en: "Book", uz: "Kitob", example: "This is my book.", ru: "Книга", ruExample: "Это моя книга.", category: "Maktab" },
+    { en: "Pen", uz: "Ruchka", example: "I write with a pen.", ru: "Ручка", ruExample: "Я пишу ручкой.", category: "Maktab" },
+    { en: "Pencil", uz: "Qalam", example: "Draw with a pencil.", ru: "Карандаш", ruExample: "Рисуй карандашом.", category: "Maktab" },
+    { en: "Notebook", uz: "Daftar", example: "Write it in your notebook.", ru: "Тетрадь", ruExample: "Запиши это в тетрадь.", category: "Maktab" },
+    { en: "Lesson", uz: "Dars", example: "Today's lesson is interesting.", ru: "Урок", ruExample: "Сегодняшний урок интересный.", category: "Maktab" },
+    { en: "Exam", uz: "Imtihon", example: "The exam is tomorrow.", ru: "Экзамен", ruExample: "Экзамен завтра.", category: "Maktab" },
+    { en: "Homework", uz: "Uyga vazifa", example: "I finished my homework.", ru: "Домашнее задание", ruExample: "Я закончил домашнее задание.", category: "Maktab" },
+    { en: "Work", uz: "Ish", example: "He goes to work every day.", ru: "Работа", ruExample: "Он ходит на работу каждый день.", category: "Ish" },
+    { en: "Job", uz: "Kasb", example: "She has a good job.", ru: "Профессия", ruExample: "У неё хорошая работа.", category: "Ish" },
+    { en: "Office", uz: "Ofis", example: "I work in an office.", ru: "Офис", ruExample: "Я работаю в офисе.", category: "Ish" },
+    { en: "Money", uz: "Pul", example: "He saves his money.", ru: "Деньги", ruExample: "Он копит деньги.", category: "Ish" },
+    { en: "Manager", uz: "Menejer", example: "The manager is busy today.", ru: "Менеджер", ruExample: "Менеджер сегодня занят.", category: "Ish" },
+   
+    { en: "Car", uz: "Mashina", example: "My car is blue.", ru: "Машина", ruExample: "Моя машина синяя.", category: "Sayohat" },
+    { en: "Bus", uz: "Avtobus", example: "We took the bus to school.", ru: "Автобус", ruExample: "Мы ехали в школу на автобусе.", category: "Sayohat" },
+    { en: "Train", uz: "Poyezd", example: "The train is fast.", ru: "Поезд", ruExample: "Поезд быстрый.", category: "Sayohat" },
+    { en: "Airport", uz: "Aeroport", example: "We arrived at the airport.", ru: "Аэропорт", ruExample: "Мы прибыли в аэропорт.", category: "Sayohat" },
+    { en: "Ticket", uz: "Chipta", example: "I bought two tickets.", ru: "Билет", ruExample: "Я купил два билета.", category: "Sayohat" },
+    { en: "City", uz: "Shahar", example: "Tashkent is a big city.", ru: "Город", ruExample: "Ташкент большой город.", category: "Sayohat" },
+    { en: "Country", uz: "Mamlakat", example: "Uzbekistan is my country.", ru: "Страна", ruExample: "Узбекистан моя страна.", category: "Sayohat" },
+    { en: "Street", uz: "Ko'cha", example: "This street is busy.", ru: "Улица", ruExample: "Эта улица оживлённая.", category: "Sayohat" },
+    { en: "Map", uz: "Xarita", example: "Look at the map.", ru: "Карта", ruExample: "Посмотри на карту.", category: "Sayohat" },
+    { en: "Hotel", uz: "Mehmonxona", example: "We stayed at a hotel.", ru: "Гостиница", ruExample: "Мы остановились в гостинице.", category: "Sayohat" },
+   
+    { en: "Dog", uz: "It", example: "The dog is running.", ru: "Собака", ruExample: "Собака бежит.", category: "Tabiat" },
+    { en: "Cat", uz: "Mushuk", example: "The cat is sleeping.", ru: "Кошка", ruExample: "Кошка спит.", category: "Tabiat" },
+    { en: "Bird", uz: "Qush", example: "The bird can fly.", ru: "Птица", ruExample: "Птица умеет летать.", category: "Tabiat" },
+    { en: "Tree", uz: "Daraxt", example: "There is a tree in the yard.", ru: "Дерево", ruExample: "Во дворе есть дерево.", category: "Tabiat" },
+    { en: "Flower", uz: "Gul", example: "She gave me a flower.", ru: "Цветок", ruExample: "Она подарила мне цветок.", category: "Tabiat" },
+    { en: "Sun", uz: "Quyosh", example: "The sun is bright today.", ru: "Солнце", ruExample: "Сегодня солнце яркое.", category: "Tabiat" },
+    { en: "Moon", uz: "Oy", example: "The moon is beautiful tonight.", ru: "Луна", ruExample: "Луна сегодня красивая.", category: "Tabiat" },
+    { en: "Rain", uz: "Yomg'ir", example: "It is raining outside.", ru: "Дождь", ruExample: "На улице идёт дождь.", category: "Ob-havo" },
+    { en: "Snow", uz: "Qor", example: "Snow is falling in winter.", ru: "Снег", ruExample: "Зимой идёт снег.", category: "Ob-havo" },
+    { en: "Wind", uz: "Shamol", example: "The wind is strong today.", ru: "Ветер", ruExample: "Сегодня сильный ветер.", category: "Ob-havo" },
+    { en: "Cold", uz: "Sovuq", example: "It is cold in winter.", ru: "Холодно", ruExample: "Зимой холодно.", category: "Ob-havo" },
+    { en: "Hot", uz: "Issiq", example: "It is hot in summer.", ru: "Жарко", ruExample: "Летом жарко.", category: "Ob-havo" },
+    
+    { en: "Today", uz: "Bugun", example: "Today is a good day.", ru: "Сегодня", ruExample: "Сегодня хороший день.", category: "Vaqt" },
+    { en: "Tomorrow", uz: "Ertaga", example: "See you tomorrow.", ru: "Завтра", ruExample: "До завтра.", category: "Vaqt" },
+    { en: "Yesterday", uz: "Kecha", example: "I saw him yesterday.", ru: "Вчера", ruExample: "Я видел его вчера.", category: "Vaqt" },
+    { en: "Morning", uz: "Ertalab", example: "I wake up in the morning.", ru: "Утро", ruExample: "Я просыпаюсь утром.", category: "Vaqt" },
+    { en: "Night", uz: "Kecha (tun)", example: "I sleep at night.", ru: "Ночь", ruExample: "Я сплю ночью.", category: "Vaqt" },
+    { en: "Week", uz: "Hafta", example: "There are seven days in a week.", ru: "Неделя", ruExample: "В неделе семь дней.", category: "Vaqt" },
+    { en: "Month", uz: "Oy (kalendar)", example: "This month is busy.", ru: "Месяц", ruExample: "Этот месяц занятой.", category: "Vaqt" },
+    { en: "Year", uz: "Yil", example: "Next year will be great.", ru: "Год", ruExample: "Следующий год будет отличным.", category: "Vaqt" },
+    { en: "One", uz: "Bir", example: "I have one book.", ru: "Один", ruExample: "У меня одна книга.", category: "Sonlar" },
+    { en: "Two", uz: "Ikki", example: "She has two sisters.", ru: "Два", ruExample: "У неё две сестры.", category: "Sonlar" },
+    { en: "Three", uz: "Uch", example: "There are three chairs.", ru: "Три", ruExample: "Здесь три стула.", category: "Sonlar" },
+    { en: "Ten", uz: "O'n", example: "He counted to ten.", ru: "Десять", ruExample: "Он посчитал до десяти.", category: "Sonlar" },
+   
+    { en: "Happy", uz: "Baxtli", example: "She is very happy today.", ru: "Счастливый", ruExample: "Она сегодня очень счастлива.", category: "His-tuyg'u" },
+    { en: "Sad", uz: "Xafa", example: "He looks sad.", ru: "Грустный", ruExample: "Он выглядит грустным.", category: "His-tuyg'u" },
+    { en: "Angry", uz: "Jahldor", example: "Don't be angry with me.", ru: "Злой", ruExample: "Не злись на меня.", category: "His-tuyg'u" },
+    { en: "Tired", uz: "Charchagan", example: "I am very tired.", ru: "Уставший", ruExample: "Я очень устал.", category: "His-tuyg'u" },
+    { en: "Beautiful", uz: "Chiroyli", example: "What a beautiful garden!", ru: "Красивый", ruExample: "Какой красивый сад!", category: "Sifat" },
+    { en: "Big", uz: "Katta", example: "This is a big house.", ru: "Большой", ruExample: "Это большой дом.", category: "Sifat" },
+    { en: "Small", uz: "Kichik", example: "The kitten is small.", ru: "Маленький", ruExample: "Котёнок маленький.", category: "Sifat" },
+    { en: "Fast", uz: "Tez", example: "He runs very fast.", ru: "Быстрый", ruExample: "Он бегает очень быстро.", category: "Sifat" },
+    { en: "Slow", uz: "Sekin", example: "The turtle is slow.", ru: "Медленный", ruExample: "Черепаха медленная.", category: "Sifat" },
+    { en: "Strong", uz: "Kuchli", example: "He is very strong.", ru: "Сильный", ruExample: "Он очень сильный.", category: "Sifat" },
+    { en: "Smart", uz: "Aqlli", example: "She is a smart student.", ru: "Умный", ruExample: "Она умная ученица.", category: "Sifat" },
+    { en: "Kind", uz: "Mehribon", example: "My teacher is kind.", ru: "Добрый", ruExample: "Мой учитель добрый.", category: "Sifat" },
+   
+    { en: "Run", uz: "Yugurmoq", example: "Children love to run.", ru: "Бегать", ruExample: "Дети любят бегать.", category: "Fe'l" },
+    { en: "Eat", uz: "Yemoq", example: "We eat lunch at noon.", ru: "Есть", ruExample: "Мы обедаем в полдень.", category: "Fe'l" },
+    { en: "Drink", uz: "Ichmoq", example: "Drink water every day.", ru: "Пить", ruExample: "Пей воду каждый день.", category: "Fe'l" },
+    { en: "Sleep", uz: "Uxlamoq", example: "I sleep eight hours.", ru: "Спать", ruExample: "Я сплю восемь часов.", category: "Fe'l" },
+    { en: "Study", uz: "O'qimoq (o'rganmoq)", example: "I study English every day.", ru: "Учиться", ruExample: "Я учу английский каждый день.", category: "Fe'l" },
+    { en: "Write", uz: "Yozmoq", example: "She writes a letter.", ru: "Писать", ruExample: "Она пишет письмо.", category: "Fe'l" },
+    { en: "Read", uz: "O'qimoq (kitob)", example: "He reads a book every night.", ru: "Читать", ruExample: "Он читает книгу каждый вечер.", category: "Fe'l" },
+    { en: "Speak", uz: "Gapirmoq", example: "She speaks English well.", ru: "Говорить", ruExample: "Она хорошо говорит по-английски.", category: "Fe'l" },
+    { en: "Listen", uz: "Tinglamoq", example: "Listen to the teacher.", ru: "Слушать", ruExample: "Слушай учителя.", category: "Fe'l" },
+    { en: "Watch", uz: "Tomosha qilmoq", example: "We watch movies together.", ru: "Смотреть", ruExample: "Мы смотрим фильмы вместе.", category: "Fe'l" },
+    { en: "Play", uz: "O'ynamoq", example: "Children play in the park.", ru: "Играть", ruExample: "Дети играют в парке.", category: "Fe'l" },
+    { en: "Buy", uz: "Sotib olmoq", example: "I want to buy a new phone.", ru: "Покупать", ruExample: "Я хочу купить новый телефон.", category: "Fe'l" },
+    { en: "Sell", uz: "Sotmoq", example: "He sells fruit at the market.", ru: "Продавать", ruExample: "Он продаёт фрукты на рынке.", category: "Fe'l" },
+    { en: "Help", uz: "Yordam bermoq", example: "Can you help me, please?", ru: "Помогать", ruExample: "Ты можешь мне помочь?", category: "Fe'l" },
+    { en: "Learn", uz: "O'rganmoq", example: "I want to learn English.", ru: "Учить", ruExample: "Я хочу выучить английский.", category: "Fe'l" },
+    { en: "Teach", uz: "O'qitmoq", example: "She teaches math.", ru: "Преподавать", ruExample: "Она преподаёт математику.", category: "Fe'l" },
+    { en: "Travel", uz: "Sayohat qilmoq", example: "They love to travel.", ru: "Путешествовать", ruExample: "Они любят путешествовать.", category: "Fe'l" },
+    { en: "Cook", uz: "Ovqat pishirmoq", example: "My mother cooks well.", ru: "Готовить", ruExample: "Моя мама хорошо готовит.", category: "Fe'l" },
+    { en: "Clean", uz: "Tozalamoq", example: "I clean my room every week.", ru: "Убирать", ruExample: "Я убираю свою комнату каждую неделю.", category: "Fe'l" },
+    { en: "Open", uz: "Ochmoq", example: "Please open the window.", ru: "Открывать", ruExample: "Пожалуйста, открой окно.", category: "Fe'l" },
+    { en: "Close", uz: "Yopmoq", example: "Close the door, please.", ru: "Закрывать", ruExample: "Закрой дверь, пожалуйста.", category: "Fe'l" },
+    
+    { en: "Computer", uz: "Kompyuter", example: "I use a computer for work.", ru: "Компьютер", ruExample: "Я использую компьютер для работы.", category: "Texnologiya" },
+    { en: "Phone", uz: "Telefon", example: "My phone is new.", ru: "Телефон", ruExample: "Мой телефон новый.", category: "Texnologiya" },
+    { en: "Internet", uz: "Internet", example: "I use the internet every day.", ru: "Интернет", ruExample: "Я пользуюсь интернетом каждый день.", category: "Texnologiya" },
+    { en: "Camera", uz: "Kamera", example: "She has a good camera.", ru: "Камера", ruExample: "У неё хорошая камера.", category: "Texnologiya" },
+    { en: "Language", uz: "Til", example: "English is a global language.", ru: "Язык", ruExample: "Английский - это международный язык.", category: "Texnologiya" },
+    { en: "Success", uz: "Muvaffaqiyat", example: "Hard work leads to success.", ru: "Успех", ruExample: "Усердный труд приводит к успеху.", category: "Texnologiya" },
+    { en: "Knowledge", uz: "Bilim", example: "Knowledge is power.", ru: "Знание", ruExample: "Знание - сила.", category: "Texnologiya" },
+    { en: "Hello", uz: "Salom", example: "Hello my friend.", ru: "Привет", ruExample: "Привет, мой друг.", category: "Umumiy" }
 ];
 
-// So'zlarning takrorlanish darajasi (Spaced-Repetition uchun)
+
 let wordWeights = JSON.parse(localStorage.getItem("wordWeights")) || {};
 
 function getWordWeight(word) {
@@ -267,7 +377,7 @@ function bumpWordWeight(word, delta) {
     localStorage.setItem("wordWeights", JSON.stringify(wordWeights));
 }
 
-// Og'irlikka qarab tasodifiy so'z tanlash: qiyin so'zlar ko'proq chiqadi
+
 function weightedRandomWord() {
     const totalWeight = words.reduce((sum, w) => sum + getWordWeight(w), 0);
     let r = Math.random() * totalWeight;
@@ -278,7 +388,6 @@ function weightedRandomWord() {
     return words[words.length - 1];
 }
 
-// -------- Global O'zgaruvchilar --------
 let index = 0;
 let quizIndex = 0;
 let score = 0;
@@ -294,7 +403,40 @@ let showEnglish = true;
 let time = 20;
 let timerInterval;
 
-// -------- DOM Elementlar --------
+let learnLang = localStorage.getItem("learnLang") || "en";
+
+function getTargetWord(w) {
+    if (learnLang === "ru") return w.ru || w.en;
+    return w.en;
+}
+
+function getTargetExample(w) {
+    if (learnLang === "ru") return w.ruExample || w.example;
+    return w.example;
+}
+
+function getVoiceLang() {
+    return learnLang === "ru" ? "ru-RU" : "en-US";
+}
+
+function setLearnLang(lang) {
+    learnLang = lang;
+    localStorage.setItem("learnLang", lang);
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+    if (typeof loadCard === "function") loadCard();
+    if (typeof restartQuiz === "function" && document.getElementById("quizPage")?.classList.contains("active")) {
+        restartQuiz();
+    }
+}
+
+document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.lang === learnLang);
+    btn.addEventListener("click", () => setLearnLang(btn.dataset.lang));
+});
+
+
 const englishWord = document.getElementById("englishWord");
 const uzbekWord = document.getElementById("uzbekWord");
 const example = document.getElementById("example");
@@ -307,26 +449,91 @@ const streakEl = document.getElementById("streak");
 const darkBtn = document.getElementById("darkMode");
 const resetBtn = document.getElementById("resetData");
 
+
+let deck = words;
+let favoriteWords = JSON.parse(localStorage.getItem("favoriteWords") || "[]");
+
+const categoryFilterEl = document.getElementById("categoryFilter");
+const favOnlyToggleEl = document.getElementById("favOnlyToggle");
+const favBtnEl = document.getElementById("favBtn");
+const cardCategoryEl = document.getElementById("cardCategory");
+const cardCounterEl = document.getElementById("cardCounter");
+
+function wordKey(w) { return w.en; }
+
+function buildDeck() {
+    const cat = categoryFilterEl ? categoryFilterEl.value : "all";
+    const favOnly = favOnlyToggleEl ? favOnlyToggleEl.checked : false;
+
+    deck = words.filter(w => {
+        const matchCat = cat === "all" || w.category === cat;
+        const matchFav = !favOnly || favoriteWords.includes(wordKey(w));
+        return matchCat && matchFav;
+    });
+
+    if (deck.length === 0) deck = words;
+    index = 0;
+    loadCard();
+}
+
+if (categoryFilterEl) {
+    const categories = ["all", ...new Set(words.map(w => w.category))];
+    categoryFilterEl.innerHTML = categories.map(c =>
+        `<option value="${c}">${c === "all" ? "🗂 Barcha kategoriya" : c}</option>`
+    ).join("");
+    categoryFilterEl.addEventListener("change", buildDeck);
+}
+
+if (favOnlyToggleEl) {
+    favOnlyToggleEl.addEventListener("change", buildDeck);
+}
+
+if (favBtnEl) {
+    favBtnEl.addEventListener("click", () => {
+        const current = deck[index];
+        if (!current) return;
+        const key = wordKey(current);
+        if (favoriteWords.includes(key)) {
+            favoriteWords = favoriteWords.filter(k => k !== key);
+        } else {
+            favoriteWords.push(key);
+        }
+        localStorage.setItem("favoriteWords", JSON.stringify(favoriteWords));
+        updateFavButton();
+    });
+}
+
+function updateFavButton() {
+    if (!favBtnEl) return;
+    const current = deck[index];
+    const isFav = current && favoriteWords.includes(wordKey(current));
+    favBtnEl.textContent = isFav ? "★" : "☆";
+    favBtnEl.classList.toggle("active", !!isFav);
+}
+
 // -------- Kartochkalarni Yuklash (Flashcard) --------
 function loadCard() {
-    if (!words[index]) return;
+    if (!deck[index]) return;
     if (englishWord && uzbekWord && example) {
         if (showEnglish) {
-            englishWord.textContent = words[index].en;
-            uzbekWord.textContent = words[index].uz;
+            englishWord.textContent = getTargetWord(deck[index]);
+            uzbekWord.textContent = deck[index].uz;
         } else {
-            englishWord.textContent = words[index].uz;
-            uzbekWord.textContent = words[index].en;
+            englishWord.textContent = deck[index].uz;
+            uzbekWord.textContent = getTargetWord(deck[index]);
         }
-        example.textContent = words[index].example;
+        example.textContent = getTargetExample(deck[index]);
     }
+    if (cardCategoryEl) cardCategoryEl.textContent = deck[index].category || "";
+    if (cardCounterEl) cardCounterEl.textContent = `${index + 1} / ${deck.length}`;
+    updateFavButton();
 }
 
 const nextBtn = document.getElementById("nextBtn");
 if (nextBtn) {
     nextBtn.onclick = () => {
         index++;
-        if (index >= words.length) index = 0;
+        if (index >= deck.length) index = 0;
         loadCard();
     };
 }
@@ -335,7 +542,7 @@ const prevBtn = document.getElementById("prevBtn");
 if (prevBtn) {
     prevBtn.onclick = () => {
         index--;
-        if (index < 0) index = words.length - 1;
+        if (index < 0) index = deck.length - 1;
         loadCard();
     };
 }
@@ -343,18 +550,15 @@ if (prevBtn) {
 const voiceBtn = document.getElementById("voiceBtn");
 if (voiceBtn) {
     voiceBtn.onclick = () => {
-        if (!words[index]) return;
-        const speech = new SpeechSynthesisUtterance(words[index].en);
-        speech.lang = "en-US";
+        if (!deck[index]) return;
+        const speech = new SpeechSynthesisUtterance(getTargetWord(deck[index]));
+        speech.lang = getVoiceLang();
         speech.rate = 0.9;
         speechSynthesis.cancel();
         speechSynthesis.speak(speech);
     };
 }
 
-// =========================================
-// TEST TIZIMI (QUIZ SYSTEM)
-// =========================================
 const timer = document.createElement("h2");
 timer.id = "timer";
 const quizPage = document.getElementById("quizPage");
@@ -377,7 +581,7 @@ function loadQuiz() {
     }
 
     const current = words[quizIndex];
-    question.innerHTML = current.en;
+    question.innerHTML = getTargetWord(current);
 
     let options = [current.uz];
     while (options.length < 4) {
@@ -447,9 +651,7 @@ function startTimer() {
     }, 1000);
 }
 
-// =========================================
-// STATISTIKA VA PROGRESS
-// =========================================
+
 function updateStats() {
     if (levelEl) levelEl.innerHTML = level;
     if (xpEl) xpEl.innerHTML = xp;
@@ -461,9 +663,76 @@ function updateStats() {
     localStorage.setItem("known", known);
     localStorage.setItem("streak", streak);
     if (typeof renderProgressChart === "function") renderProgressChart();
+    updateHomeWidgets();
+    updateRecommendation();
 }
 
-// ASOSIY o'yin statistikasini yuklash (localStorage'dan)
+
+const DAILY_GOAL = 10;
+
+function getTodayStr() {
+    return new Date().toISOString().slice(0, 10);
+}
+
+function getDailyProgress() {
+    try {
+        const raw = JSON.parse(localStorage.getItem("dailyGoalProgress"));
+        if (raw && raw.date === getTodayStr()) return raw.count;
+    } catch (e) {}
+    return 0;
+}
+
+function incrementDailyGoal() {
+    const today = getTodayStr();
+    let count = getDailyProgress() + 1;
+    localStorage.setItem("dailyGoalProgress", JSON.stringify({ date: today, count }));
+    if (count === DAILY_GOAL) {
+        localStorage.setItem("dailyGoalCelebrated", today);
+        setTimeout(() => alert("🎉 Ajoyib! Bugungi maqsadga yetdingiz — " + DAILY_GOAL + " so'z!"), 300);
+    }
+    updateHomeWidgets();
+}
+
+function updateHomeWidgets() {
+    const goalCountEl = document.getElementById("dailyGoalCount");
+    const goalFillEl = document.getElementById("dailyGoalFill");
+    const homeStreakEl = document.getElementById("homeStreak");
+    const homeXpEl = document.getElementById("homeXp");
+    const homeKnownEl = document.getElementById("homeKnown");
+
+    const progressCount = getDailyProgress();
+    if (goalCountEl) goalCountEl.innerHTML = `${Math.min(progressCount, DAILY_GOAL)} / ${DAILY_GOAL} so'z`;
+    if (goalFillEl) goalFillEl.style.width = Math.min((progressCount / DAILY_GOAL) * 100, 100) + "%";
+    if (homeStreakEl) homeStreakEl.innerHTML = streak;
+    if (homeXpEl) homeXpEl.innerHTML = xp;
+    if (homeKnownEl) homeKnownEl.innerHTML = known;
+}
+
+
+function updateRecommendation() {
+    const card = document.getElementById("recommendationCard");
+    if (!card) return;
+    const total = (typeof words !== "undefined" && words.length) ? words.length : 0;
+    if (!total) { card.classList.remove("show"); return; }
+
+    const percent = Math.round((known / total) * 100);
+    let msg = "";
+
+    if (percent < 20) {
+        msg = "💡 Tavsiya: Siz hali boshida ekansiz — har kuni 10 tadan kartochkani ko'rib chiqing, bu eng tez natija beradi.";
+    } else if (percent < 50) {
+        msg = "💡 Tavsiya: Yaxshi boshladingiz! Endi Test bo'limida bilimingizni mustahkamlang.";
+    } else if (percent < 80) {
+        msg = `💡 Tavsiya: So'zlarning ${percent}% ni bilasiz — AI Teacher bilan gap tuzishni mashq qiling.`;
+    } else {
+        msg = `🏆 Ajoyib! So'zlarning ${percent}% ni allaqachon bilasiz. AI Speaking Test bilan talaffuzingizni sinab ko'ring.`;
+    }
+
+    card.innerHTML = msg;
+    card.classList.add("show");
+}
+
+
 function loadStats() {
     level = Number(localStorage.getItem("level")) || 1;
     xp = Number(localStorage.getItem("xp")) || 0;
@@ -483,9 +752,6 @@ function updateProgress() {
 }
 setInterval(updateProgress, 500);
 
-// =========================================
-// O'YIN TIZIMI, COIN VA SINOVLAR
-// =========================================
 function updateGame() {
     console.log("Coins:", coins, "Combo:", combo, "Lives:", lives);
 }
@@ -494,6 +760,7 @@ function correctAnswer() {
     combo++;
     coins += 5;
     known = Math.min(known + 1, words.length);
+    incrementDailyGoal();
     if (combo % 5 === 0) {
         coins += 20;
         alert("🔥 Combo Bonus! +20 Coin");
@@ -537,9 +804,7 @@ function coinAnimation() {
     ], { duration: 300 });
 }
 
-// =========================================
-// DO'KON TIZIMI (SHOP SYSTEM)
-// =========================================
+
 const shop = [
     { name: "100 ta yangi so'z", price: 100 },
     { name: "Premium Theme", price: 250 },
@@ -579,7 +844,7 @@ function saveHighScore() {
     }
 }
 
-// Holat (state) massivlari — localStorage bilan ishlaydi
+
 let achievements = JSON.parse(localStorage.getItem("achievements")) || [];
 let badges = JSON.parse(localStorage.getItem("badges")) || [];
 
@@ -597,9 +862,7 @@ function addBadge(name) {
     alert("🏅 Nishon olindi: " + name);
 }
 
-// =========================================
-// GAMIFIKATSIYA (AVATAR, RANK, MISSIONS)
-// =========================================
+
 const avatars = ["😀","😎","🤖","👨‍💻","👩‍🎓","🦁","🐼","🐯","🦅","🐺"];
 let avatar = localStorage.getItem("avatar") || avatars[0];
 
@@ -674,9 +937,7 @@ function mysteryBox() {
     saveGame();
 }
 
-// =========================================
-// DO'STLAR VA ONLAYN TIZIM (MULTIPLAYER)
-// =========================================
+
 let friends = JSON.parse(localStorage.getItem("friends")) || [];
 function addFriend(name) {
     if (!friends.includes(name)) {
@@ -722,9 +983,7 @@ function finishBattle() {
     saveGame();
 }
 
-// =========================================
-// QIDIRUV VA QO'SHIMCHA FUNKSIYALAR
-// =========================================
+
 const searchInput = document.createElement("input");
 searchInput.placeholder = "🔍 So'z qidirish...";
 searchInput.id = "searchBox";
@@ -761,7 +1020,7 @@ function switchLanguage() {
 }
 
 function shuffleWords() {
-    words.sort(() => Math.random() - 0.5);
+    deck.sort(() => Math.random() - 0.5);
     index = 0;
     loadCard();
 }
@@ -770,7 +1029,7 @@ let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let hardWords = JSON.parse(localStorage.getItem("hardWords")) || [];
 
 function addFavorite() {
-    let word = words[index];
+    let word = deck[index];
     if (!favorites.find(x => x.en === word.en)) {
         favorites.push(word);
         localStorage.setItem("favorites", JSON.stringify(favorites));
@@ -781,7 +1040,7 @@ function addFavorite() {
 }
 
 function addHardWord() {
-    const word = words[index];
+    const word = deck[index];
     if (!hardWords.find(w => w.en === word.en)) {
         hardWords.push(word);
         localStorage.setItem("hardWords", JSON.stringify(hardWords));
@@ -790,7 +1049,7 @@ function addHardWord() {
     }
 }
 
-// Lug'atga asoslangan oddiy "repetitor" javobi (haqiqiy AI emas, lekin foydali)
+
 function simpleTutorReply(question) {
     const q = question.toLowerCase();
     const found = words.find(w => q.includes(w.en.toLowerCase()) || q.includes(w.uz.toLowerCase()));
@@ -807,9 +1066,8 @@ function simpleTutorReply(question) {
     return `🤔 Bu savolga aniq javob topa olmadim (to'liq AI hali ulanmagan). Amaliyot uchun bugungi so'z: <b>${tip.en}</b> — ${tip.uz}.`;
 }
 
-// =========================================
-// SUN'IY INTELLEKT BO'LIMI (AI CHAT)
-// =========================================
+
+
 const aiQuestion = document.getElementById("aiQuestion");
 const aiAnswer = document.getElementById("aiAnswer");
 const askAI = document.getElementById("askAI");
@@ -894,10 +1152,8 @@ if (voiceAssistantBtn) {
     };
 }
 
-// =========================================
-// SOZLAMALAR VA BULUTLI TIZIM (FIREBASE)
-// =========================================
-let dark = localStorage.getItem("dark") !== "false"; // standart holat: dark
+
+let dark = localStorage.getItem("dark") !== "false";
 document.body.dataset.theme = dark ? "dark" : "light";
 
 if (darkBtn) {
@@ -997,9 +1253,6 @@ if (syncBtn) {
     syncBtn.onclick = window.cloudSave;
 }
 
-// =========================================
-// PWA, SERVICE WORKER VA BILDIRISHNOMALAR
-// =========================================
 let deferredPrompt = null;
 window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
@@ -1047,9 +1300,7 @@ setTimeout(() => {
 window.addEventListener("offline", () => { alert("📴 Offline Mode faollashdi"); });
 window.addEventListener("online", () => { alert("🌐 Internet qaytdi. Onlayn rejim!"); });
 
-// =========================================
-// KLAVIATURA STRATEGIYALARI (SHORTCUTS)
-// =========================================
+
 document.addEventListener("keydown", (e) => {
     if (e.ctrlKey && e.key === "d") { e.preventDefault(); addFavorite(); }
     if (e.altKey && e.key.toLowerCase() === "h") { e.preventDefault(); addHardWord(); }
@@ -1063,7 +1314,7 @@ document.addEventListener("keydown", (e) => {
     if (e.key.toLowerCase() === "w") spinWheelReward();
 });
 
-// -------- Dasturni Ilk Ishga Tushirish --------
+
 window.addEventListener("beforeunload", () => {
     localStorage.setItem("lastWord", index);
 });
@@ -1087,9 +1338,7 @@ setTimeout(() => {
 
 console.log("English Master Pro v19 - To'liq barqaror versiya ishga tushdi ✔");
 
-// ==========================
-// VIDEO LESSONS
-// ==========================
+
 const lessons = [
     { title: "Lesson 1", video: "https://www.youtube.com/embed/VIDEO_ID" },
     { title: "Lesson 2", video: "https://www.youtube.com/embed/VIDEO_ID" }
@@ -1107,9 +1356,7 @@ if (courseList) {
     });
 }
 
-// ==========================
-// LISTENING
-// ==========================
+
 const checkListeningBtn = document.getElementById("checkListening");
 if (checkListeningBtn) {
     checkListeningBtn.onclick = () => {
@@ -1125,9 +1372,7 @@ if (checkListeningBtn) {
     };
 }
 
-// ==========================
-// DICTIONARY
-// ==========================
+
 const dictionary = [
     { word: "Apple", meaning: "Olma" },
     { word: "Dog", meaning: "It" },
@@ -1147,9 +1392,7 @@ if (dictionarySearchInput) {
 
 console.log("Course Loaded");
 
-// ==========================
-// OCR (Tesseract.js orqali haqiqiy matn tanish)
-// ==========================
+
 function runOCR(file, outEl) {
     if (!outEl) return;
     if (typeof Tesseract === "undefined") {
@@ -1178,9 +1421,7 @@ if (scanImageBtn) {
     };
 }
 
-// ==========================
-// TRANSLATE
-// ==========================
+
 
 // Lug'atga asoslangan so'zma-so'z tarjimon (128 so'zlik bazamiz asosida)
 function dictionaryTranslate(text) {
@@ -1222,17 +1463,12 @@ if (translateBtnMain) {
     };
 }
 
-// ==========================
-// SPEAKING SCORE
-// ==========================
+
 function pronunciationScoreDemo() {
     const scoreVal = Math.floor(Math.random() * 41) + 60;
     alert("🎤 Speaking Score: " + scoreVal + "/100");
 }
 
-// ==========================
-// PDF
-// ==========================
 const pdfFileInput = document.getElementById("pdfFile");
 if (pdfFileInput) {
     pdfFileInput.onchange = () => {
@@ -1243,9 +1479,7 @@ if (pdfFileInput) {
 
 console.log("AI Tools Loaded");
 
-// ======================
-// AI SPEAKING TEST
-// ======================
+
 const startSpeaking = document.getElementById("startSpeaking");
 const speechResult = document.getElementById("speechResult");
 
@@ -1267,9 +1501,7 @@ if (startSpeaking) {
     };
 }
 
-// ======================
-// ESSAY CHECKER
-// ======================
+
 const checkEssayBtn = document.getElementById("checkEssay");
 if (checkEssayBtn) {
     checkEssayBtn.onclick = async () => {
@@ -1281,9 +1513,7 @@ if (checkEssayBtn) {
     };
 }
 
-// ======================
-// READING TEST
-// ======================
+
 const checkReadingBtn = document.getElementById("checkReading");
 if (checkReadingBtn) {
     checkReadingBtn.onclick = () => {
@@ -1300,9 +1530,7 @@ if (checkReadingBtn) {
     };
 }
 
-// ======================
-// SMART VOCABULARY
-// ======================
+
 function suggestWord() {
     const random = words[Math.floor(Math.random() * words.length)];
     console.log("Today's Smart Word:", random.en);
@@ -1311,9 +1539,6 @@ suggestWord();
 
 console.log("Speaking Module Loaded");
 
-// ==========================
-// AI TEACHER
-// ==========================
 const teacherQuestion = document.getElementById("teacherQuestion");
 const teacherAnswer = document.getElementById("teacherAnswer");
 const askTeacherBtn = document.getElementById("askTeacher");
@@ -1329,11 +1554,6 @@ if (askTeacherBtn) {
     };
 }
 
-// ==========================
-// GRAMMAR
-// ==========================
-
-// Qoidalarga asoslangan grammatika tekshiruvchi (API'siz, mahalliy)
 function checkGrammarRules(text) {
     const issues = [];
     const trimmed = text.trim();
@@ -1394,9 +1614,7 @@ if (checkGrammarBtn) {
     };
 }
 
-// ==========================
-// STUDY PLAN
-// ==========================
+
 const createPlanBtn = document.getElementById("createPlan");
 if (createPlanBtn) {
     createPlanBtn.onclick = () => {
@@ -1411,9 +1629,8 @@ if (createPlanBtn) {
     };
 }
 
-// ==========================
-// VOCABULARY GENERATOR
-// ==========================
+
+
 const generateWordsBtn = document.getElementById("generateWords");
 if (generateWordsBtn) {
     generateWordsBtn.onclick = () => {
@@ -1429,9 +1646,6 @@ if (generateWordsBtn) {
 
 console.log("AI Teacher Pro Loaded");
 
-// =======================
-// AI CHAT (2-oynasi)
-// =======================
 const chatMessages = document.getElementById("chatMessages");
 const chatMessageInput = document.getElementById("chatMessage");
 const sendChatBtn = document.getElementById("sendChat");
@@ -1453,9 +1667,7 @@ if (sendChatBtn) {
     };
 }
 
-// =======================
-// LIVE TRANSLATOR
-// =======================
+
 const translateNowBtn = document.getElementById("translateNow");
 if (translateNowBtn) {
     translateNowBtn.onclick = () => {
@@ -1467,9 +1679,7 @@ if (translateNowBtn) {
     };
 }
 
-// =======================
-// QUIZ CREATOR
-// =======================
+
 const createQuizBtn = document.getElementById("createQuiz");
 if (createQuizBtn) {
     createQuizBtn.onclick = () => {
@@ -1482,9 +1692,7 @@ if (createQuizBtn) {
 
 console.log("AI Chat Loaded");
 
-// ==========================
-// ROOM
-// ==========================
+
 let currentRoom = "";
 const createRoomBtn = document.getElementById("createRoom");
 const roomStatusEl = document.getElementById("roomStatus");
@@ -1505,9 +1713,7 @@ if (joinRoomBtn) {
     };
 }
 
-// ==========================
-// FRIEND CHAT
-// ==========================
+
 const sendFriendBtn = document.getElementById("sendFriend");
 const friendInputEl = document.getElementById("friendInput");
 const friendMessagesEl = document.getElementById("friendMessages");
@@ -1521,9 +1727,8 @@ if (sendFriendBtn) {
     };
 }
 
-// ==========================
-// TOURNAMENT
-// ==========================
+
+
 const startTournamentBtn = document.getElementById("startTournament");
 if (startTournamentBtn) {
     startTournamentBtn.onclick = () => {
@@ -1532,9 +1737,7 @@ if (startTournamentBtn) {
     };
 }
 
-// ==========================
-// WORLD RANKING
-// ==========================
+
 const ranking = [
     { name: "Alex", score: 9500 },
     { name: "John", score: 9100 },
@@ -1553,9 +1756,7 @@ function startVideoCall() { alert("📹 Video Call"); }
 
 console.log("Multiplayer Loaded");
 
-// ==========================
-// CAMERA / QR / PDF TRANSLATE
-// ==========================
+
 const scanOCRBtn = document.getElementById("scanOCR");
 if (scanOCRBtn) {
     scanOCRBtn.onclick = () => {
@@ -1602,9 +1803,7 @@ if (translatePDFBtn) {
 
 console.log("Camera Tools Loaded");
 
-// ==========================
-// CAMERA VIEW
-// ==========================
+
 const video = document.getElementById("cameraView");
 const startCameraBtn = document.getElementById("startCamera");
 if (startCameraBtn) {
@@ -1652,7 +1851,6 @@ if (startVoiceTranslateBtn) {
     };
 }
 
-// Ikki matnni solishtirib, o'xshashlik foizini hisoblash (Levenshtein masofasi asosida)
 function levenshtein(a, b) {
     const m = a.length, n = b.length;
     const dp = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]);
@@ -1681,7 +1879,7 @@ if (startPronunciationBtn) {
     startPronunciationBtn.onclick = () => {
         const out = document.getElementById("pronunciationScore");
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const target = words[index] ? words[index].en : "Hello";
+        const target = deck[index] ? deck[index].en : "Hello";
         if (!SpeechRecognition) {
             if (out) out.innerHTML = "🎙️ Brauzeringiz ovozni aniqlashni qo'llab-quvvatlamaydi.";
             return;
@@ -1703,9 +1901,7 @@ if (startPronunciationBtn) {
 
 console.log("Smart AI Loaded");
 
-// ==========================
-// ACADEMY / COURSE DATA
-// ==========================
+
 const academy = {
     ielts: { title: "IELTS Course", video: "https://www.youtube.com/embed/VIDEO_ID" },
     grammar: { title: "Grammar Course", video: "https://www.youtube.com/embed/VIDEO_ID" },
@@ -1750,9 +1946,6 @@ function completeLesson() {
 
 console.log("Academy Loaded");
 
-// =========================
-// ACHIEVEMENTS DISPLAY
-// =========================
 const achievementDefs = [
     { title: "First Word", need: 1 },
     { title: "100 XP", need: 100 },
@@ -1770,9 +1963,7 @@ function loadAchievements() {
 }
 loadAchievements();
 
-// =========================
-// BADGES DISPLAY
-// =========================
+
 const badgeTierList = ["🥉 Bronze", "🥈 Silver", "🥇 Gold", "💎 Diamond", "👑 Master"];
 const badgeListEl = document.getElementById("badgeList");
 if (badgeListEl) {
@@ -1781,9 +1972,7 @@ if (badgeListEl) {
     });
 }
 
-// =========================
-// CALENDAR
-// =========================
+
 const calendarEl = document.getElementById("calendar");
 if (calendarEl) {
     for (let i = 1; i <= 30; i++) {
@@ -1791,9 +1980,6 @@ if (calendarEl) {
     }
 }
 
-// =========================
-// DAILY REWARD
-// =========================
 const dailyRewardBtn = document.getElementById("dailyReward");
 if (dailyRewardBtn) {
     dailyRewardBtn.onclick = () => {
@@ -1810,9 +1996,7 @@ function logGameProgress() {
 }
 logGameProgress();
 
-// =========================
-// PROGRESS CHART (Chart.js)
-// =========================
+
 function recordDailyXp() {
     const today = new Date().toDateString();
     let history = JSON.parse(localStorage.getItem("xpHistory")) || [];
@@ -1869,9 +2053,7 @@ renderProgressChart();
 
 console.log("Achievement Loaded");
 
-// ==========================
-// FRIEND PROFILE
-// ==========================
+
 const friend = { name: "Guest", level: 12, xp: 850, avatar: "😎" };
 const friendProfileEl = document.getElementById("friendProfile");
 if (friendProfileEl) {
@@ -1924,9 +2106,7 @@ if (claimWeeklyBtn) {
 
 console.log("Social Module Loaded");
 
-// ==========================
-// GUILD SYSTEM
-// ==========================
+
 let guild = JSON.parse(localStorage.getItem("guild")) || null;
 
 const guildNameInput = document.getElementById("guildName");
@@ -2016,9 +2196,7 @@ if (guildRankingEl) {
 
 console.log("Guild Module Loaded");
 
-// ==========================
-// BATTLE SYSTEM
-// ==========================
+
 let myHealth = 100;
 let enemyHealth = 100;
 const myHP = document.getElementById("myHP");
@@ -2092,9 +2270,7 @@ function checkWinner() {
 
 console.log("Battle Module Loaded");
 
-// ==========================
-// BOSS
-// ==========================
+
 let bossHealth = 500;
 const bossHP = document.getElementById("bossHP");
 
@@ -2162,9 +2338,7 @@ if (rareItemsEl) rareItemsList.forEach(item => rareItemsEl.innerHTML += `<div cl
 
 console.log("Boss Battle Loaded");
 
-// ======================
-// MAP / OPEN WORLD
-// ======================
+
 const locations = {
     village: "🏘️ Safe Village",
     forest: "🌲 Monster Forest",
@@ -2228,9 +2402,7 @@ if (finishQuestBtn) {
 
 console.log("Open World Loaded");
 
-// ==========================
-// KINGDOM
-// ==========================
+
 let castleLevel = 1;
 const kingdomInfoEl = document.getElementById("kingdomInfo");
 function updateKingdom() {
@@ -2320,9 +2492,7 @@ if (kingdomMarketEl) {
 
 console.log("Kingdom Loaded");
 
-// =====================
-// LUCKY WHEEL / SLOT / MYSTERY BOX / VIP
-// =====================
+
 let diamonds = 0;
 let vip = false;
 
@@ -2403,9 +2573,7 @@ if (dailyEventEl) dailyEventEl.innerHTML = events[Math.floor(Math.random() * eve
 
 console.log("Event System Loaded");
 
-// =========================
-// GLOBAL MARKET / TRADE / MAIL / BANK / AUCTION
-// =========================
+
 const marketItems = ["⚔️ Sword - 500", "🛡️ Shield - 300", "💎 Diamond - 1000", "🧪 Potion - 50"];
 const marketListEl = document.getElementById("marketList");
 if (marketListEl) marketItems.forEach(item => marketListEl.innerHTML += `<div class="marketCard">${item}</div>`);
@@ -3057,7 +3225,7 @@ if (startPronunciationBtn2) {
     startPronunciationBtn2.onclick = () => {
         const out = document.getElementById("pronunciationScore2");
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const target = words[index] ? words[index].en : "Hello";
+        const target = deck[index] ? deck[index].en : "Hello";
         if (!SpeechRecognition) {
             if (out) out.innerHTML = "🎙️ Brauzeringiz ovozni aniqlashni qo'llab-quvvatlamaydi.";
             return;
