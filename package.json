@@ -1,0 +1,20 @@
+{
+  "name": "english-master-pro",
+  "version": "1.0.0",
+  "description": "English learning app with AI features",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'Static site - no build needed'",
+    "dev": "npx serve ."
+  },
+  "keywords": [
+    "english",
+    "learning",
+    "education"
+  ],
+  "author": "mannopovv",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/speed-insights": "^1.0.12"
+  }
+}
