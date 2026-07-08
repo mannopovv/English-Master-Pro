@@ -1,0 +1,30 @@
+{
+  "name": "english-master-pro",
+  "version": "1.0.0",
+  "description": "Learn English vocabulary, play quizzes, and practice with AI tutor.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve .",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mannopovv/English-Master-Pro.git"
+  },
+  "keywords": [
+    "english",
+    "learning",
+    "education",
+    "pwa"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mannopovv/English-Master-Pro/issues"
+  },
+  "homepage": "https://github.com/mannopovv/English-Master-Pro#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
