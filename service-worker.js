@@ -1,4 +1,4 @@
-const CACHE_NAME = "english-master-v2"; // Versiya yangilandi
+const CACHE_NAME = "english-master-v2"; 
 
 const ASSETS = [
   "./",
@@ -7,9 +7,9 @@ const ASSETS = [
   "./index.js",
   "./manifest.json",
   "./icon-192.png"
-]; 
+];
 
-// --- Install Event ---
+
 self.addEventListener("install", (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME)
@@ -17,11 +17,11 @@ self.addEventListener("install", (e) => {
         console.log("📦 Service Worker: Fayllar keshga olinmoqda...");
         return cache.addAll(ASSETS);
       })
-      .then(() => self.skipWaiting()) 
+      .then(() => self.skipWaiting())
   );
 });
 
-// --- Activate Event ---
+
 self.addEventListener("activate", (e) => {
   e.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -33,36 +33,47 @@ self.addEventListener("activate", (e) => {
           }
         })
       );
-    }).then(() => self.clients.claim()) 
+    }).then(() => self.clients.claim())
   );
 });
 
-// --- Fetch Event (Tuzatilgan qism) ---
+
 self.addEventListener("fetch", (e) => {
-  // Faqat HTTP/HTTPS so'rovlarni keshga tekshiramiz (chrome-extension va h.k. xatolik bermasligi uchun)
+  
   if (!e.request.url.startsWith("http")) return;
 
-  e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
-      
-      // Orqafonda tarmoqdan yangi faylni yuklab olish so'rovi
-      const fetchPromise = fetch(e.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const cacheCopy = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(e.request, cacheCopy);
-            });
-          }
-          return networkResponse;
-        })
-        .catch(() => {
-          console.log("📴 Tarmoq xatosi (Foydalanuvchi offlayn yoki server o'chiq)");
-        });
+  
+  if (e.request.method !== "GET") return;
 
-      // MUHIM TUZATISH: Agar keshda eski fayl bo'lsa ham, agar internet bo'lsa 
-      // yangi faylni (fetchPromise) ustun qo'yamiz. Internet yo'q bo'lsagina keshdagini beradi.
-      return fetchPromise || cachedResponse;
-    })
+  e.respondWith(
+    fetch(e.request)
+      .then((networkResponse) => {
+     
+        if (networkResponse && networkResponse.status === 200) {
+          const cacheCopy = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(e.request, cacheCopy);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(async () => {
+        
+        console.log("📴 Tarmoq xatosi (Foydalanuvchi oflayn yoki server o'chiq)");
+        const cachedResponse = await caches.match(e.request);
+        if (cachedResponse) return cachedResponse;
+
+        
+        if (e.request.mode === "navigate") {
+          const fallbackPage = await caches.match("./index.html");
+          if (fallbackPage) return fallbackPage;
+        }
+
+       
+        return new Response(
+          "Siz oflaynsiz va bu fayl keshda mavjud emas.",
+          { status: 503, statusText: "Offline", headers: { "Content-Type": "text/plain; charset=utf-8" } }
+        );
+      })
   );
 });

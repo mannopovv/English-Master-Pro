@@ -3,12 +3,14 @@
   "short_name": "English Pro",
   "description": "Learn English vocabulary, play quizzes, and practice with AI tutor.",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#1e293b",
   "theme_color": "#2563eb",
   "lang": "uz",
   "id": "/english-master-pro-pwa",
+  "categories": ["education"],
   "icons": [
     {
       "src": "icon-192.png",
@@ -17,19 +19,19 @@
       "purpose": "any"
     },
     {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
