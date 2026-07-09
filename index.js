@@ -1,4 +1,3 @@
-
 const onboardingModal = document.getElementById("onboardingModal");
 if (onboardingModal) {
     const savedLevel = localStorage.getItem("userLevel");

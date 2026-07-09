@@ -5,10 +5,25 @@
     font-family: 'Poppins', sans-serif;
 }
  
+html {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
 body {
     background: radial-gradient(circle at 15% 0%, #17233d 0%, #0f172a 45%, #0b1222 100%);
     color: #fff;
     min-height: 100vh;
+    overflow-x: hidden;
+    width: 100%;
     transition: background 0.3s, color 0.3s;
 }
  
@@ -18,13 +33,14 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 18px 40px;
+    padding-top: max(18px, env(safe-area-inset-top));
     background: rgba(30, 41, 59, .75);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     box-shadow: 0 5px 20px rgba(0,0,0,.35);
     position: sticky;
     top: 0;
-    z-index: 500;
+    z-index: 1010;
     border-bottom: 1px solid rgba(148, 163, 184, .12);
 }
  
