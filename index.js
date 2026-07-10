@@ -182,7 +182,13 @@ const menuButtons = {
     "settingsBtn": "settingsPage",
     "startBtn": "flashPage",
     "aiBtn": "aiPage",
-    "assistantBtn": "assistantPage"
+    "assistantBtn": "assistantPage",
+    "courseBtn": "coursePage",
+    "aiToolsBtn": "aiToolsPage",
+    "speakingBtn": "speakingPage",
+    "grammarBtn": "aiTeacherPage",
+    "achievementBtn": "achievementPage",
+    "avatarBtn": "avatarPage"
 };
 
 Object.keys(menuButtons).forEach(btnId => {
@@ -1067,6 +1073,82 @@ function simpleTutorReply(question) {
 
 
 
+/* ===================== REAL AI INTEGRATION ===================== */
+/* Foydalanuvchi Settings sahifasida o'z API kalitini kiritsa,
+   AI Teacher / Chat / Test generatori / Essay tekshiruvi haqiqiy AI orqali ishlaydi.
+   Kalit kiritilmagan bo'lsa, dastur mahalliy (offline) oddiy javoblarga qaytadi. */
+
+function getAISettings() {
+    return {
+        key: localStorage.getItem("ai_api_key") || "",
+        endpoint: localStorage.getItem("ai_endpoint") || "https://api.openai.com/v1/chat/completions",
+        model: localStorage.getItem("ai_model") || "gpt-4o-mini"
+    };
+}
+
+function hasAIKey() {
+    return !!getAISettings().key;
+}
+
+async function callAI(userPrompt, systemPrompt) {
+    const { key, endpoint, model } = getAISettings();
+    if (!key) return null;
+    try {
+        const messages = [];
+        if (systemPrompt) messages.push({ role: "system", content: systemPrompt });
+        messages.push({ role: "user", content: userPrompt });
+
+        const res = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${key}`
+            },
+            body: JSON.stringify({ model, messages, max_tokens: 600 })
+        });
+
+        if (!res.ok) {
+            console.error("AI so'rovi xato qaytardi:", res.status);
+            return null;
+        }
+        const data = await res.json();
+        const text = data?.choices?.[0]?.message?.content;
+        return text ? text.trim() : null;
+    } catch (err) {
+        console.error("AI ulanish xatosi:", err);
+        return null;
+    }
+}
+
+const aiApiKeyInput = document.getElementById("aiApiKeyInput");
+const aiEndpointInput = document.getElementById("aiEndpointInput");
+const aiModelInput = document.getElementById("aiModelInput");
+const saveAiSettingsBtn = document.getElementById("saveAiSettings");
+const aiSettingsStatusEl = document.getElementById("aiSettingsStatus");
+
+if (aiApiKeyInput) {
+    const s = getAISettings();
+    aiApiKeyInput.value = s.key;
+    aiEndpointInput.value = localStorage.getItem("ai_endpoint") || "";
+    aiModelInput.value = localStorage.getItem("ai_model") || "";
+}
+
+if (saveAiSettingsBtn) {
+    saveAiSettingsBtn.onclick = () => {
+        localStorage.setItem("ai_api_key", aiApiKeyInput.value.trim());
+        if (aiEndpointInput.value.trim()) localStorage.setItem("ai_endpoint", aiEndpointInput.value.trim());
+        else localStorage.removeItem("ai_endpoint");
+        if (aiModelInput.value.trim()) localStorage.setItem("ai_model", aiModelInput.value.trim());
+        else localStorage.removeItem("ai_model");
+        if (aiSettingsStatusEl) {
+            aiSettingsStatusEl.innerHTML = aiApiKeyInput.value.trim()
+                ? "✅ Saqlandi. Endi AI funksiyalar haqiqiy javob beradi."
+                : "ℹ️ Kalit o'chirildi — AI funksiyalar mahalliy (offline) rejimda ishlaydi.";
+        }
+    };
+}
+/* ================================================================= */
+
 const aiQuestion = document.getElementById("aiQuestion");
 const aiAnswer = document.getElementById("aiAnswer");
 const askAI = document.getElementById("askAI");
@@ -1082,26 +1164,50 @@ if (askAI) {
         const questionText = aiQuestion.value.trim();
         if (!questionText) { alert("Savol yozing"); return; }
         aiAnswer.innerHTML = "⏳ AI javob yozmoqda...";
-        setTimeout(() => {
-            aiAnswer.innerHTML = simpleTutorReply(questionText);
-        }, 800);
+        if (hasAIKey()) {
+            const reply = await callAI(
+                questionText,
+                "Sen ingliz tili o'qituvchisisan. Foydalanuvchi savoliga qisqa, aniq va tushunarli javob ber. Agar foydalanuvchi o'zbek tilida yozsa, javobni ham o'zbek tilida ber."
+            );
+            aiAnswer.innerHTML = reply ? reply.replace(/\n/g, "<br>") : ("⚠️ AI bilan bog'lanib bo'lmadi. " + simpleTutorReply(questionText));
+        } else {
+            setTimeout(() => {
+                aiAnswer.innerHTML = simpleTutorReply(questionText);
+            }, 500);
+        }
     };
 }
 
 if (generateQuiz) {
-    generateQuiz.onclick = () => {
+    generateQuiz.onclick = async () => {
         if (quizResult) quizResult.innerHTML = "⏳ AI test tayyorlamoqda...";
-        setTimeout(() => {
-            const picks = [...words].sort(() => Math.random() - 0.5).slice(0, 5);
+        if (hasAIKey()) {
+            const reply = await callAI(
+                "Ingliz tilini o'rganuvchilar uchun 5 ta oddiy inglizcha so'z bo'yicha ko'p tanlovli (A/B/C/D) test tuz. Har bir savolda to'g'ri javobni ham belgila. O'zbek tilida tushuntir.",
+                "Sen ingliz tili test generatorisan. Javobni HTML formatida, tushunarli va tartibli qil."
+            );
             if (quizResult) {
-                quizResult.innerHTML = "🧠 Test tayyor:<br>" + picks.map((w, i) => `${i + 1}. ${w.en} = ?`).join("<br>");
+                if (reply) {
+                    quizResult.innerHTML = reply.replace(/\n/g, "<br>");
+                } else {
+                    const picks = [...words].sort(() => Math.random() - 0.5).slice(0, 5);
+                    quizResult.innerHTML = "⚠️ AI bilan bog'lanib bo'lmadi. Oddiy test:<br>" + picks.map((w, i) => `${i + 1}. ${w.en} = ?`).join("<br>");
+                }
             }
-        }, 800);
+        } else {
+            setTimeout(() => {
+                const picks = [...words].sort(() => Math.random() - 0.5).slice(0, 5);
+                if (quizResult) {
+                    quizResult.innerHTML = "🧠 Test tayyor:<br>" + picks.map((w, i) => `${i + 1}. ${w.en} = ?`).join("<br>") +
+                        "<br><br><small>ℹ️ To'liq AI test uchun Sozlamalarda API kalit kiriting.</small>";
+                }
+            }, 500);
+        }
     };
 }
 
 if (sendMessageBtn) {
-    sendMessageBtn.onclick = () => {
+    sendMessageBtn.onclick = async () => {
         if (!chatInput || !chatBox) return;
         const text = chatInput.value.trim();
         if (!text) return;
@@ -1115,13 +1221,25 @@ if (sendMessageBtn) {
         chatBox.innerHTML += `<div class="ai" id="${aiLoadingId}"></div>`;
         document.getElementById(aiLoadingId).innerHTML = "🤖 AI javob yozmoqda...";
 
-        setTimeout(() => {
+        if (hasAIKey()) {
+            const reply = await callAI(
+                text,
+                "Sen do'stona ingliz tili suhbatdoshisan (AI Assistant). Foydalanuvchi bilan qisqa va tabiiy suhbat qur, kerak bo'lsa xatolarini muloyimlik bilan tuzat."
+            );
             const aiReplyContainer = document.getElementById(aiLoadingId);
             if (aiReplyContainer) {
-                aiReplyContainer.innerHTML = simpleTutorReply(text);
+                aiReplyContainer.innerHTML = reply ? reply.replace(/\n/g, "<br>") : ("⚠️ AI bilan bog'lanib bo'lmadi. " + simpleTutorReply(text));
             }
             chatBox.scrollTop = chatBox.scrollHeight;
-        }, 800);
+        } else {
+            setTimeout(() => {
+                const aiReplyContainer = document.getElementById(aiLoadingId);
+                if (aiReplyContainer) {
+                    aiReplyContainer.innerHTML = simpleTutorReply(text) + "<br><small>ℹ️ To'liq AI suhbat uchun Sozlamalarda API kalit kiriting.</small>";
+                }
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 600);
+        }
     };
 }
 
@@ -1379,13 +1497,47 @@ const dictionary = [
     { word: "Teacher", meaning: "O'qituvchi" }
 ];
 
+async function lookupFreeDictionary(word) {
+    try {
+        const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+        if (!res.ok) return null;
+        const data = await res.json();
+        const entry = data[0];
+        if (!entry) return null;
+        const phonetic = entry.phonetic || (entry.phonetics || []).find(p => p.text)?.text || "";
+        const meanings = (entry.meanings || []).slice(0, 2).map(m => {
+            const def = m.definitions?.[0]?.definition || "";
+            return `<b>${m.partOfSpeech}</b>: ${def}`;
+        }).join("<br>");
+        return { word: entry.word, phonetic, meanings };
+    } catch (err) {
+        console.error("Dictionary API xatosi:", err);
+        return null;
+    }
+}
+
 const dictionarySearchInput = document.getElementById("dictionarySearch");
 if (dictionarySearchInput) {
+    let dictDebounce = null;
     dictionarySearchInput.oninput = (e) => {
-        const value = e.target.value.toLowerCase();
-        const result = dictionary.find(w => w.word.toLowerCase() === value);
+        const value = e.target.value.trim();
         const out = document.getElementById("dictionaryResult");
-        if (out) out.innerHTML = result ? `${result.word} = ${result.meaning}` : "Topilmadi";
+        if (!value) { if (out) out.innerHTML = ""; return; }
+        if (out) out.innerHTML = "⏳ Qidirilmoqda...";
+
+        clearTimeout(dictDebounce);
+        dictDebounce = setTimeout(async () => {
+            const local = dictionary.find(w => w.word.toLowerCase() === value.toLowerCase());
+            const remote = await lookupFreeDictionary(value);
+
+            let html = "";
+            if (local) html += `<div>🇺🇿 ${local.word} = ${local.meaning}</div>`;
+            if (remote) {
+                html += `<div style="margin-top:8px">📖 <b>${remote.word}</b> ${remote.phonetic ? `<i>${remote.phonetic}</i>` : ""}<br>${remote.meanings}</div>`;
+            }
+            if (!html) html = "Topilmadi";
+            if (out) out.innerHTML = html;
+        }, 450);
     };
 }
 
@@ -1440,13 +1592,33 @@ function dictionaryTranslate(text) {
     return { text: translated.join(""), unknownCount, totalWords: tokens.filter(t => /[a-zA-Z\u0400-\u04FF]/.test(t)).length };
 }
 
-function renderTranslation(text, outEl) {
+async function freeTranslate(text, targetLang) {
+    try {
+        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${targetLang}`);
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data?.responseData?.translatedText || null;
+    } catch (err) {
+        console.error("Tarjima API xatosi:", err);
+        return null;
+    }
+}
+
+async function renderTranslation(text, outEl) {
     if (!outEl) return;
     if (!text.trim()) { outEl.innerHTML = "Matn kiriting"; return; }
+    outEl.innerHTML = "⏳ Tarjima qilinmoqda...";
+
+    const remote = await freeTranslate(text, "uz");
+    if (remote) {
+        outEl.innerHTML = `🌍 ${remote}`;
+        return;
+    }
+
     const result = dictionaryTranslate(text);
-    let note = "";
+    let note = "<br><small>ℹ️ Internet orqali tarjima qilib bo'lmadi, 128 so'zlik mahalliy lug'atdan foydalanildi.</small>";
     if (result.unknownCount > 0) {
-        note = `<br><small>ℹ️ ${result.unknownCount}/${result.totalWords} so'z lug'atimizda yo'q (128 so'zlik bazaga asoslangan oddiy tarjima).</small>`;
+        note += `<br><small>ℹ️ ${result.unknownCount}/${result.totalWords} so'z lug'atimizda yo'q.</small>`;
     }
     outEl.innerHTML = `🌍 ${result.text}${note}`;
 }
@@ -1508,7 +1680,19 @@ if (checkEssayBtn) {
         const essay = essayInput ? essayInput.value : "";
         if (!essay) { alert("Essay yozing"); return; }
         const out = document.getElementById("essayResult");
-        if (out) out.innerHTML = "🤖 AI tekshiruvi uchun API ulanmagan.";
+        if (out) out.innerHTML = "⏳ Tekshirilmoqda...";
+
+        if (hasAIKey()) {
+            const reply = await callAI(
+                "Quyidagi inglizcha esseni tekshir va baholab ber:\n\n" + essay,
+                "Sen ingliz tili yozuv (essay) baholovchisisan. Grammatika, so'z boyligi va tuzilish bo'yicha 1-10 baho ber, keyin 3-4 ta aniq tavsiya yoz. Javobni o'zbek tilida ber."
+            );
+            if (out) out.innerHTML = reply ? reply.replace(/\n/g, "<br>") : "⚠️ AI bilan bog'lanib bo'lmadi. Internetni yoki API kalitni tekshiring.";
+        } else {
+            const issues = checkGrammarRules(essay);
+            if (out) out.innerHTML = "📋 Mahalliy tekshiruv (asosiy qoidalar bo'yicha):<br>" + issues.map(i => `<div>${i}</div>`).join("") +
+                "<br><small>ℹ️ To'liq AI baholash uchun Sozlamalarda API kalit kiriting.</small>";
+        }
     };
 }
 
@@ -1547,9 +1731,14 @@ if (askTeacherBtn) {
         const q = teacherQuestion ? teacherQuestion.value.trim() : "";
         if (!q) { alert("Savol yozing"); return; }
         if (teacherAnswer) teacherAnswer.innerHTML = "🤖 AI javob tayyorlamoqda...";
-        setTimeout(() => {
-            if (teacherAnswer) teacherAnswer.innerHTML = simpleTutorReply(q);
-        }, 800);
+        if (hasAIKey()) {
+            const reply = await callAI(q, "Sen ingliz tili grammatikasi bo'yicha o'qituvchisan. Aniq, qisqa va misollar bilan o'zbek tilida tushuntir.");
+            if (teacherAnswer) teacherAnswer.innerHTML = reply ? reply.replace(/\n/g, "<br>") : ("⚠️ AI bilan bog'lanib bo'lmadi. " + simpleTutorReply(q));
+        } else {
+            setTimeout(() => {
+                if (teacherAnswer) teacherAnswer.innerHTML = simpleTutorReply(q) + "<br><small>ℹ️ To'liq AI javob uchun Sozlamalarda API kalit kiriting.</small>";
+            }, 500);
+        }
     };
 }
 

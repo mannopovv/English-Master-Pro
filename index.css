@@ -2633,3 +2633,198 @@ body[data-theme="light"] #bottomNav button.active {
         padding-bottom: 70px;
     }
 }
+/* AI Settings card */
+.ai-settings-card{
+    background: rgba(37,99,235,0.08);
+    border: 1px solid rgba(37,99,235,0.35);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 18px;
+    text-align: left;
+}
+.ai-settings-card h3{
+    margin: 0 0 8px 0;
+}
+.ai-settings-hint{
+    font-size: 13px;
+    opacity: 0.8;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+.ai-settings-card input{
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(37,99,235,0.4);
+    background: rgba(255,255,255,0.06);
+    color: inherit;
+}
+#saveAiSettings{
+    background:#2563eb;
+    color:#fff;
+    border:none;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+}
+#aiSettingsStatus{
+    margin-top:8px;
+    font-size:13px;
+}
+
+/* =========================================
+   DIZAYN TUZATISH v2 — izchil komponentlar
+   ========================================= */
+
+/* Klaviatura fokusi hamma joyda ko'rinsin (accessibility) */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 3px solid #38bdf8;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Umumiy kontent tugmalari (nav va bottomNav bundan mustasno) uchun izchil ko'rinish */
+main button {
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 4px 8px 4px 0;
+    box-shadow: 0 4px 14px rgba(37,99,235,.22);
+    transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+main button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(37,99,235,.32);
+    filter: brightness(1.05);
+}
+
+main button:active {
+    transform: scale(.96);
+}
+
+/* Fayl tanlash inputlarini chiroyli qilish */
+main input[type="file"] {
+    background: rgba(56,189,248,.08);
+    border: 2px dashed rgba(56,189,248,.4);
+    border-radius: 12px;
+    padding: 14px;
+    width: 100%;
+    color: #cbd5e1;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+main input[type="file"]::file-selector-button {
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 12px;
+}
+
+/* Bo'sh natija bloklari yashirin tursin, matn kelganda karta bo'lib ko'rinsin */
+.tool-page > div[id]:empty {
+    display: none;
+}
+
+.tool-page > div[id]:not(:empty) {
+    background: rgba(30,41,59,.7);
+    border: 1px solid rgba(56,189,248,.18);
+    padding: 16px 18px;
+    border-radius: 14px;
+    margin-top: 12px;
+    line-height: 1.6;
+    animation: fade .3s ease;
+}
+
+/* tool-page sarlavhalari va bo'linish chiziqlari */
+.tool-page {
+    max-width: 720px;
+}
+
+.tool-page h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    margin-top: 6px;
+}
+
+.tool-page hr {
+    margin: 34px 0;
+    opacity: .5;
+}
+
+.tool-page textarea,
+.tool-page input:not([type="file"]),
+.tool-page select {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.tool-page audio {
+    width: 100%;
+    margin: 12px 0;
+    border-radius: 10px;
+}
+
+.tool-page canvas#progressChart {
+    width: 100% !important;
+    max-height: 260px;
+    background: rgba(30,41,59,.7);
+    border-radius: 14px;
+    padding: 10px;
+}
+
+/* AI sozlamalar bo'limi input focus rangi izchil bo'lsin */
+.ai-settings-card input:focus-visible {
+    outline: 3px solid #38bdf8;
+    outline-offset: 2px;
+}
+
+/* Yengil (light) mavzu uchun tool-page va tugmalar */
+body[data-theme="light"] .tool-page > div[id]:not(:empty) {
+    background: rgba(37,99,235,.06);
+    border-color: rgba(37,99,235,.18);
+    color: #0f172a;
+}
+
+body[data-theme="light"] main input[type="file"] {
+    background: rgba(37,99,235,.05);
+    color: #1e293b;
+}
+
+body[data-theme="light"] .ai-settings-card {
+    background: rgba(37,99,235,.05);
+}
+
+/* Mobil ekranda tool-page tugmalari to'liq kenglikda bo'lsin */
+@media (max-width: 640px) {
+    .tool-page {
+        max-width: 100%;
+    }
+    main button {
+        width: 100%;
+        margin: 6px 0;
+    }
+}
