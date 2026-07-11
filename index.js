@@ -23,6 +23,22 @@ if (onboardingModal) {
 
 
 const offlineBanner = document.getElementById("offlineBanner");
+
+// ---- Har qanday tugmaga chiroyli "ripple" bosish animatsiyasi ---------
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn || btn.disabled) return;
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement("span");
+    ripple.className = "ripple-effect";
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + "px";
+    ripple.style.left = (e.clientX - rect.left - size / 2) + "px";
+    ripple.style.top = (e.clientY - rect.top - size / 2) + "px";
+    btn.appendChild(ripple);
+    ripple.addEventListener("animationend", () => ripple.remove());
+}, { passive: true });
+
 function updateOnlineStatus() {
     if (!offlineBanner) return;
     offlineBanner.classList.toggle("show", !navigator.onLine);
@@ -42,6 +58,7 @@ if (notifyBtn) {
         const permission = await Notification.requestPermission();
         if (permission === "granted") {
             localStorage.setItem("dailyReminder", "true");
+            localStorage.setItem("lastReminderDate", new Date().toDateString());
             if (settingsStatusEl) settingsStatusEl.innerHTML = "✅ Kunlik eslatma yoqildi";
             new Notification("English Master Pro", { body: "Bugungi so'zlaringizni o'rganishni unutmang! 📚" });
         } else {
@@ -49,6 +66,29 @@ if (notifyBtn) {
         }
     });
 }
+
+// Ilova ochilganda: agar eslatma yoqilgan bo'lsa va bugun hali
+// ko'rsatilmagan bo'lsa, avtomatik ravishda bir marta eslatma beriladi.
+// (Brauzer PWA'lari uchun haqiqiy background push server talab qiladi,
+// bu esa oddiy "foydalanuvchi qaytganida eslatish" yechimi.)
+function checkDailyReminderOnLoad() {
+    if (!("Notification" in window)) return;
+    if (localStorage.getItem("dailyReminder") !== "true") return;
+    if (Notification.permission !== "granted") return;
+
+    const today = new Date().toDateString();
+    const lastShown = localStorage.getItem("lastReminderDate");
+    if (lastShown === today) return;
+
+    localStorage.setItem("lastReminderDate", today);
+    const knownCount = Number(localStorage.getItem("known")) || 0;
+    new Notification("English Master Pro", {
+        body: knownCount > 0
+            ? `Xush kelibsiz! Hozircha ${knownCount} so'z bildingiz. Davom eting! 🔥`
+            : "Bugungi so'zlaringizni o'rganishni unutmang! 📚"
+    });
+}
+checkDailyReminderOnLoad();
 
 
 const exportBtn = document.getElementById("exportBtn");
@@ -88,6 +128,57 @@ if (importInput) {
             }
         };
         reader.readAsText(file);
+    });
+}
+
+
+const downloadReportBtn = document.getElementById("downloadReportBtn");
+if (downloadReportBtn) {
+    downloadReportBtn.addEventListener("click", () => {
+        const lvl = Number(localStorage.getItem("level")) || 1;
+        const xpVal = Number(localStorage.getItem("xp")) || 0;
+        const knownVal = Number(localStorage.getItem("known")) || 0;
+        const streakVal = Number(localStorage.getItem("streak")) || 1;
+        const achievementsList = JSON.parse(localStorage.getItem("achievements") || "[]");
+        const badgesList = JSON.parse(localStorage.getItem("badges") || "[]");
+        const dateStr = new Date().toLocaleDateString("uz-UZ");
+
+        const html = `<!DOCTYPE html>
+<html lang="uz"><head><meta charset="UTF-8">
+<title>English Master Pro — Hisobot</title>
+<style>
+  body { font-family: 'Segoe UI', sans-serif; background:#0f172a; color:#e2e8f0; padding:32px; }
+  h1 { color:#38bdf8; }
+  .stat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:24px 0; }
+  .stat-card { background:#1e293b; border-radius:12px; padding:16px; text-align:center; }
+  .stat-card .num { font-size:2rem; font-weight:700; color:#38bdf8; }
+  ul { line-height:1.8; }
+  @media print { body { background:#fff; color:#111; } .stat-card { background:#eee; } }
+</style></head>
+<body>
+  <h1>📊 English Master Pro — Progress hisoboti</h1>
+  <p>Sana: ${dateStr}</p>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="num">${lvl}</div>Level</div>
+    <div class="stat-card"><div class="num">${xpVal}</div>XP</div>
+    <div class="stat-card"><div class="num">${knownVal}</div>Bilgan so'z</div>
+    <div class="stat-card"><div class="num">${streakVal}🔥</div>Streak</div>
+  </div>
+  <h2>🏆 Yutuqlar (${achievementsList.length})</h2>
+  <ul>${achievementsList.map(a => `<li>${a}</li>`).join("") || "<li>Hali yo'q</li>"}</ul>
+  <h2>🎖️ Nishonlar (${badgesList.length})</h2>
+  <ul>${badgesList.map(b => `<li>${b}</li>`).join("") || "<li>Hali yo'q</li>"}</ul>
+  <p style="margin-top:32px;opacity:.6;font-size:.85rem;">Ushbu faylni brauzerda ochib, "Chop etish → PDF sifatida saqlash" orqali PDF holatiga o'tkazishingiz mumkin.</p>
+</body></html>`;
+
+        const blob = new Blob([html], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `english-master-hisobot-${getTodayStr()}.html`;
+        a.click();
+        URL.revokeObjectURL(url);
+        if (settingsStatusEl) settingsStatusEl.innerHTML = "✅ Hisobot yuklab olindi";
     });
 }
 
@@ -188,7 +279,9 @@ const menuButtons = {
     "speakingBtn": "speakingPage",
     "grammarBtn": "aiTeacherPage",
     "achievementBtn": "achievementPage",
-    "avatarBtn": "avatarPage"
+    "avatarBtn": "avatarPage",
+    "beginnerBtn": "beginnerPage",
+    "matchBtn": "matchPage"
 };
 
 Object.keys(menuButtons).forEach(btnId => {
@@ -199,6 +292,12 @@ Object.keys(menuButtons).forEach(btnId => {
             if (btnId === "quizBtn") {
                 loadQuiz();
                 startTimer();
+            }
+            if (btnId === "matchBtn" && typeof startMatchRound === "function") {
+                startMatchRound();
+            }
+            if (btnId === "beginnerBtn" && typeof renderBeginnerContent === "function") {
+                renderBeginnerContent();
             }
             syncBottomNav(menuButtons[btnId]);
         };
@@ -372,6 +471,37 @@ const words = [
 
 let wordWeights = JSON.parse(localStorage.getItem("wordWeights")) || {};
 
+// ---- Spaced repetition (SM-2 soddalashtirilgan versiyasi) -------------
+// Har bir so'z uchun: ease (qulaylik koeffitsienti), interval (kunlarda),
+// nextReview (keyingi ko'rsatish vaqti) va reps (ketma-ket to'g'ri javoblar).
+let srsData = JSON.parse(localStorage.getItem("srsData")) || {};
+
+function getSrs(word) {
+    return srsData[word.en] || { ease: 2.5, interval: 0, nextReview: 0, reps: 0 };
+}
+
+function isDue(word) {
+    return getSrs(word).nextReview <= Date.now();
+}
+
+function scheduleWordReview(word, wasCorrect) {
+    const s = getSrs(word);
+    if (wasCorrect) {
+        s.reps += 1;
+        if (s.reps === 1) s.interval = 1;
+        else if (s.reps === 2) s.interval = 3;
+        else s.interval = Math.round(s.interval * s.ease);
+        s.ease = Math.min(3.2, s.ease + 0.1);
+    } else {
+        s.reps = 0;
+        s.interval = 0; // darhol qayta ko'rsatiladi
+        s.ease = Math.max(1.3, s.ease - 0.25);
+    }
+    s.nextReview = Date.now() + s.interval * 24 * 60 * 60 * 1000;
+    srsData[word.en] = s;
+    localStorage.setItem("srsData", JSON.stringify(srsData));
+}
+
 function getWordWeight(word) {
     return wordWeights[word.en] || 1;
 }
@@ -380,17 +510,24 @@ function bumpWordWeight(word, delta) {
     const current = wordWeights[word.en] || 1;
     wordWeights[word.en] = Math.max(1, Math.min(10, current + delta));
     localStorage.setItem("wordWeights", JSON.stringify(wordWeights));
+    // Mavjud chaqiruvlar bo'yicha: manfiy delta = to'g'ri javob, musbat = xato javob
+    scheduleWordReview(word, delta < 0);
 }
 
 
 function weightedRandomWord() {
-    const totalWeight = words.reduce((sum, w) => sum + getWordWeight(w), 0);
+    // Muddati kelgan (due) so'zlarga ustuvorlik beriladi — bu haqiqiy
+    // spaced-repetition mantig'i: bilmagan/eskirgan so'zlar tezroq qaytadi.
+    const dueWords = words.filter(isDue);
+    const pool = dueWords.length ? dueWords : words;
+
+    const totalWeight = pool.reduce((sum, w) => sum + getWordWeight(w), 0);
     let r = Math.random() * totalWeight;
-    for (const w of words) {
+    for (const w of pool) {
         r -= getWordWeight(w);
         if (r <= 0) return w;
     }
-    return words[words.length - 1];
+    return pool[pool.length - 1];
 }
 
 let index = 0;
@@ -569,14 +706,76 @@ timer.id = "timer";
 const quizPage = document.getElementById("quizPage");
 if (quizPage) quizPage.prepend(timer);
 
+// =========================================================================
+// DARAJAGA MOS TEST TIZIMI (Level-based quiz)
+// O'quvchi tanlagan daraja (Boshlang'ich / O'rta / Yuqori) asosida savollar
+// filtrlanadi. Daraja so'z uzunligiga qarab avtomatik aniqlanadi:
+// qisqa va oddiy so'zlar — boshlang'ich, o'rtacha — o'rta, uzun/murakkab — yuqori.
+// =========================================================================
+
+const LEVEL_LABELS = { beginner: "Boshlang'ich", intermediate: "O'rta", advanced: "Yuqori" };
+
+function wordLevel(w) {
+    const len = (w.en || "").length;
+    if (len <= 5) return "beginner";
+    if (len <= 8) return "intermediate";
+    return "advanced";
+}
+
+function getUserLevel() {
+    return localStorage.getItem("userLevel") || "beginner";
+}
+
+let quizDeck = words;
+
+function buildQuizDeck() {
+    const lvl = getUserLevel();
+    let pool = words.filter(w => wordLevel(w) === lvl);
+    if (pool.length < 4) pool = words; // shu darajada yetarli so'z topilmasa, hammasidan foydalanamiz
+    quizDeck = (typeof shuffleArr === "function") ? shuffleArr(pool) : pool;
+    quizIndex = 0;
+    score = 0;
+    updateQuizLevelUI();
+}
+
+function updateQuizLevelUI() {
+    const lvl = getUserLevel();
+    document.querySelectorAll(".quiz-level-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.level === lvl);
+    });
+    const labelEl = document.getElementById("quizLevelLabel");
+    if (labelEl) labelEl.textContent = `📊 Daraja: ${LEVEL_LABELS[lvl]} — ${quizDeck.length} ta savol tayyor`;
+}
+
+document.querySelectorAll(".quiz-level-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        localStorage.setItem("userLevel", btn.dataset.level);
+        buildQuizDeck();
+        clearInterval(timerInterval);
+        loadQuiz();
+        startTimer();
+    });
+});
+
+// Boshlang'ich "daraja tanlash" oynasida daraja tanlanganda test darrov shu darajaga moslashadi
+if (onboardingModal) {
+    onboardingModal.querySelectorAll("[data-level]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            if (typeof buildQuizDeck === "function") buildQuizDeck();
+        });
+    });
+}
+
+buildQuizDeck();
+
 function loadQuiz() {
     if (!question || !answers) return;
 
-    if (quizIndex >= words.length) {
+    if (quizIndex >= quizDeck.length) {
         clearInterval(timerInterval);
         question.innerHTML = "🎉 Test tugadi";
         answers.innerHTML = `
-            <h2>Natija: ${score}/${words.length}</h2>
+            <h2>Natija: ${score}/${quizDeck.length}</h2>
             <button id="restartQuiz" class="answer" style="text-align:center;">Qayta boshlash</button>
         `;
         const restartBtn = document.getElementById("restartQuiz");
@@ -585,12 +784,12 @@ function loadQuiz() {
         return;
     }
 
-    const current = words[quizIndex];
+    const current = quizDeck[quizIndex];
     question.innerHTML = getTargetWord(current);
 
     let options = [current.uz];
-    while (options.length < 4) {
-        let random = words[Math.floor(Math.random() * words.length)].uz;
+    while (options.length < 4 && quizDeck.length >= 4) {
+        let random = quizDeck[Math.floor(Math.random() * quizDeck.length)].uz;
         if (!options.includes(random)) {
             options.push(random);
         }
@@ -602,16 +801,31 @@ function loadQuiz() {
         const btn = document.createElement("button");
         btn.className = "answer";
         btn.innerHTML = option;
-        btn.onclick = () => checkAnswer(option);
+        btn.onclick = () => checkAnswer(option, btn);
         answers.appendChild(btn);
     });
 }
 
-function checkAnswer(answer) {
-    if (answer === words[quizIndex].uz) {
+function checkAnswer(answer, clickedBtn) {
+    const correctAnswerText = quizDeck[quizIndex].uz;
+    const isCorrect = answer === correctAnswerText;
+
+    // Har bir javob tugmasini to'g'ri/xato ekaniga qarab chiroyli belgilaymiz
+    if (answers) {
+        Array.from(answers.children).forEach(btn => {
+            btn.disabled = true;
+            if (btn.textContent === correctAnswerText) {
+                btn.classList.add("correct");
+            } else if (btn === clickedBtn) {
+                btn.classList.add("wrong");
+            }
+        });
+    }
+
+    if (isCorrect) {
         score++;
         xp += 15;
-        bumpWordWeight(words[quizIndex], -2);
+        bumpWordWeight(quizDeck[quizIndex], -2);
         if (xp >= 100) {
             xp = 0;
             level++;
@@ -622,19 +836,22 @@ function checkAnswer(answer) {
         }
         correctAnswer();
     } else {
-        bumpWordWeight(words[quizIndex], 3);
+        bumpWordWeight(quizDeck[quizIndex], 3);
         wrongAnswer();
     }
     updateStats();
     quizIndex++;
     clearInterval(timerInterval);
-    loadQuiz();
-    if (quizIndex < words.length) startTimer();
+
+    // Animatsiya ko'rinishi uchun keyingi savolga o'tishdan oldin kichik pauza
+    setTimeout(() => {
+        loadQuiz();
+        if (quizIndex < quizDeck.length) startTimer();
+    }, 550);
 }
 
 function restartQuiz() {
-    quizIndex = 0;
-    score = 0;
+    buildQuizDeck();
     loadQuiz();
     startTimer();
 }
@@ -651,7 +868,7 @@ function startTimer() {
             wrongAnswer();
             quizIndex++;
             loadQuiz();
-            if (quizIndex < words.length) startTimer();
+            if (quizIndex < quizDeck.length) startTimer();
         }
     }, 1000);
 }
@@ -668,6 +885,7 @@ function updateStats() {
     localStorage.setItem("known", known);
     localStorage.setItem("streak", streak);
     if (typeof renderProgressChart === "function") renderProgressChart();
+    if (typeof renderLeaderboard === "function") renderLeaderboard();
     updateHomeWidgets();
     updateRecommendation();
 }
@@ -794,11 +1012,31 @@ function saveGame() {
 }
 
 function celebrate() {
+    spawnConfetti();
     document.body.animate([
         { transform: "scale(1)" },
         { transform: "scale(1.02)" },
         { transform: "scale(1)" }
     ], { duration: 500 });
+}
+
+// Level oshganda ekranga real konfetti animatsiyasi tushadi (tashqi kutubxonasiz)
+function spawnConfetti(count = 40) {
+    const colors = ["#38bdf8", "#2563eb", "#facc15", "#f472b6", "#4ade80"];
+    const container = document.createElement("div");
+    container.className = "confetti-container";
+    document.body.appendChild(container);
+    for (let i = 0; i < count; i++) {
+        const piece = document.createElement("span");
+        piece.className = "confetti-piece";
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDuration = (2 + Math.random() * 1.5) + "s";
+        piece.style.animationDelay = (Math.random() * 0.3) + "s";
+        piece.style.transform = `rotate(${Math.floor(Math.random() * 360)}deg)`;
+        container.appendChild(piece);
+    }
+    setTimeout(() => container.remove(), 3500);
 }
 
 function coinAnimation() {
@@ -1635,9 +1873,25 @@ if (translateBtnMain) {
 }
 
 
-function pronunciationScoreDemo() {
-    const scoreVal = Math.floor(Math.random() * 41) + 60;
-    alert("🎤 Speaking Score: " + scoreVal + "/100");
+// Ikki matn orasidagi moslikni Levenshtein masofasi orqali foizda hisoblaydi.
+// Tasodifiy raqam emas — haqiqatan aytilgan so'z bilan taqqoslaydi.
+function similarityScore(a, b) {
+    a = (a || "").toLowerCase().trim();
+    b = (b || "").toLowerCase().trim();
+    if (!a || !b) return 0;
+    const dp = Array.from({ length: a.length + 1 }, () => new Array(b.length + 1).fill(0));
+    for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+    for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+            dp[i][j] = a[i - 1] === b[j - 1]
+                ? dp[i - 1][j - 1]
+                : 1 + Math.min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]);
+        }
+    }
+    const distance = dp[a.length][b.length];
+    const maxLen = Math.max(a.length, b.length);
+    return Math.round((1 - distance / maxLen) * 100);
 }
 
 const pdfFileInput = document.getElementById("pdfFile");
@@ -1653,21 +1907,77 @@ console.log("AI Tools Loaded");
 
 const startSpeaking = document.getElementById("startSpeaking");
 const speechResult = document.getElementById("speechResult");
+const speechScoreEl = document.getElementById("speechScore");
+const speakingTargetWordEl = document.getElementById("speakingTargetWord");
+const listenTargetBtn = document.getElementById("listenTargetBtn");
+const newSpeakingWordBtn = document.getElementById("newSpeakingWordBtn");
+
+let speakingTargetWord = null;
+
+function pickSpeakingWord() {
+    speakingTargetWord = typeof weightedRandomWord === "function" ? weightedRandomWord() : words[0];
+    if (speakingTargetWordEl) speakingTargetWordEl.innerHTML = getTargetWord(speakingTargetWord);
+    if (speechResult) speechResult.innerHTML = "";
+    if (speechScoreEl) speechScoreEl.innerHTML = "";
+}
+
+if (speakingTargetWordEl) pickSpeakingWord();
+
+if (newSpeakingWordBtn) newSpeakingWordBtn.onclick = pickSpeakingWord;
+
+if (listenTargetBtn) {
+    listenTargetBtn.onclick = () => {
+        if (!speakingTargetWord) pickSpeakingWord();
+        if (!("speechSynthesis" in window)) {
+            alert("Brauzeringiz ovozli o'qishni qo'llamaydi.");
+            return;
+        }
+        const utter = new SpeechSynthesisUtterance(getTargetWord(speakingTargetWord));
+        utter.lang = getVoiceLang();
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utter);
+    };
+}
 
 if (startSpeaking) {
     startSpeaking.onclick = () => {
+        if (!speakingTargetWord) pickSpeakingWord();
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
             alert("Speech Recognition qo'llab-quvvatlanmaydi.");
             return;
         }
         const recognition = new SpeechRecognition();
-        recognition.lang = "en-US";
+        recognition.lang = getVoiceLang();
         recognition.start();
         if (speechResult) speechResult.innerHTML = "🎤 Listening...";
+        if (speechScoreEl) speechScoreEl.innerHTML = "";
+
         recognition.onresult = (e) => {
-            const text = e.results[0][0].transcript;
-            if (speechResult) speechResult.innerHTML = "🗣️ You said: " + text;
+            const heard = e.results[0][0].transcript;
+            if (speechResult) speechResult.innerHTML = "🗣️ Siz aytdingiz: " + heard;
+
+            const target = getTargetWord(speakingTargetWord);
+            const scoreVal = similarityScore(heard, target);
+            const isGood = scoreVal >= 70;
+            const verdict = scoreVal >= 85 ? "✅ Ajoyib talaffuz!" : scoreVal >= 60 ? "🙂 Yaxshi, yana urinib ko'ring" : "🔁 Qayta urinib ko'ring";
+
+            if (speechScoreEl) {
+                speechScoreEl.innerHTML = `🎯 Maqsad: <b>${target}</b> — Moslik: <b>${scoreVal}/100</b><br>${verdict}`;
+            }
+
+            // Natijani spaced-repetition tizimiga ham yozamiz
+            if (typeof bumpWordWeight === "function") {
+                bumpWordWeight(speakingTargetWord, isGood ? -2 : 3);
+            }
+            if (isGood) {
+                xp += 5;
+                if (typeof updateStats === "function") updateStats();
+            }
+        };
+
+        recognition.onerror = () => {
+            if (speechResult) speechResult.innerHTML = "❌ Ovoz tanilmadi, qayta urinib ko'ring.";
         };
     };
 }
@@ -2090,33 +2400,10 @@ if (startPronunciationBtn) {
 console.log("Smart AI Loaded");
 
 
-const academy = {
-    ielts: { title: "IELTS Course", video: "https://www.youtube.com/embed/VIDEO_ID" },
-    grammar: { title: "Grammar Course", video: "https://www.youtube.com/embed/VIDEO_ID" },
-    listening: { title: "Listening Course", video: "https://www.youtube.com/embed/VIDEO_ID" },
-    writing: { title: "Writing Course", video: "https://www.youtube.com/embed/VIDEO_ID" }
-};
-
-const academyContent = document.getElementById("academyContent");
-const lessonVideo = document.getElementById("lessonVideo");
-
-function openCourse(name) {
-    const item = academy[name];
-    if (academyContent) academyContent.innerHTML = `<h2>${item.title}</h2><p>Complete every lesson to unlock rewards.</p>`;
-    if (lessonVideo) lessonVideo.src = item.video;
-}
-
-const ieltsBtn = document.getElementById("ieltsBtn");
-if (ieltsBtn) ieltsBtn.onclick = () => openCourse("ielts");
-
-const grammarBtn = document.getElementById("grammarBtn");
-if (grammarBtn) grammarBtn.onclick = () => openCourse("grammar");
-
-const listeningBtn = document.getElementById("listeningBtn");
-if (listeningBtn) listeningBtn.onclick = () => openCourse("listening");
-
-const writingBtn = document.getElementById("writingBtn");
-if (writingBtn) writingBtn.onclick = () => openCourse("writing");
+// NOTE: eski "academy" bloki olib tashlandi — u academyContent/lessonVideo
+// kabi HTML'da mavjud bo'lmagan elementlarga murojaat qilar edi va
+// grammarBtn'ning asl onclick (Grammatika sahifasini ochish) vazifasini
+// jimgina bekor qilib qo'ygan edi, shu sabab tugma "ishlamayotgandek" ko'rinardi.
 
 const certificateBtn = document.getElementById("certificateBtn");
 if (certificateBtn) {
@@ -2238,6 +2525,34 @@ function renderProgressChart() {
     });
 }
 renderProgressChart();
+
+// ---- Shaxsiy reyting (real backend/do'stlar tizimi bo'lmagani uchun
+// eng adolatli va yolg'on bo'lmagan variant — o'z eng yaxshi kunlaringiz
+// bilan taqqoslash) ----------------------------------------------------
+function renderLeaderboard() {
+    const listEl = document.getElementById("leaderboardList");
+    if (!listEl) return;
+
+    const history = JSON.parse(localStorage.getItem("xpHistory")) || [];
+    const todayStr = new Date().toDateString();
+    const rows = history.filter(h => h.date !== todayStr);
+    rows.push({ date: todayStr, xp, level });
+    rows.sort((a, b) => b.xp - a.xp);
+
+    if (!rows.length) {
+        listEl.innerHTML = "<li>Hali ma'lumot yo'q — bir necha kun mashq qiling!</li>";
+        return;
+    }
+
+    listEl.innerHTML = rows.slice(0, 7).map((h, i) => {
+        const isToday = h.date === todayStr;
+        return `<li class="${isToday ? "me" : ""}">
+            <span><span class="leaderboard-rank">#${i + 1}</span> ${isToday ? "🟢 Bugun (Siz)" : h.date}</span>
+            <span>${h.xp} XP · Lv.${h.level}</span>
+        </li>`;
+    }).join("");
+}
+renderLeaderboard();
 
 console.log("Achievement Loaded");
 
@@ -2846,13 +3161,13 @@ const skinsEl = document.getElementById("skins");
 if (skinsEl) skins.forEach(item => skinsEl.innerHTML += `<div class="skin">${item}</div>`);
 
 const darkThemeBtn = document.getElementById("darkTheme");
-if (darkThemeBtn) darkThemeBtn.onclick = () => { document.body.dataset.theme = "dark"; };
+if (darkThemeBtn) darkThemeBtn.onclick = () => { document.body.dataset.theme = "dark"; localStorage.setItem("appTheme", "dark"); };
 
 const lightThemeBtn = document.getElementById("lightTheme");
-if (lightThemeBtn) lightThemeBtn.onclick = () => { document.body.dataset.theme = "light"; };
+if (lightThemeBtn) lightThemeBtn.onclick = () => { document.body.dataset.theme = "light"; localStorage.setItem("appTheme", "light"); };
 
 const neonThemeBtn = document.getElementById("neonTheme");
-if (neonThemeBtn) neonThemeBtn.onclick = () => { document.body.dataset.theme = "neon"; };
+if (neonThemeBtn) neonThemeBtn.onclick = () => { document.body.dataset.theme = "neon"; localStorage.setItem("appTheme", "neon"); };
 
 const effects = ["✨ Glow", "🔥 Fire", "❄️ Ice", "⚡ Lightning"];
 const effectsDivEl = document.getElementById("effects");
@@ -3550,3 +3865,366 @@ if (lifeStatisticsBtn) {
 }
 
 console.log("Ultimate Edition Loaded");
+
+// =========================================================================
+// NOLDAN BOSHLASH KURSI (Beginner Course): Ingliz + Rus tili — alifbo,
+// sonlar, salomlashish, grammatika asoslari. Har biri talaffuz bilan.
+// =========================================================================
+
+function speakText(text, langCode) {
+    if (!("speechSynthesis" in window) || !text) return;
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = langCode;
+    utter.rate = 0.85;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utter);
+}
+
+const ENGLISH_ALPHABET = [
+    { letter: "A", sound: "ey", word: "Apple", uz: "Olma" },
+    { letter: "B", sound: "bi", word: "Book", uz: "Kitob" },
+    { letter: "C", sound: "si", word: "Cat", uz: "Mushuk" },
+    { letter: "D", sound: "di", word: "Dog", uz: "It" },
+    { letter: "E", sound: "i", word: "Egg", uz: "Tuxum" },
+    { letter: "F", sound: "ef", word: "Fish", uz: "Baliq" },
+    { letter: "G", sound: "ji", word: "Girl", uz: "Qiz" },
+    { letter: "H", sound: "eych", word: "Hat", uz: "Shlyapa" },
+    { letter: "I", sound: "ay", word: "Ice", uz: "Muz" },
+    { letter: "J", sound: "jey", word: "Juice", uz: "Sharbat" },
+    { letter: "K", sound: "key", word: "King", uz: "Shoh" },
+    { letter: "L", sound: "el", word: "Lion", uz: "Sher" },
+    { letter: "M", sound: "em", word: "Moon", uz: "Oy" },
+    { letter: "N", sound: "en", word: "Nose", uz: "Burun" },
+    { letter: "O", sound: "ou", word: "Orange", uz: "Apelsin" },
+    { letter: "P", sound: "pi", word: "Pen", uz: "Ruchka" },
+    { letter: "Q", sound: "kyu", word: "Queen", uz: "Malika" },
+    { letter: "R", sound: "ar", word: "Rain", uz: "Yomg'ir" },
+    { letter: "S", sound: "es", word: "Sun", uz: "Quyosh" },
+    { letter: "T", sound: "ti", word: "Tree", uz: "Daraxt" },
+    { letter: "U", sound: "yu", word: "Umbrella", uz: "Soyabon" },
+    { letter: "V", sound: "vi", word: "Van", uz: "Furgon" },
+    { letter: "W", sound: "dabl-yu", word: "Water", uz: "Suv" },
+    { letter: "X", sound: "eks", word: "Box", uz: "Quti" },
+    { letter: "Y", sound: "way", word: "Yellow", uz: "Sariq" },
+    { letter: "Z", sound: "zi", word: "Zoo", uz: "Hayvonot bog'i" }
+];
+
+const RUSSIAN_ALPHABET = [
+    { letter: "А", sound: "a", word: "Арбуз", uz: "Tarvuz" },
+    { letter: "Б", sound: "be", word: "Банан", uz: "Banan" },
+    { letter: "В", sound: "ve", word: "Вода", uz: "Suv" },
+    { letter: "Г", sound: "ge", word: "Голова", uz: "Bosh" },
+    { letter: "Д", sound: "de", word: "Дом", uz: "Uy" },
+    { letter: "Е", sound: "ye", word: "Ель", uz: "Archa" },
+    { letter: "Ё", sound: "yo", word: "Ёлка", uz: "Yangi yil archasi" },
+    { letter: "Ж", sound: "zhe", word: "Жираф", uz: "Jirafa" },
+    { letter: "З", sound: "ze", word: "Зима", uz: "Qish" },
+    { letter: "И", sound: "i", word: "Игра", uz: "O'yin" },
+    { letter: "Й", sound: "i kratkoye", word: "Йогурт", uz: "Yogurt" },
+    { letter: "К", sound: "ka", word: "Кот", uz: "Mushuk" },
+    { letter: "Л", sound: "el", word: "Лук", uz: "Piyoz" },
+    { letter: "М", sound: "em", word: "Мама", uz: "Ona" },
+    { letter: "Н", sound: "en", word: "Нос", uz: "Burun" },
+    { letter: "О", sound: "o", word: "Окно", uz: "Deraza" },
+    { letter: "П", sound: "pe", word: "Папа", uz: "Ota" },
+    { letter: "Р", sound: "er", word: "Рука", uz: "Qo'l" },
+    { letter: "С", sound: "es", word: "Солнце", uz: "Quyosh" },
+    { letter: "Т", sound: "te", word: "Тигр", uz: "Yo'lbars" },
+    { letter: "У", sound: "u", word: "Утро", uz: "Ertalab" },
+    { letter: "Ф", sound: "ef", word: "Фрукты", uz: "Mevalar" },
+    { letter: "Х", sound: "kha", word: "Хлеб", uz: "Non" },
+    { letter: "Ц", sound: "tse", word: "Цветок", uz: "Gul" },
+    { letter: "Ч", sound: "che", word: "Чай", uz: "Choy" },
+    { letter: "Ш", sound: "sha", word: "Школа", uz: "Maktab" },
+    { letter: "Щ", sound: "shcha", word: "Щенок", uz: "Kuchukcha" },
+    { letter: "Ъ", sound: "qattiq belgi", word: "Подъезд", uz: "Kirish eshigi (belgi ovoz bermaydi)" },
+    { letter: "Ы", sound: "y", word: "Сыр", uz: "Pishloq" },
+    { letter: "Ь", sound: "yumshoq belgi", word: "Мать", uz: "Ona (belgi ovoz bermaydi)" },
+    { letter: "Э", sound: "e", word: "Этаж", uz: "Qavat" },
+    { letter: "Ю", sound: "yu", word: "Юбка", uz: "Yubka" },
+    { letter: "Я", sound: "ya", word: "Яблоко", uz: "Olma" }
+];
+
+const NUMBER_UZ = ["Nol","Bir","Ikki","Uch","To'rt","Besh","Olti","Yetti","Sakkiz","To'qqiz","O'n",
+    "O'n bir","O'n ikki","O'n uch","O'n to'rt","O'n besh","O'n olti","O'n yetti","O'n sakkiz","O'n to'qqiz","Yigirma"];
+const NUMBER_EN = ["Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten",
+    "Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen","Twenty"];
+const NUMBER_RU = ["Ноль","Один","Два","Три","Четыре","Пять","Шесть","Семь","Восемь","Девять","Десять",
+    "Одиннадцать","Двенадцать","Тринадцать","Четырнадцать","Пятнадцать","Шестнадцать","Семнадцать","Восемнадцать","Девятнадцать","Двадцать"];
+
+const GREETINGS_EN = [
+    { phrase: "Hello", uz: "Salom" },
+    { phrase: "Good morning", uz: "Xayrli tong" },
+    { phrase: "Good afternoon", uz: "Xayrli kun" },
+    { phrase: "Good evening", uz: "Xayrli kech" },
+    { phrase: "Good night", uz: "Xayrli tun" },
+    { phrase: "How are you?", uz: "Qalaysiz?" },
+    { phrase: "I'm fine, thank you", uz: "Yaxshiman, rahmat" },
+    { phrase: "What's your name?", uz: "Ismingiz nima?" },
+    { phrase: "My name is...", uz: "Mening ismim..." },
+    { phrase: "Nice to meet you", uz: "Tanishganimdan xursandman" },
+    { phrase: "Thank you", uz: "Rahmat" },
+    { phrase: "Please", uz: "Iltimos" },
+    { phrase: "Excuse me / Sorry", uz: "Kechirasiz" },
+    { phrase: "Goodbye", uz: "Xayr" },
+    { phrase: "See you later", uz: "Ko'rishguncha" }
+];
+
+const GREETINGS_RU = [
+    { phrase: "Привет", uz: "Salom (norasmiy)" },
+    { phrase: "Здравствуйте", uz: "Assalomu alaykum (rasmiy)" },
+    { phrase: "Доброе утро", uz: "Xayrli tong" },
+    { phrase: "Добрый день", uz: "Xayrli kun" },
+    { phrase: "Добрый вечер", uz: "Xayrli kech" },
+    { phrase: "Спокойной ночи", uz: "Xayrli tun" },
+    { phrase: "Как дела?", uz: "Ishlar qalay?" },
+    { phrase: "Хорошо, спасибо", uz: "Yaxshi, rahmat" },
+    { phrase: "Как тебя зовут?", uz: "Isming nima?" },
+    { phrase: "Меня зовут...", uz: "Mening ismim..." },
+    { phrase: "Приятно познакомиться", uz: "Tanishganimdan xursandman" },
+    { phrase: "Спасибо", uz: "Rahmat" },
+    { phrase: "Пожалуйста", uz: "Iltimos / Marhamat" },
+    { phrase: "Извините", uz: "Kechirasiz" },
+    { phrase: "До свидания", uz: "Xayr" }
+];
+
+function renderTileGrid(items) {
+    return `<div class="tile-grid">` + items.map(it => `
+        <button class="tile alpha-tile" data-speak="${it.word.replace(/"/g, "&quot;")}">
+            <div class="tile-letter">${it.letter}</div>
+            <div class="tile-sound">/${it.sound}/</div>
+            <div class="tile-word">${it.word}</div>
+            <div class="tile-uz">${it.uz}</div>
+        </button>`).join("") + `</div>`;
+}
+
+function renderNumberGrid(lang) {
+    const words_ = lang === "ru" ? NUMBER_RU : NUMBER_EN;
+    return `<div class="tile-grid">` + words_.map((w, i) => `
+        <button class="tile num-tile" data-speak="${w}">
+            <div class="tile-letter">${i}</div>
+            <div class="tile-word">${w}</div>
+            <div class="tile-uz">${NUMBER_UZ[i]}</div>
+        </button>`).join("") + `</div>`;
+}
+
+function renderGreetingList(lang) {
+    const list = lang === "ru" ? GREETINGS_RU : GREETINGS_EN;
+    return `<div class="phrase-list">` + list.map(g => `
+        <div class="phrase-row">
+            <button class="phrase-speak" data-speak="${g.phrase.replace(/"/g, "&quot;")}">🔊</button>
+            <div class="phrase-texts">
+                <div class="phrase-main">${g.phrase}</div>
+                <div class="phrase-uz">${g.uz}</div>
+            </div>
+        </div>`).join("") + `</div>`;
+}
+
+function renderGrammarBasics(lang) {
+    if (lang === "ru") {
+        return `
+        <div class="grammar-box">
+            <h3>Kishilik olmoshlari (Личные местоимения)</h3>
+            <table class="grammar-table">
+                <tr><td>Я</td><td>Men</td></tr>
+                <tr><td>Ты</td><td>Sen</td></tr>
+                <tr><td>Он / Она / Оно</td><td>U (erkak/ayol/narsa)</td></tr>
+                <tr><td>Мы</td><td>Biz</td></tr>
+                <tr><td>Вы</td><td>Siz / Sizlar</td></tr>
+                <tr><td>Они</td><td>Ular</td></tr>
+            </table>
+            <h3>Muhim qoida: "bo'lmoq" fe'li hozirgi zamonda tushib qoladi</h3>
+            <p class="ai-settings-hint">Ingliz tilida "I am", "You are" deyilsa, rus tilida hozirgi zamonda bu fe'l umuman ishlatilmaydi: <b>Я студент</b> — so'zma-so'z "Men talaba", ya'ni "Men talabaman".</p>
+            <h3>Muhim eslatma: kelishiklar (падежи)</h3>
+            <p class="ai-settings-hint">Rus tilida otlar gapdagi vazifasiga qarab oxiri o'zgaradi (masalan: книга → книги → книгу). Bu — boshlang'ich bosqichdan keyin o'rganiladigan mavzu, hozircha so'z va iboralarni yodlashga e'tibor bering.</p>
+        </div>`;
+    }
+    return `
+    <div class="grammar-box">
+        <h3>Personal pronouns (Kishilik olmoshlari)</h3>
+        <table class="grammar-table">
+            <tr><td>I</td><td>Men</td></tr>
+            <tr><td>You</td><td>Sen / Siz</td></tr>
+            <tr><td>He / She / It</td><td>U (erkak/ayol/narsa)</td></tr>
+            <tr><td>We</td><td>Biz</td></tr>
+            <tr><td>You</td><td>Sizlar</td></tr>
+            <tr><td>They</td><td>Ular</td></tr>
+        </table>
+        <h3>Verb "to be" (bo'lmoq)</h3>
+        <table class="grammar-table">
+            <tr><td>I am</td><td>Men ... man</td></tr>
+            <tr><td>You are</td><td>Sen ... san</td></tr>
+            <tr><td>He/She/It is</td><td>U ...</td></tr>
+            <tr><td>We are</td><td>Biz ... miz</td></tr>
+            <tr><td>They are</td><td>Ular ...</td></tr>
+        </table>
+        <h3>Oddiy gap tuzilishi</h3>
+        <p class="ai-settings-hint">Ingliz tilida gap tartibi doim qat'iy: <b>Ega + Fe'l + To'ldiruvchi</b> (Subject + Verb + Object). Masalan: <b>I like tea.</b> — "Men choy yaxshi ko'raman."</p>
+    </div>`;
+}
+
+let beginnerLang = "en";
+let beginnerTopic = "alphabet";
+
+function renderBeginnerContent() {
+    const container = document.getElementById("beginnerContent");
+    if (!container) return;
+
+    if (beginnerTopic === "alphabet") {
+        container.innerHTML = renderTileGrid(beginnerLang === "ru" ? RUSSIAN_ALPHABET : ENGLISH_ALPHABET);
+    } else if (beginnerTopic === "numbers") {
+        container.innerHTML = renderNumberGrid(beginnerLang);
+    } else if (beginnerTopic === "greetings") {
+        container.innerHTML = renderGreetingList(beginnerLang);
+    } else if (beginnerTopic === "grammar") {
+        container.innerHTML = renderGrammarBasics(beginnerLang);
+    }
+
+    const voiceLang = beginnerLang === "ru" ? "ru-RU" : "en-US";
+    container.querySelectorAll("[data-speak]").forEach(el => {
+        el.addEventListener("click", () => speakText(el.dataset.speak, voiceLang));
+    });
+}
+
+document.querySelectorAll(".beginner-lang-tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+        beginnerLang = btn.dataset.blang;
+        document.querySelectorAll(".beginner-lang-tab").forEach(b => b.classList.toggle("active", b === btn));
+        renderBeginnerContent();
+    });
+});
+
+document.querySelectorAll(".beginner-topic-tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+        beginnerTopic = btn.dataset.topic;
+        document.querySelectorAll(".beginner-topic-tab").forEach(b => b.classList.toggle("active", b === btn));
+        renderBeginnerContent();
+    });
+});
+
+renderBeginnerContent();
+
+// =========================================================================
+// SO'Z O'YINI (Word Matching Game) — yangi, mustaqil o'yin bo'limi
+// =========================================================================
+
+let matchState = { pairs: [], matchedCount: 0, selectedLeft: null };
+
+function shuffleArr(arr) {
+    return arr.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(v => v[1]);
+}
+
+function startMatchRound() {
+    if (typeof words === "undefined" || !words.length) return;
+    const chosen = shuffleArr(words).slice(0, 6);
+    matchState.pairs = chosen.map((w, i) => ({
+        id: i,
+        left: (typeof getTargetWord === "function") ? getTargetWord(w) : w.en,
+        right: w.uz
+    }));
+    matchState.matchedCount = 0;
+    matchState.selectedLeft = null;
+    renderMatchGrid();
+}
+
+function renderMatchGrid() {
+    const grid = document.getElementById("matchGrid");
+    const statusEl = document.getElementById("matchStatus");
+    if (!grid) return;
+
+    const leftItems = matchState.pairs.map(p => ({ id: p.id, text: p.left }));
+    const rightItems = shuffleArr(matchState.pairs.map(p => ({ id: p.id, text: p.right })));
+
+    grid.innerHTML = `
+        <div class="match-col">
+            ${leftItems.map(it => `<button class="match-item" data-id="${it.id}" data-side="left">${it.text}</button>`).join("")}
+        </div>
+        <div class="match-col">
+            ${rightItems.map(it => `<button class="match-item" data-id="${it.id}" data-side="right">${it.text}</button>`).join("")}
+        </div>
+    `;
+    if (statusEl) statusEl.textContent = `Juftliklar: ${matchState.matchedCount} / ${matchState.pairs.length}`;
+    attachMatchListeners();
+}
+
+function attachMatchListeners() {
+    const grid = document.getElementById("matchGrid");
+    if (!grid) return;
+    grid.querySelectorAll(".match-item").forEach(btn => {
+        btn.addEventListener("click", () => {
+            if (btn.disabled) return;
+
+            if (btn.dataset.side === "left") {
+                grid.querySelectorAll('.match-item[data-side="left"]').forEach(b => b.classList.remove("selected"));
+                btn.classList.add("selected");
+                matchState.selectedLeft = btn;
+                return;
+            }
+
+            if (!matchState.selectedLeft) return;
+            const leftBtn = matchState.selectedLeft;
+            const isCorrect = leftBtn.dataset.id === btn.dataset.id;
+
+            if (isCorrect) {
+                leftBtn.classList.remove("selected");
+                leftBtn.classList.add("matched");
+                btn.classList.add("matched");
+                leftBtn.disabled = true;
+                btn.disabled = true;
+                matchState.selectedLeft = null;
+                matchState.matchedCount++;
+                xp += 5;
+                updateStats();
+
+                const statusEl = document.getElementById("matchStatus");
+                if (matchState.matchedCount === matchState.pairs.length) {
+                    xp += 20;
+                    updateStats();
+                    if (typeof celebrate === "function") celebrate();
+                    if (statusEl) statusEl.textContent = `🎉 Barchasi topildi! +20 XP bonus`;
+                } else if (statusEl) {
+                    statusEl.textContent = `Juftliklar: ${matchState.matchedCount} / ${matchState.pairs.length}`;
+                }
+            } else {
+                btn.classList.add("shake-wrong");
+                leftBtn.classList.add("shake-wrong");
+                setTimeout(() => {
+                    btn.classList.remove("shake-wrong");
+                    leftBtn.classList.remove("shake-wrong");
+                    leftBtn.classList.remove("selected");
+                }, 400);
+                matchState.selectedLeft = null;
+            }
+        });
+    });
+}
+
+const newMatchRoundBtn = document.getElementById("newMatchRound");
+if (newMatchRoundBtn) newMatchRoundBtn.addEventListener("click", startMatchRound);
+
+// =========================================================================
+// KUNNING SO'ZI (Word of the Day) — bosh sahifadagi kichik vidjet
+// =========================================================================
+
+function renderWordOfDay() {
+    if (typeof words === "undefined" || !words.length) return;
+    const dayIndex = Math.floor(Date.now() / 86400000) % words.length;
+    const w = words[dayIndex];
+
+    const enEl = document.getElementById("wotdEnglish");
+    const ruEl = document.getElementById("wotdRussian");
+    const uzEl = document.getElementById("wotdUzbek");
+    const exEl = document.getElementById("wotdExample");
+    if (enEl) enEl.textContent = w.en;
+    if (ruEl) ruEl.textContent = w.ru || w.en;
+    if (uzEl) uzEl.textContent = w.uz;
+    if (exEl) exEl.textContent = w.example || "";
+
+    const speakEnBtn = document.getElementById("wotdSpeakEn");
+    const speakRuBtn = document.getElementById("wotdSpeakRu");
+    if (speakEnBtn) speakEnBtn.onclick = () => speakText(w.en, "en-US");
+    if (speakRuBtn) speakRuBtn.onclick = () => speakText(w.ru || w.en, "ru-RU");
+}
+renderWordOfDay();
+
+console.log("Beginner Course + Word Game + Word of the Day Loaded");

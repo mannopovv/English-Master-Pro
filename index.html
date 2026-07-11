@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -21,6 +21,14 @@
 </head>
  
 <body>
+    <script>
+        // Saqlangan mavzuni darhol qo'llaymiz — aks holda har safar qayta
+        // yuklaganda bir lahza standart mavzu ko'rinib, keyin almashadi.
+        try {
+            const savedTheme = localStorage.getItem("appTheme");
+            if (savedTheme) document.body.dataset.theme = savedTheme;
+        } catch (e) {}
+    </script>
 
     <div id="offlineBanner">📴 Siz oflaynsiz — ba'zi funksiyalar (AI, tarjima) internetsiz ishlamaydi</div>
 
@@ -53,7 +61,9 @@
 
         <nav id="mainNav">
             <button id="homeBtn">🏠 Bosh sahifa</button>
+            <button id="beginnerBtn">🆕 Noldan boshlash</button>
             <button id="flashBtn">📚 Kartochka</button>
+            <button id="matchBtn">🎮 So'z o'yini</button>
             <button id="quizBtn">📝 Test</button>
             <button id="aiBtn">🤖 AI Teacher</button>
             <button id="assistantBtn">💬 AI Assistant</button>
@@ -87,6 +97,24 @@
                     <div><i class="fa-solid fa-fire"></i> <span id="homeStreak">0</span> kun</div>
                     <div><i class="fa-solid fa-star"></i> <span id="homeXp">0</span> XP</div>
                     <div><i class="fa-solid fa-book"></i> <span id="homeKnown">0</span> so'z</div>
+                </div>
+            </div>
+
+            <div class="wotd-card" id="wotdCard">
+                <div class="wotd-label">✨ Kunning so'zi</div>
+                <div class="wotd-body">
+                    <div class="wotd-lang-block">
+                        <span class="wotd-flag">🇬🇧</span>
+                        <span class="wotd-word" id="wotdEnglish">—</span>
+                        <button class="wotd-speak" id="wotdSpeakEn" aria-label="Ingizcha talaffuz">🔊</button>
+                    </div>
+                    <div class="wotd-lang-block">
+                        <span class="wotd-flag">🇷🇺</span>
+                        <span class="wotd-word" id="wotdRussian">—</span>
+                        <button class="wotd-speak" id="wotdSpeakRu" aria-label="Ruscha talaffuz">🔊</button>
+                    </div>
+                    <div class="wotd-uz" id="wotdUzbek">—</div>
+                    <div class="wotd-example" id="wotdExample">—</div>
                 </div>
             </div>
 
@@ -125,11 +153,46 @@
         </section>
  
         
+        <section id="beginnerPage" class="page tool-page">
+            <h2>🆕 Noldan boshlash</h2>
+            <p class="ai-settings-hint">Hech narsa bilmasangiz ham bo'ladi — shu yerdan boshlang: alifbo, sonlar, salomlashish va grammatika asoslari, ikkala tilda ham.</p>
+
+            <div class="beginner-lang-tabs" id="beginnerLangTabs">
+                <button class="beginner-lang-tab active" data-blang="en">🇬🇧 Ingliz tili</button>
+                <button class="beginner-lang-tab" data-blang="ru">🇷🇺 Rus tili</button>
+            </div>
+
+            <div class="beginner-topic-tabs" id="beginnerTopicTabs">
+                <button class="beginner-topic-tab active" data-topic="alphabet">🔤 Alifbo</button>
+                <button class="beginner-topic-tab" data-topic="numbers">🔢 Sonlar</button>
+                <button class="beginner-topic-tab" data-topic="greetings">👋 Salomlashish</button>
+                <button class="beginner-topic-tab" data-topic="grammar">📐 Grammatika</button>
+            </div>
+
+            <div id="beginnerContent"></div>
+        </section>
+
+        <section id="matchPage" class="page tool-page">
+            <h2>🎮 So'zlarni moslashtirish</h2>
+            <p class="ai-settings-hint">Chap tomondagi so'zga mos tarjimani toping. Har to'g'ri juftlik uchun XP olasiz!</p>
+            <div class="match-toolbar">
+                <div id="matchStatus" class="match-status">Juftliklar: 0 / 6</div>
+                <button id="newMatchRound">🔀 Yangi round</button>
+            </div>
+            <div id="matchGrid" class="match-grid"></div>
+        </section>
+
         <section id="quizPage" class="page">
             <div class="lang-switcher" id="langSwitcherQuiz">
                 <button data-lang="en" class="lang-btn">🇬🇧 English</button>
                 <button data-lang="ru" class="lang-btn">🇷🇺 Русский</button>
             </div>
+            <div class="quiz-level-switcher" id="quizLevelSwitcher">
+                <button class="quiz-level-btn" data-level="beginner">🌱 Boshlang'ich</button>
+                <button class="quiz-level-btn" data-level="intermediate">🌿 O'rta</button>
+                <button class="quiz-level-btn" data-level="advanced">🌳 Yuqori</button>
+            </div>
+            <div id="quizLevelLabel" class="quiz-level-label"></div>
             <h2 id="question">Question</h2>
             <div id="answers"></div>
         </section>
@@ -194,6 +257,7 @@
             <button id="installApp">📱 Ilovani o'rnatish</button>
             <button id="notifyBtn">🔔 Kunlik eslatma yoqish</button>
             <button id="exportBtn">⬇️ Progressni yuklab olish</button>
+            <button id="downloadReportBtn">📄 Hisobotni yuklab olish (HTML)</button>
             <label id="importLabel" for="importInput">⬆️ Progressni yuklash
                 <input type="file" id="importInput" accept="application/json" hidden>
             </label>
@@ -230,22 +294,38 @@
             messagingSenderId: "YOUR_ID",
             appId: "YOUR_APP_ID"
         };
- 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
- 
-        
-        window.auth = auth;
-        window.db = db;
-        window.doc = doc;
-        window.setDoc = setDoc;
-        window.getDoc = getDoc;
-        
-        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-        window.signOut = signOut;
-        window.onAuthStateChanged = onAuthStateChanged;
+
+        // Placeholder qiymatlar hali almashtirilmagan bo'lsa Firebase'ni
+        // ishga tushirishga urinmaymiz — aks holda modul xato berib,
+        // Cloud Sync "sababsiz" ishlamay qoladi.
+        const isFirebaseConfigured = Object.values(firebaseConfig).every(
+            (v) => typeof v === "string" && !v.startsWith("YOUR_")
+        );
+        window.isFirebaseConfigured = isFirebaseConfigured;
+
+        if (isFirebaseConfigured) {
+            try {
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                const db = getFirestore(app);
+
+                window.auth = auth;
+                window.db = db;
+                window.doc = doc;
+                window.setDoc = setDoc;
+                window.getDoc = getDoc;
+
+                window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+                window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+                window.signOut = signOut;
+                window.onAuthStateChanged = onAuthStateChanged;
+            } catch (err) {
+                console.error("Firebase ishga tushmadi:", err);
+                window.isFirebaseConfigured = false;
+            }
+        } else {
+            console.warn("⚠️ Firebase sozlanmagan (firebaseConfig placeholder). Cloud Sync mahalliy rejimda ishlaydi.");
+        }
     </script>
     <section id="coursePage" class="page tool-page">
  
@@ -257,9 +337,10 @@
  
 <h2>🎧 Listening Test</h2>
  
-<audio id="lessonAudio" controls>
+<audio id="lessonAudio" controls onerror="this.closest('section').querySelector('#lessonAudioMissing')?.classList.add('show')">
 <source src="audio/lesson1.mp3" type="audio/mpeg">
 </audio>
+<p id="lessonAudioMissing" class="audio-missing-note">🔇 Audio fayl topilmadi. Uni <code>audio/lesson1.mp3</code> yo'liga qo'shing.</p>
  
 <input
 type="text"
@@ -326,12 +407,18 @@ accept=".pdf">
 <section id="speakingPage" class="page tool-page">
  
 <h2>🎤 AI Speaking Test</h2>
+<p>Ko'rsatilgan so'zni ovoz chiqarib talaffuz qiling — tizim aytganingizni matnga o'giradi va haqiqiy so'z bilan solishtirib aniqlik foizini chiqaradi.</p>
+
+<div id="speakingTargetWord" class="speaking-target">—</div>
+<button id="listenTargetBtn">🔊 Eshitish</button>
+<button id="newSpeakingWordBtn">🔀 Yangi so'z</button>
  
 <button id="startSpeaking">
-Start Speaking
+🎤 Start Speaking
 </button>
  
 <div id="speechResult"></div>
+<div id="speechScore"></div>
  
 <hr>
  
@@ -345,6 +432,7 @@ placeholder="Write your essay here...">
 <button id="checkEssay">
 Check Essay
 </button>
+
  
 <div id="essayResult"></div>
  
@@ -430,6 +518,12 @@ Generate 10 Words
  
 <div id="badgeList"></div>
  
+<hr>
+
+<h2>🏅 Shaxsiy reyting (eng yaxshi kunlar)</h2>
+<p class="ai-settings-hint">So'nggi 14 kunlik XP natijalaringiz taqqoslanadi — o'zingizning eng yaxshi natijangizdan oshishga harakat qiling.</p>
+<ul id="leaderboardList" class="leaderboard-list"></ul>
+
 <hr>
  
 <h2>📅 Learning Calendar</h2>
@@ -532,12 +626,13 @@ Neon
  
 <h2>🎵 Background Music</h2>
  
-<audio id="bgMusic" loop>
+<audio id="bgMusic" loop onerror="document.getElementById('musicMissingNote').classList.add('show')">
 <source src="assets/audio/background.mp3" type="audio/mpeg">
 </audio>
  
 <button id="playMusic">▶️ Play</button>
 <button id="pauseMusic">⏸️ Pause</button>
+<p id="musicMissingNote" class="audio-missing-note">🔇 Fon musiqasi fayli topilmadi (<code>assets/audio/background.mp3</code>).</p>
  
 <hr>
  
@@ -547,9 +642,10 @@ Neon
 Click Sound
 </button>
  
-<audio id="clickSound">
+<audio id="clickSound" onerror="document.getElementById('clickMissingNote').classList.add('show')">
 <source src="assets/audio/click.mp3" type="audio/mpeg">
 </audio>
+<p id="clickMissingNote" class="audio-missing-note">🔇 Click ovoz fayli topilmadi (<code>assets/audio/click.mp3</code>).</p>
  
 <hr>
  

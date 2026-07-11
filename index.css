@@ -12,10 +12,133 @@ html {
 
 button {
     -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
 }
 
 button:active {
     transform: scale(0.97);
+}
+
+button:disabled {
+    cursor: default;
+    opacity: .9;
+}
+
+/* Har qanday tugma bosilganda chiqadigan "ripple" animatsiyasi (JS orqali qo'shiladi) */
+.ripple-effect {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+    transform: scale(0);
+    animation: rippleAnim .6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes rippleAnim {
+    to {
+        transform: scale(2.6);
+        opacity: 0;
+    }
+}
+
+/* Test javoblarida to'g'ri/xato ekanini chiroyli ko'rsatish */
+.answer.correct {
+    background: #22c55e !important;
+    color: #fff !important;
+    border-color: #22c55e !important;
+    animation: answerPop .4s ease;
+}
+
+.answer.wrong {
+    background: #ef4444 !important;
+    color: #fff !important;
+    border-color: #ef4444 !important;
+    animation: answerShake .4s ease;
+}
+
+@keyframes answerPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+}
+
+@keyframes answerShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+
+.confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.confetti-piece {
+    position: absolute;
+    top: -20px;
+    width: 8px;
+    height: 14px;
+    opacity: .9;
+    border-radius: 2px;
+    animation-name: confettiFall;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes confettiFall {
+    to {
+        top: 110vh;
+        transform: rotate(720deg);
+    }
+}
+
+.speaking-target {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 20px;
+    margin: 12px 0;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    letter-spacing: 1px;
+}
+
+.audio-missing-note {
+    display: none;
+    font-size: 0.85rem;
+    opacity: 0.75;
+    margin-top: 6px;
+}
+.audio-missing-note.show {
+    display: block;
+}
+.leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.leaderboard-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+}
+.leaderboard-list li.me {
+    background: rgba(37,99,235,0.25);
+    font-weight: 600;
+}
+.leaderboard-rank {
+    opacity: 0.7;
+    margin-right: 8px;
 }
 
 body {
@@ -2827,4 +2950,427 @@ body[data-theme="light"] .ai-settings-card {
         width: 100%;
         margin: 6px 0;
     }
+}
+/* =========================================================================
+   DIZAYN YANGILANISHI — "Til Kartochkalari" uslubi (v2)
+   Signature element: Duolingo/Scrabble-vari "tile" kartochkalar — alifbo,
+   sonlar va so'z o'yinida bir xil vizual tilda takrorlanadi.
+   ========================================================================= */
+
+:root {
+    --lang-amber: #f59e0b;
+    --lang-amber-soft: rgba(245, 158, 11, .16);
+    --lang-cyan: #38bdf8;
+    --lang-indigo: #818cf8;
+    --lang-glass: rgba(255, 255, 255, .05);
+    --lang-glass-border: rgba(255, 255, 255, .12);
+    --display-font: 'Space Grotesk', 'Poppins', sans-serif;
+}
+
+/* Sarlavhalarda va raqamlarda "display" shrift ishlatamiz — o'ziga xoslik uchun */
+.page h2, #homePage h1, .tile-letter, .wotd-word, .stats h1 {
+    font-family: var(--display-font);
+}
+
+/* ---- Beginner Course tabs ---- */
+.beginner-lang-tabs, .beginner-topic-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 18px 0;
+}
+
+.beginner-lang-tab, .beginner-topic-tab {
+    padding: 12px 20px;
+    border: 1px solid var(--lang-glass-border);
+    border-radius: 14px;
+    background: var(--lang-glass);
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+
+.beginner-lang-tab:hover, .beginner-topic-tab:hover {
+    transform: translateY(-2px);
+    border-color: var(--lang-cyan);
+}
+
+.beginner-lang-tab.active {
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(56, 189, 248, .3);
+}
+
+.beginner-topic-tab.active {
+    background: linear-gradient(135deg, var(--lang-amber), #fbbf24);
+    border-color: transparent;
+    color: #1e1200;
+    box-shadow: 0 8px 20px rgba(245, 158, 11, .3);
+}
+
+/* ---- Tile grid: alphabet + numbers (signature motif) ---- */
+.tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.tile {
+    position: relative;
+    background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+    border: 1px solid var(--lang-glass-border);
+    border-radius: 16px;
+    padding: 18px 10px 14px;
+    text-align: center;
+    cursor: pointer;
+    color: #e2e8f0;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.tile:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: var(--lang-cyan);
+    box-shadow: 0 10px 24px rgba(56, 189, 248, .18);
+}
+
+.tile:active {
+    transform: translateY(-1px) scale(.98);
+}
+
+.tile::after {
+    content: "🔊";
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 11px;
+    opacity: .5;
+}
+
+.tile-letter {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tile-sound {
+    font-size: 12px;
+    color: var(--lang-amber);
+    margin-top: 4px;
+    font-style: italic;
+}
+
+.tile-word {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 8px;
+    color: #f1f5f9;
+}
+
+.tile-uz {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 2px;
+}
+
+.num-tile .tile-letter {
+    font-size: 26px;
+}
+
+/* ---- Greetings / phrase list ---- */
+.phrase-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.phrase-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--lang-glass);
+    border: 1px solid var(--lang-glass-border);
+    border-radius: 14px;
+    padding: 14px 18px;
+    transition: border-color .18s ease, transform .18s ease;
+}
+
+.phrase-row:hover {
+    border-color: var(--lang-cyan);
+    transform: translateX(4px);
+}
+
+.phrase-speak {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.phrase-main {
+    font-weight: 700;
+    font-size: 16px;
+    color: #f1f5f9;
+}
+
+.phrase-uz {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-top: 2px;
+}
+
+/* ---- Grammar tables ---- */
+.grammar-box {
+    background: var(--lang-glass);
+    border: 1px solid var(--lang-glass-border);
+    border-radius: 18px;
+    padding: 22px 24px;
+    margin-top: 10px;
+}
+
+.grammar-box h3 {
+    color: var(--lang-cyan);
+    font-size: 17px;
+    margin: 18px 0 10px;
+}
+
+.grammar-box h3:first-child {
+    margin-top: 0;
+}
+
+.grammar-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+}
+
+.grammar-table tr {
+    border-bottom: 1px solid var(--lang-glass-border);
+}
+
+.grammar-table td {
+    padding: 10px 8px;
+    font-size: 14px;
+}
+
+.grammar-table td:first-child {
+    font-weight: 700;
+    color: #f1f5f9;
+    width: 45%;
+}
+
+.grammar-table td:last-child {
+    color: #94a3b8;
+}
+
+/* ---- Word Matching Game ---- */
+.match-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.match-status {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--lang-amber);
+}
+
+.match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.match-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.match-item {
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid var(--lang-glass-border);
+    background: var(--lang-glass);
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+
+.match-item:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: var(--lang-cyan);
+}
+
+.match-item.selected {
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    border-color: transparent;
+    color: #fff;
+}
+
+.match-item.matched {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    border-color: transparent;
+    color: #fff;
+    opacity: .85;
+    cursor: default;
+}
+
+.match-item.shake-wrong {
+    animation: answerShake .4s ease;
+    border-color: #ef4444 !important;
+}
+
+@media (max-width: 640px) {
+    .match-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+}
+
+/* ---- Word of the Day widget ---- */
+.wotd-card {
+    max-width: 480px;
+    margin: 22px auto 0;
+    background: linear-gradient(160deg, rgba(245,158,11,.14), rgba(255,255,255,.03));
+    border: 1px solid var(--lang-amber-soft);
+    border-radius: 20px;
+    padding: 20px 24px;
+    text-align: left;
+}
+
+.wotd-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: var(--lang-amber);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.wotd-lang-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.wotd-flag {
+    font-size: 18px;
+}
+
+.wotd-word {
+    font-size: 22px;
+    font-weight: 700;
+    color: #f8fafc;
+    flex: 1;
+}
+
+.wotd-speak {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,.12);
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.wotd-uz {
+    font-size: 14px;
+    color: #cbd5e1;
+    margin-top: 8px;
+}
+
+.wotd-example {
+    font-size: 13px;
+    color: #94a3b8;
+    font-style: italic;
+    margin-top: 4px;
+}
+
+body[data-theme="light"] .tile,
+body[data-theme="light"] .phrase-row,
+body[data-theme="light"] .grammar-box,
+body[data-theme="light"] .match-item,
+body[data-theme="light"] .beginner-lang-tab,
+body[data-theme="light"] .beginner-topic-tab {
+    background: rgba(37,99,235,.05);
+    color: #1e293b;
+    border-color: rgba(37,99,235,.15);
+}
+
+body[data-theme="light"] .tile-word,
+body[data-theme="light"] .phrase-main,
+body[data-theme="light"] .wotd-word {
+    color: #1e293b;
+}
+
+body[data-theme="light"] .wotd-card {
+    background: linear-gradient(160deg, rgba(245,158,11,.08), rgba(255,255,255,.6));
+}
+
+@media (max-width: 640px) {
+    .tile-grid { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); }
+}
+
+/* ---- Quiz level switcher (Daraja bo'yicha test) ---- */
+.quiz-level-switcher {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 14px 0 6px;
+}
+
+.quiz-level-btn {
+    padding: 10px 18px;
+    border: 1px solid var(--lang-glass-border, rgba(255,255,255,.12));
+    border-radius: 14px;
+    background: var(--lang-glass, rgba(255,255,255,.05));
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+
+.quiz-level-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--lang-cyan, #38bdf8);
+}
+
+.quiz-level-btn.active {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(34, 197, 94, .3);
+}
+
+.quiz-level-label {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 14px;
+}
+
+body[data-theme="light"] .quiz-level-btn {
+    background: rgba(37,99,235,.05);
+    color: #1e293b;
+    border-color: rgba(37,99,235,.15);
 }

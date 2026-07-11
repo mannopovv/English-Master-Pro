@@ -1,4 +1,4 @@
-const CACHE_NAME = "english-master-v3"; 
+const CACHE_NAME = "english-master-v5";
 
 const ASSETS = [
   "./",
@@ -6,16 +6,39 @@ const ASSETS = [
   "./index.css",
   "./index.js",
   "./manifest.json",
-  "./icon-192.png"
+  "./icon-192.png",
+  "./icon-512.png",
+  "./icon-192-maskable.png",
+  "./icon-512-maskable.png"
 ];
 
+// cache.addAll() fails (and aborts install) the moment ANY single asset is
+// missing (e.g. an icon that hasn't been added yet). We cache each asset
+// individually instead, so one missing file can't break offline support
+// for everything else.
+async function cacheAssetsIndividually(cache) {
+  await Promise.all(
+    ASSETS.map(async (url) => {
+      try {
+        const res = await fetch(url);
+        if (res && res.ok) {
+          await cache.put(url, res);
+        } else {
+          console.warn("⚠️ Service Worker: keshga olinmadi (status):", url);
+        }
+      } catch (err) {
+        console.warn("⚠️ Service Worker: keshga olinmadi (topilmadi):", url);
+      }
+    })
+  );
+}
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log("📦 Service Worker: Fayllar keshga olinmoqda...");
-        return cache.addAll(ASSETS);
+        return cacheAssetsIndividually(cache);
       })
       .then(() => self.skipWaiting())
   );
