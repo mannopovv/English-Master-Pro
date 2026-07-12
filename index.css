@@ -3374,3 +3374,330 @@ body[data-theme="light"] .quiz-level-btn {
     color: #1e293b;
     border-color: rgba(37,99,235,.15);
 }
+
+/* =========================================================================
+   YANGI FUNKSIYALAR: Tezkor test, Gap tuzish, Grammatika testi
+   ========================================================================= */
+
+/* ---- Grammar quiz tabs (reuses tile-like look) ---- */
+.grammar-quiz-lang-tabs { margin: 18px 0 10px; }
+
+.grammar-quiz-lang-btn,
+.grammar-quiz-level-btn {
+    padding: 12px 20px;
+    border: 1px solid var(--lang-glass-border, rgba(255,255,255,.12));
+    border-radius: 14px;
+    background: var(--lang-glass, rgba(255,255,255,.05));
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0 8px 8px 0;
+    transition: transform .18s ease, border-color .18s ease;
+}
+
+.grammar-quiz-lang-btn:hover,
+.grammar-quiz-level-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--lang-cyan, #38bdf8);
+}
+
+.grammar-quiz-lang-btn.active {
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    border-color: transparent;
+    color: #fff;
+}
+
+.grammar-quiz-level-btn.active {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    border-color: transparent;
+    color: #fff;
+}
+
+.grammar-quiz-question {
+    font-family: var(--display-font, 'Space Grotesk', sans-serif);
+    font-size: 22px;
+    margin: 18px 0;
+    color: #f1f5f9;
+}
+
+.grammar-quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.grammar-quiz-final {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--lang-amber, #f59e0b);
+    margin-bottom: 14px;
+}
+
+/* ---- Sentence Builder ---- */
+.sentence-answer {
+    min-height: 64px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    background: var(--lang-glass, rgba(255,255,255,.05));
+    border: 2px dashed var(--lang-glass-border, rgba(255,255,255,.15));
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin: 16px 0;
+}
+
+.sentence-placeholder {
+    color: #64748b;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.sentence-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.sentence-tile {
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--lang-glass-border, rgba(255,255,255,.12));
+    background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease;
+}
+
+.sentence-tile:hover {
+    transform: translateY(-2px);
+    border-color: var(--lang-cyan, #38bdf8);
+}
+
+.sentence-tile.placed {
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    border-color: transparent;
+    color: #fff;
+}
+
+.sentence-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.sentence-status {
+    margin-top: 14px;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.sentence-status.correct { color: #22c55e; }
+.sentence-status.wrong { color: #ef4444; }
+
+/* ---- Speed Round ---- */
+.speed-hud {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin: 14px 0 20px;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.speed-hud-item {
+    background: var(--lang-glass, rgba(255,255,255,.05));
+    border: 1px solid var(--lang-glass-border, rgba(255,255,255,.12));
+    border-radius: 12px;
+    padding: 8px 16px;
+}
+
+.speed-card {
+    background: linear-gradient(160deg, rgba(56,189,248,.12), rgba(255,255,255,.02));
+    border: 1px solid var(--lang-glass-border, rgba(255,255,255,.12));
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.speed-word {
+    font-family: var(--display-font, 'Space Grotesk', sans-serif);
+    font-size: 28px;
+    font-weight: 700;
+    color: #f8fafc;
+}
+
+.speed-vs {
+    font-size: 18px;
+    color: #64748b;
+    margin: 8px 0;
+}
+
+.speed-uz {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--lang-amber, #f59e0b);
+}
+
+.speed-actions {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.speed-true, .speed-false {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.speed-true { background: linear-gradient(135deg, #22c55e, #16a34a); }
+.speed-false { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+.speed-result {
+    margin-top: 14px;
+    font-size: 15px;
+    color: #cbd5e1;
+    text-align: center;
+}
+
+body[data-theme="light"] .grammar-quiz-lang-btn,
+body[data-theme="light"] .grammar-quiz-level-btn,
+body[data-theme="light"] .sentence-tile,
+body[data-theme="light"] .sentence-answer,
+body[data-theme="light"] .speed-hud-item,
+body[data-theme="light"] .speed-card {
+    background: rgba(37,99,235,.05);
+    color: #1e293b;
+    border-color: rgba(37,99,235,.15);
+}
+
+body[data-theme="light"] .grammar-quiz-question,
+body[data-theme="light"] .speed-word {
+    color: #1e293b;
+}
+
+@media (max-width: 640px) {
+    .speed-hud { gap: 10px; }
+    .speed-hud-item { padding: 6px 10px; font-size: 14px; }
+}
+
+/* =========================================================================
+   VIDEO TUZATISH + TINGLASH + QIYIN SO'ZLAR + KUNLIK REJA
+   ========================================================================= */
+
+.course-lang-btn {
+    padding: 10px 18px;
+    border: 1px solid var(--lang-glass-border, rgba(255,255,255,.12));
+    border-radius: 14px;
+    background: var(--lang-glass, rgba(255,255,255,.05));
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0 8px 8px 0;
+    transition: transform .18s ease, border-color .18s ease;
+}
+
+.course-lang-btn:hover { transform: translateY(-2px); border-color: var(--lang-cyan, #38bdf8); }
+
+.course-lang-btn.active {
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    border-color: transparent;
+    color: #fff;
+}
+
+.lesson iframe {
+    border-radius: 14px;
+    display: block;
+    max-width: 100%;
+}
+
+.listening-controls {
+    display: flex;
+    gap: 12px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+}
+
+.listening-result {
+    margin-top: 12px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.listening-result.correct { color: #22c55e; }
+.listening-result.wrong { color: #ef4444; }
+
+.mistake-clear-btn {
+    flex-shrink: 0;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.daily-plan-card {
+    max-width: 480px;
+    margin: 22px auto 0;
+    background: linear-gradient(160deg, rgba(56,189,248,.12), rgba(255,255,255,.03));
+    border: 1px solid var(--lang-glass-border, rgba(255,255,255,.12));
+    border-radius: 20px;
+    padding: 20px 24px;
+    text-align: left;
+}
+
+.daily-task-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #e2e8f0;
+    cursor: pointer;
+}
+
+.daily-task-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #38bdf8;
+    cursor: pointer;
+}
+
+.daily-task-row span.done {
+    text-decoration: line-through;
+    color: #64748b;
+}
+
+.daily-plan-bonus {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--lang-amber, #f59e0b);
+}
+
+body[data-theme="light"] .course-lang-btn {
+    background: rgba(37,99,235,.05);
+    color: #1e293b;
+    border-color: rgba(37,99,235,.15);
+}
+
+body[data-theme="light"] .daily-plan-card {
+    background: linear-gradient(160deg, rgba(56,189,248,.08), rgba(255,255,255,.6));
+}
+
+body[data-theme="light"] .daily-task-row { color: #1e293b; }

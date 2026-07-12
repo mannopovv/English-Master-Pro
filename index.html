@@ -64,6 +64,10 @@
             <button id="beginnerBtn">🆕 Noldan boshlash</button>
             <button id="flashBtn">📚 Kartochka</button>
             <button id="matchBtn">🎮 So'z o'yini</button>
+            <button id="speedBtn">⚡ Tezkor test</button>
+            <button id="sentenceBtn">🧩 Gap tuzish</button>
+            <button id="grammarQuizBtn">📐 Grammatika testi</button>
+            <button id="mistakeBtn">📖 Qiyin so'zlar</button>
             <button id="quizBtn">📝 Test</button>
             <button id="aiBtn">🤖 AI Teacher</button>
             <button id="assistantBtn">💬 AI Assistant</button>
@@ -98,6 +102,12 @@
                     <div><i class="fa-solid fa-star"></i> <span id="homeXp">0</span> XP</div>
                     <div><i class="fa-solid fa-book"></i> <span id="homeKnown">0</span> so'z</div>
                 </div>
+            </div>
+
+            <div class="daily-plan-card">
+                <div class="wotd-label">🗓️ Kunlik mashq rejasi</div>
+                <div id="dailyPlanList"></div>
+                <div id="dailyPlanBonus" class="daily-plan-bonus" style="display:none;">🎉 Barcha vazifalar bajarildi! +20 XP, +15 tanga olindi.</div>
             </div>
 
             <div class="wotd-card" id="wotdCard">
@@ -180,6 +190,62 @@
                 <button id="newMatchRound">🔀 Yangi round</button>
             </div>
             <div id="matchGrid" class="match-grid"></div>
+        </section>
+
+        <section id="speedPage" class="page tool-page">
+            <h2>⚡ Tezkor test</h2>
+            <p class="ai-settings-hint">60 soniyada so'z va tarjima to'g'ri mos kelayotganini tezda ayting — imkon qadar ko'proq to'g'ri javob bering!</p>
+            <div class="speed-hud">
+                <div class="speed-hud-item">⏱ <span id="speedTimeLeft">60</span>s</div>
+                <div class="speed-hud-item">✅ <span id="speedScoreVal">0</span></div>
+                <div class="speed-hud-item">🏆 <span id="speedHighVal">0</span></div>
+            </div>
+            <div class="speed-card">
+                <div id="speedWord" class="speed-word">—</div>
+                <div class="speed-vs">=</div>
+                <div id="speedUzGuess" class="speed-uz">—</div>
+            </div>
+            <div class="speed-actions">
+                <button id="speedTrueBtn" class="speed-true">✅ To'g'ri</button>
+                <button id="speedFalseBtn" class="speed-false">❌ Noto'g'ri</button>
+            </div>
+            <button id="startSpeedBtn">▶️ Boshlash</button>
+            <div id="speedResult" class="speed-result"></div>
+        </section>
+
+        <section id="sentencePage" class="page tool-page">
+            <h2>🧩 Gap tuzish</h2>
+            <p class="ai-settings-hint">Bo'lakchalarni to'g'ri tartibda bosib, to'g'ri gap tuzing.</p>
+            <div id="sentenceAnswer" class="sentence-answer"></div>
+            <div id="sentenceBank" class="sentence-bank"></div>
+            <div class="sentence-actions">
+                <button id="checkSentenceBtn">✅ Tekshirish</button>
+                <button id="newSentenceBtn">🔀 Yangi gap</button>
+            </div>
+            <div id="sentenceStatus" class="sentence-status"></div>
+        </section>
+
+        <section id="grammarQuizPage" class="page tool-page">
+            <h2>📐 Grammatika testi</h2>
+            <p class="ai-settings-hint">Darajangizga mos grammatika savollari — ingliz va rus tillarida.</p>
+            <div class="beginner-lang-tabs grammar-quiz-lang-tabs">
+                <button class="grammar-quiz-lang-btn active" data-lang="en">🇬🇧 English</button>
+                <button class="grammar-quiz-lang-btn" data-lang="ru">🇷🇺 Русский</button>
+            </div>
+            <div class="quiz-level-switcher">
+                <button class="grammar-quiz-level-btn" data-level="beginner">🌱 Boshlang'ich</button>
+                <button class="grammar-quiz-level-btn" data-level="intermediate">🌿 O'rta</button>
+                <button class="grammar-quiz-level-btn" data-level="advanced">🌳 Yuqori</button>
+            </div>
+            <div id="grammarQuizLabel" class="quiz-level-label"></div>
+            <h2 id="grammarQuizQuestion" class="grammar-quiz-question">—</h2>
+            <div id="grammarQuizOptions" class="grammar-quiz-options"></div>
+        </section>
+
+        <section id="mistakePage" class="page tool-page">
+            <h2>📖 Qiyin so'zlar daftari</h2>
+            <p class="ai-settings-hint">Testda xato qilingan so'zlar shu yerga avtomatik yig'iladi. Ularni qayta mashq qiling — to'g'ri javob bersangiz, ro'yxatdan asta chiqib ketadi!</p>
+            <div id="mistakeList"></div>
         </section>
 
         <section id="quizPage" class="page">
@@ -329,27 +395,35 @@
     </script>
     <section id="coursePage" class="page tool-page">
  
-<h2>📚 English Course</h2>
+<h2>📚 Video darslar</h2>
+
+<div class="beginner-lang-tabs" id="courseLangTabs">
+    <button class="course-lang-btn active" data-lang="en">🇬🇧 English</button>
+    <button class="course-lang-btn" data-lang="ru">🇷🇺 Русский</button>
+</div>
  
 <div id="courseList"></div>
  
 <hr>
  
-<h2>🎧 Listening Test</h2>
- 
-<audio id="lessonAudio" controls onerror="this.closest('section').querySelector('#lessonAudioMissing')?.classList.add('show')">
-<source src="audio/lesson1.mp3" type="audio/mpeg">
-</audio>
-<p id="lessonAudioMissing" class="audio-missing-note">🔇 Audio fayl topilmadi. Uni <code>audio/lesson1.mp3</code> yo'liga qo'shing.</p>
+<h2>🎧 Tinglab tushunish (Listening)</h2>
+<p class="ai-settings-hint">Tugmani bosing — gap ovozda o'qib beriladi. Diqqat bilan tinglang va eshitganingizni yozing.</p>
+
+<div class="listening-controls">
+    <button id="playListeningBtn">🔊 Gapni tinglash</button>
+    <button id="newListeningBtn">🔀 Yangi gap</button>
+</div>
  
 <input
 type="text"
 id="listeningAnswer"
-placeholder="Eshitgan gapingizni yozing">
+placeholder="Eshitgan gapingizni shu yerga yozing">
  
 <button id="checkListening">
-Tekshirish
+✅ Tekshirish
 </button>
+
+<div id="listeningResult" class="listening-result"></div>
  
 <hr>
  

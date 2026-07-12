@@ -281,7 +281,11 @@ const menuButtons = {
     "achievementBtn": "achievementPage",
     "avatarBtn": "avatarPage",
     "beginnerBtn": "beginnerPage",
-    "matchBtn": "matchPage"
+    "matchBtn": "matchPage",
+    "speedBtn": "speedPage",
+    "sentenceBtn": "sentencePage",
+    "grammarQuizBtn": "grammarQuizPage",
+    "mistakeBtn": "mistakePage"
 };
 
 Object.keys(menuButtons).forEach(btnId => {
@@ -298,6 +302,18 @@ Object.keys(menuButtons).forEach(btnId => {
             }
             if (btnId === "beginnerBtn" && typeof renderBeginnerContent === "function") {
                 renderBeginnerContent();
+            }
+            if (btnId === "sentenceBtn" && typeof pickSentence === "function") {
+                pickSentence();
+            }
+            if (btnId === "grammarQuizBtn" && typeof buildGrammarDeck === "function") {
+                buildGrammarDeck();
+            }
+            if (btnId === "speedBtn" && typeof resetSpeedUI === "function") {
+                resetSpeedUI();
+            }
+            if (btnId === "mistakeBtn" && typeof renderMistakeNotebook === "function") {
+                renderMistakeNotebook();
             }
             syncBottomNav(menuButtons[btnId]);
         };
@@ -826,6 +842,7 @@ function checkAnswer(answer, clickedBtn) {
         score++;
         xp += 15;
         bumpWordWeight(quizDeck[quizIndex], -2);
+        if (typeof clearMistake === "function") clearMistake(quizDeck[quizIndex]);
         if (xp >= 100) {
             xp = 0;
             level++;
@@ -837,6 +854,7 @@ function checkAnswer(answer, clickedBtn) {
         correctAnswer();
     } else {
         bumpWordWeight(quizDeck[quizIndex], 3);
+        if (typeof recordMistake === "function") recordMistake(quizDeck[quizIndex]);
         wrongAnswer();
     }
     updateStats();
@@ -1694,38 +1712,107 @@ setTimeout(() => {
 console.log("English Master Pro v19 - To'liq barqaror versiya ishga tushdi ✔");
 
 
-const lessons = [
-    { title: "Lesson 1", video: "https://www.youtube.com/embed/VIDEO_ID" },
-    { title: "Lesson 2", video: "https://www.youtube.com/embed/VIDEO_ID" }
+const lessonsEn = [
+    { title: "BBC Learning English — All About Language (6 Minute English)", video: "https://www.youtube.com/embed/fcN0BXzK8bg" },
+    { title: "Take Your English Forward — BBC Learning English", video: "https://www.youtube.com/embed/kVwPYXSAEjA" },
+    { title: "55 English Lessons in 55 Minutes — Grammar & Vocabulary", video: "https://www.youtube.com/embed/gYq-ilAbxDM" }
 ];
 
-const courseList = document.getElementById("courseList");
-if (courseList) {
-    lessons.forEach(item => {
-        courseList.innerHTML += `
-            <div class="lesson">
-                <h3>${item.title}</h3>
-                <iframe width="350" height="200" src="${item.video}" allowfullscreen></iframe>
-            </div>
-        `;
-    });
+const lessonsRu = [
+    { title: "Rus tili darsi 1 — Maslahatlar va alifbo", video: "https://www.youtube.com/embed/AYRZupz6rdw" },
+    { title: "To'liq boshlang'ich rus tili kursi (9 soat)", video: "https://www.youtube.com/embed/Q4pZnM7LeSo" }
+];
+
+let courseLang = "en";
+
+function renderCourseList() {
+    const courseList = document.getElementById("courseList");
+    if (!courseList) return;
+    const list = courseLang === "ru" ? lessonsRu : lessonsEn;
+    courseList.innerHTML = list.map(item => `
+        <div class="lesson">
+            <h3>${item.title}</h3>
+            <iframe width="100%" height="220" src="${item.video}" title="${item.title.replace(/"/g, "&quot;")}"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen loading="lazy"></iframe>
+        </div>
+    `).join("");
 }
 
+document.querySelectorAll(".course-lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        courseLang = btn.dataset.lang;
+        document.querySelectorAll(".course-lang-btn").forEach(b => b.classList.toggle("active", b === btn));
+        renderCourseList();
+    });
+});
+
+renderCourseList();
+
+
+// =========================================================================
+// TINGLAB TUSHUNISH (Listening) — avval yo'q audio faylga suyanardi va
+// hech qachon ishlamasdi. Endi brauzerning ovoz sintezidan (TTS)
+// foydalanib, har safar so'zlardan tasodifiy gap tanlab, ovozda o'qiydi.
+// =========================================================================
+
+let listeningState = { sentence: "" };
+
+function pickListeningSentence() {
+    if (typeof words === "undefined" || !words.length) return;
+    const lang = (typeof learnLang !== "undefined") ? learnLang : "en";
+    let pool = words.filter(w => (lang === "ru" ? w.ruExample : w.example));
+    if (!pool.length) pool = words.filter(w => w.example);
+    if (!pool.length) return;
+
+    const w = pool[Math.floor(Math.random() * pool.length)];
+    listeningState.sentence = ((lang === "ru" ? w.ruExample : w.example) || w.example || "").trim();
+
+    const resultEl = document.getElementById("listeningResult");
+    if (resultEl) { resultEl.textContent = ""; resultEl.className = "listening-result"; }
+    const inputEl = document.getElementById("listeningAnswer");
+    if (inputEl) inputEl.value = "";
+}
+
+function playListeningSentence() {
+    if (!listeningState.sentence) pickListeningSentence();
+    const lang = (typeof learnLang !== "undefined") ? learnLang : "en";
+    if (typeof speakText === "function") {
+        speakText(listeningState.sentence, lang === "ru" ? "ru-RU" : "en-US");
+    }
+}
+
+const playListeningBtn = document.getElementById("playListeningBtn");
+if (playListeningBtn) playListeningBtn.addEventListener("click", playListeningSentence);
+
+const newListeningBtn = document.getElementById("newListeningBtn");
+if (newListeningBtn) newListeningBtn.addEventListener("click", pickListeningSentence);
 
 const checkListeningBtn = document.getElementById("checkListening");
 if (checkListeningBtn) {
     checkListeningBtn.onclick = () => {
-        const listeningAnswerEl = document.getElementById("listeningAnswer");
-        const text = listeningAnswerEl ? listeningAnswerEl.value.toLowerCase() : "";
-        if (text.includes("hello")) {
-            alert("✅ Correct");
-            coins += 20;
-            saveGame();
+        const inputEl = document.getElementById("listeningAnswer");
+        const resultEl = document.getElementById("listeningResult");
+        if (!resultEl) return;
+
+        const typed = (inputEl ? inputEl.value : "").trim().toLowerCase().replace(/[.!?]+$/, "");
+        const target = listeningState.sentence.toLowerCase().replace(/[.!?]+$/, "");
+
+        if (typed && typed === target) {
+            xp += 10;
+            updateStats();
+            resultEl.textContent = "✅ To'g'ri! Ajoyib eshitib tushundingiz.";
+            resultEl.className = "listening-result correct";
+            if (typeof celebrate === "function") celebrate();
         } else {
-            alert("❌ Wrong");
+            resultEl.textContent = `❌ Hali unchalik emas. To'g'ri javob: "${listeningState.sentence}"`;
+            resultEl.className = "listening-result wrong";
         }
     };
 }
+
+pickListeningSentence();
 
 
 const dictionary = [
@@ -4228,3 +4315,535 @@ function renderWordOfDay() {
 renderWordOfDay();
 
 console.log("Beginner Course + Word Game + Word of the Day Loaded");
+
+// =========================================================================
+// GAP TUZISH (Sentence Builder) — so'z bo'lakchalaridan to'g'ri gap yasash
+// =========================================================================
+
+let sentenceState = { tokens: [], current: [] };
+
+function pickSentence() {
+    if (typeof words === "undefined" || !words.length) return;
+    const lang = (typeof learnLang !== "undefined") ? learnLang : "en";
+    let pool = words.filter(w => (lang === "ru" ? w.ruExample : w.example));
+    if (!pool.length) pool = words.filter(w => w.example);
+    if (!pool.length) return;
+
+    const w = pool[Math.floor(Math.random() * pool.length)];
+    const raw = ((lang === "ru" ? w.ruExample : w.example) || w.example || "").trim();
+    const clean = raw.replace(/[.!?]+$/, "");
+    const parts = clean.split(" ").filter(Boolean);
+
+    sentenceState.tokens = parts.map((text, id) => ({ id, text }));
+    sentenceState.current = [];
+    renderSentenceBuilder();
+
+    const statusEl = document.getElementById("sentenceStatus");
+    if (statusEl) { statusEl.textContent = ""; statusEl.className = "sentence-status"; }
+}
+
+function renderSentenceBuilder() {
+    const bankEl = document.getElementById("sentenceBank");
+    const answerEl = document.getElementById("sentenceAnswer");
+    if (!bankEl || !answerEl) return;
+
+    const usedIds = new Set(sentenceState.current);
+    const bankTokens = sentenceState.tokens.filter(t => !usedIds.has(t.id));
+
+    bankEl.innerHTML = bankTokens.map(t =>
+        `<button class="sentence-tile" data-id="${t.id}">${t.text}</button>`
+    ).join("");
+
+    answerEl.innerHTML = sentenceState.current.length
+        ? sentenceState.current.map(id => {
+            const t = sentenceState.tokens.find(x => x.id === id);
+            return `<button class="sentence-tile placed" data-id="${id}">${t.text}</button>`;
+        }).join("")
+        : `<span class="sentence-placeholder">Bo'lakchalarni shu yerga bosing...</span>`;
+
+    bankEl.querySelectorAll(".sentence-tile").forEach(btn => {
+        btn.addEventListener("click", () => {
+            sentenceState.current.push(Number(btn.dataset.id));
+            renderSentenceBuilder();
+        });
+    });
+
+    answerEl.querySelectorAll(".sentence-tile").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = Number(btn.dataset.id);
+            sentenceState.current = sentenceState.current.filter(x => x !== id);
+            renderSentenceBuilder();
+        });
+    });
+}
+
+function checkSentence() {
+    const statusEl = document.getElementById("sentenceStatus");
+    if (!statusEl) return;
+
+    if (sentenceState.current.length !== sentenceState.tokens.length) {
+        statusEl.textContent = "⚠️ Avval barcha bo'lakchalarni joylashtiring.";
+        statusEl.className = "sentence-status wrong";
+        return;
+    }
+
+    const built = sentenceState.current.map(id => sentenceState.tokens.find(t => t.id === id).text).join(" ");
+    const target = sentenceState.tokens.map(t => t.text).join(" ");
+
+    if (built.toLowerCase() === target.toLowerCase()) {
+        xp += 10;
+        updateStats();
+        statusEl.textContent = "✅ To'g'ri! Ajoyib ish.";
+        statusEl.className = "sentence-status correct";
+        if (typeof celebrate === "function") celebrate();
+    } else {
+        statusEl.textContent = "❌ Hali to'g'ri emas, tartibni qayta tekshiring.";
+        statusEl.className = "sentence-status wrong";
+    }
+}
+
+const checkSentenceBtn = document.getElementById("checkSentenceBtn");
+if (checkSentenceBtn) checkSentenceBtn.addEventListener("click", checkSentence);
+
+const newSentenceBtn = document.getElementById("newSentenceBtn");
+if (newSentenceBtn) newSentenceBtn.addEventListener("click", pickSentence);
+
+// =========================================================================
+// TEZKOR TEST (Speed Round) — 60 soniyalik tez javob berish o'yini
+// =========================================================================
+
+let speedState = { active: false, timeLeft: 60, score: 0, current: null, timer: null };
+
+function resetSpeedUI() {
+    speedState.active = false;
+    clearInterval(speedState.timer);
+    speedState.timeLeft = 60;
+    speedState.score = 0;
+    const timeEl = document.getElementById("speedTimeLeft");
+    const scoreEl = document.getElementById("speedScoreVal");
+    const highEl = document.getElementById("speedHighVal");
+    const wordEl = document.getElementById("speedWord");
+    const uzEl = document.getElementById("speedUzGuess");
+    const resultEl = document.getElementById("speedResult");
+    if (timeEl) timeEl.textContent = "60";
+    if (scoreEl) scoreEl.textContent = "0";
+    if (highEl) highEl.textContent = Number(localStorage.getItem("speedHighScore")) || 0;
+    if (wordEl) wordEl.textContent = "—";
+    if (uzEl) uzEl.textContent = "—";
+    if (resultEl) resultEl.innerHTML = "";
+}
+
+function startSpeedRound() {
+    clearInterval(speedState.timer);
+    speedState.active = true;
+    speedState.timeLeft = 60;
+    speedState.score = 0;
+    const resultEl = document.getElementById("speedResult");
+    if (resultEl) resultEl.innerHTML = "";
+    updateSpeedUI();
+    nextSpeedQuestion();
+    speedState.timer = setInterval(() => {
+        speedState.timeLeft--;
+        updateSpeedUI();
+        if (speedState.timeLeft <= 0) endSpeedRound();
+    }, 1000);
+}
+
+function nextSpeedQuestion() {
+    if (typeof words === "undefined" || !words.length) return;
+    const pool = (typeof quizDeck !== "undefined" && quizDeck.length) ? quizDeck : words;
+    const w = pool[Math.floor(Math.random() * pool.length)];
+    const isTrue = Math.random() < 0.5;
+    let shownUz = w.uz;
+
+    if (!isTrue) {
+        let other = pool[Math.floor(Math.random() * pool.length)];
+        let tries = 0;
+        while (other.uz === w.uz && tries < 10) {
+            other = pool[Math.floor(Math.random() * pool.length)];
+            tries++;
+        }
+        shownUz = other.uz;
+    }
+
+    speedState.current = { word: w, shownUz, isTrue };
+    const wordEl = document.getElementById("speedWord");
+    const uzEl = document.getElementById("speedUzGuess");
+    if (wordEl) wordEl.textContent = (typeof getTargetWord === "function") ? getTargetWord(w) : w.en;
+    if (uzEl) uzEl.textContent = shownUz;
+}
+
+function answerSpeed(userSaysTrue) {
+    if (!speedState.active || !speedState.current) return;
+    const correct = userSaysTrue === speedState.current.isTrue;
+    if (correct) {
+        speedState.score++;
+        xp += 3;
+    } else {
+        xp = Math.max(0, xp - 1);
+    }
+    updateStats();
+    updateSpeedUI();
+    nextSpeedQuestion();
+}
+
+function updateSpeedUI() {
+    const timeEl = document.getElementById("speedTimeLeft");
+    const scoreEl = document.getElementById("speedScoreVal");
+    if (timeEl) timeEl.textContent = speedState.timeLeft;
+    if (scoreEl) scoreEl.textContent = speedState.score;
+}
+
+function endSpeedRound() {
+    clearInterval(speedState.timer);
+    speedState.active = false;
+    const best = Math.max(Number(localStorage.getItem("speedHighScore")) || 0, speedState.score);
+    localStorage.setItem("speedHighScore", best);
+    const highEl = document.getElementById("speedHighVal");
+    if (highEl) highEl.textContent = best;
+
+    const resultEl = document.getElementById("speedResult");
+    if (resultEl) resultEl.innerHTML = `⏱️ Vaqt tugadi! Natija: <b>${speedState.score}</b> ta to'g'ri. Rekord: <b>${best}</b>`;
+
+    if (speedState.score > 0) {
+        coins += Math.round(speedState.score / 2);
+        saveGame();
+    }
+    if (speedState.score >= 10 && typeof celebrate === "function") celebrate();
+}
+
+const startSpeedBtn = document.getElementById("startSpeedBtn");
+if (startSpeedBtn) startSpeedBtn.addEventListener("click", startSpeedRound);
+
+const speedTrueBtn = document.getElementById("speedTrueBtn");
+if (speedTrueBtn) speedTrueBtn.addEventListener("click", () => answerSpeed(true));
+
+const speedFalseBtn = document.getElementById("speedFalseBtn");
+if (speedFalseBtn) speedFalseBtn.addEventListener("click", () => answerSpeed(false));
+
+resetSpeedUI();
+
+// =========================================================================
+// GRAMMATIKA TESTI (Level-based grammar quiz) — Ingliz va Rus tillarida
+// =========================================================================
+
+const GRAMMAR_QUESTIONS_EN = [
+    { level: "beginner", q: "I ___ a student.", options: ["am", "is", "are"], answer: "am" },
+    { level: "beginner", q: "She ___ my sister.", options: ["am", "is", "are"], answer: "is" },
+    { level: "beginner", q: "They ___ happy today.", options: ["am", "is", "are"], answer: "are" },
+    { level: "beginner", q: "___ you like tea?", options: ["Do", "Does", "Is"], answer: "Do" },
+    { level: "beginner", q: "This is ___ book.", options: ["I", "my", "me"], answer: "my" },
+    { level: "intermediate", q: "He has been ___ English for two years.", options: ["study", "studies", "studying"], answer: "studying" },
+    { level: "intermediate", q: "If it rains, I ___ stay home.", options: ["will", "would", "am"], answer: "will" },
+    { level: "intermediate", q: "___ apple a day keeps the doctor away.", options: ["A", "An", "The"], answer: "An" },
+    { level: "intermediate", q: "She is taller ___ her brother.", options: ["that", "then", "than"], answer: "than" },
+    { level: "advanced", q: "By next year, she ___ from university.", options: ["will graduate", "will have graduated", "graduates"], answer: "will have graduated" },
+    { level: "advanced", q: "The book ___ in 1980.", options: ["wrote", "was written", "has written"], answer: "was written" },
+    { level: "advanced", q: "I wish I ___ more time yesterday.", options: ["have", "had", "had had"], answer: "had had" }
+];
+
+const GRAMMAR_QUESTIONS_RU = [
+    { level: "beginner", q: "Это ___ дом.", options: ["мой", "моя", "моё"], answer: "мой" },
+    { level: "beginner", q: "___ тебя зовут?", options: ["Как", "Что", "Где"], answer: "Как" },
+    { level: "beginner", q: "Она — ___ сестра.", options: ["мой", "моя", "моё"], answer: "моя" },
+    { level: "beginner", q: "Мы ___ студенты. (Qanday fe'l kerak?)", options: ["Fe'l kerak emas (—)", "есть", "быть"], answer: "Fe'l kerak emas (—)" },
+    { level: "beginner", q: "___ дела?", options: ["Как", "Кто", "Куда"], answer: "Как" },
+    { level: "intermediate", q: "Я иду в ___ (школа).", options: ["школа", "школу", "школе"], answer: "школу" },
+    { level: "intermediate", q: "У меня нет ___ (книга).", options: ["книга", "книги", "книгу"], answer: "книги" },
+    { level: "intermediate", q: "Это письмо ___ (мама).", options: ["мама", "маме", "маму"], answer: "маме" },
+    { level: "advanced", q: "Я разговариваю с ___ (друг).", options: ["друг", "другом", "друга"], answer: "другом" },
+    { level: "advanced", q: "Он думает о ___ (работа).", options: ["работа", "работе", "работу"], answer: "работе" }
+];
+
+let grammarLang = "en";
+let grammarDeck = [];
+let grammarIndex = 0;
+let grammarScore = 0;
+
+function buildGrammarDeck() {
+    const lvl = getUserLevel();
+    const bank = grammarLang === "ru" ? GRAMMAR_QUESTIONS_RU : GRAMMAR_QUESTIONS_EN;
+    let pool = bank.filter(q => q.level === lvl);
+    if (pool.length < 3) pool = bank;
+
+    grammarDeck = (typeof shuffleArr === "function") ? shuffleArr(pool.slice()) : pool.slice();
+    grammarIndex = 0;
+    grammarScore = 0;
+    updateGrammarQuizUI();
+    loadGrammarQuestion();
+}
+
+function updateGrammarQuizUI() {
+    const lvl = getUserLevel();
+    document.querySelectorAll(".grammar-quiz-level-btn").forEach(b => b.classList.toggle("active", b.dataset.level === lvl));
+    document.querySelectorAll(".grammar-quiz-lang-btn").forEach(b => b.classList.toggle("active", b.dataset.lang === grammarLang));
+    const label = document.getElementById("grammarQuizLabel");
+    if (label) label.textContent = `📊 ${LEVEL_LABELS[lvl]} daraja — ${grammarDeck.length} ta savol`;
+}
+
+function loadGrammarQuestion() {
+    const qEl = document.getElementById("grammarQuizQuestion");
+    const optsEl = document.getElementById("grammarQuizOptions");
+    if (!qEl || !optsEl) return;
+
+    if (grammarIndex >= grammarDeck.length) {
+        qEl.textContent = "🎉 Grammatika testi tugadi!";
+        optsEl.innerHTML = `
+            <div class="grammar-quiz-final">Natija: ${grammarScore}/${grammarDeck.length}</div>
+            <button id="restartGrammarQuiz" class="answer" style="text-align:center;">Qayta boshlash</button>
+        `;
+        const rBtn = document.getElementById("restartGrammarQuiz");
+        if (rBtn) rBtn.onclick = buildGrammarDeck;
+        return;
+    }
+
+    const current = grammarDeck[grammarIndex];
+    qEl.textContent = current.q;
+    optsEl.innerHTML = current.options.map(opt =>
+        `<button class="answer" data-opt="${opt.replace(/"/g, "&quot;")}">${opt}</button>`
+    ).join("");
+
+    optsEl.querySelectorAll("button").forEach(btn => {
+        btn.onclick = () => checkGrammarAnswer(btn.dataset.opt, btn);
+    });
+}
+
+function checkGrammarAnswer(opt, btn) {
+    const current = grammarDeck[grammarIndex];
+    const isCorrect = opt === current.answer;
+    const optsEl = document.getElementById("grammarQuizOptions");
+
+    if (optsEl) {
+        Array.from(optsEl.children).forEach(b => {
+            b.disabled = true;
+            if (b.dataset.opt === current.answer) b.classList.add("correct");
+            else if (b === btn) b.classList.add("wrong");
+        });
+    }
+
+    if (isCorrect) {
+        grammarScore++;
+        xp += 10;
+    } else {
+        xp = Math.max(0, xp - 2);
+    }
+    updateStats();
+    grammarIndex++;
+    setTimeout(loadGrammarQuestion, 700);
+}
+
+document.querySelectorAll(".grammar-quiz-lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        grammarLang = btn.dataset.lang;
+        buildGrammarDeck();
+    });
+});
+
+document.querySelectorAll(".grammar-quiz-level-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        localStorage.setItem("userLevel", btn.dataset.level);
+        if (typeof updateQuizLevelUI === "function") updateQuizLevelUI();
+        buildGrammarDeck();
+    });
+});
+
+// =========================================================================
+// HAQIQIY KUNLIK STREAK TIZIMI (Real Daily Streak Engine)
+// Avval "streak" faqat saqlanardi, lekin kunlar farqiga qarab avtomatik
+// oshib/tushib turmasdi. Endi har kuni dasturga kirganda tekshiriladi:
+// - bugun allaqachon kirgan bo'lsa — o'zgarmaydi
+// - aynan bir kun oldin kirgan bo'lsa — streak +1
+// - bir kundan ko'p tanaffus bo'lsa — streak 1 ga tushadi
+// Muhim kunlarda (3, 7, 14, 30, 60, 100) bonus tanga va konfetti beriladi.
+// =========================================================================
+
+const STREAK_MILESTONES = [3, 7, 14, 30, 60, 100];
+
+function daysBetween(dateStrA, dateStrB) {
+    const oneDay = 24 * 60 * 60 * 1000;
+    const a = new Date(dateStrA + "T00:00:00");
+    const b = new Date(dateStrB + "T00:00:00");
+    return Math.round((b - a) / oneDay);
+}
+
+function updateDailyStreak() {
+    const today = new Date().toISOString().slice(0, 10);
+    const lastActive = localStorage.getItem("lastActiveDate");
+
+    if (!lastActive) {
+        streak = streak || 1;
+    } else if (lastActive === today) {
+        // bugun allaqachon faol bo'lgan — hech narsa o'zgarmaydi
+        return;
+    } else {
+        const diff = daysBetween(lastActive, today);
+        if (diff === 1) {
+            streak = (streak || 1) + 1;
+        } else if (diff > 1) {
+            streak = 1;
+        }
+    }
+
+    localStorage.setItem("lastActiveDate", today);
+    localStorage.setItem("streak", streak);
+    if (typeof updateStats === "function") updateStats();
+
+    if (STREAK_MILESTONES.includes(streak)) {
+        const bonus = streak * 10;
+        coins += bonus;
+        if (typeof saveGame === "function") saveGame();
+        if (typeof celebrate === "function") celebrate();
+        setTimeout(() => {
+            alert(`🔥 ${streak} kunlik streak! Tabriklaymiz — bonus sifatida +${bonus} tanga oldingiz!`);
+        }, 300);
+    }
+}
+
+updateDailyStreak();
+
+console.log("Sentence Builder + Speed Round + Grammar Quiz + Daily Streak Loaded");
+
+// =========================================================================
+// QIYIN SO'ZLAR DAFTARI (Mistake Notebook) — Testda xato qilingan so'zlar
+// avtomatik shu ro'yxatga tushadi. To'g'ri javob berilganda ro'yxatdan
+// asta chiqib ketadi (har to'g'ri javob 1 marta hisobni kamaytiradi).
+// =========================================================================
+
+function getMistakeWords() {
+    try {
+        return JSON.parse(localStorage.getItem("mistakeWords") || "{}");
+    } catch (e) {
+        return {};
+    }
+}
+
+function saveMistakeWords(obj) {
+    localStorage.setItem("mistakeWords", JSON.stringify(obj));
+}
+
+function recordMistake(word) {
+    if (!word || !word.en) return;
+    const mistakes = getMistakeWords();
+    mistakes[word.en] = (mistakes[word.en] || 0) + 1;
+    saveMistakeWords(mistakes);
+}
+
+function clearMistake(word) {
+    if (!word || !word.en) return;
+    const mistakes = getMistakeWords();
+    if (mistakes[word.en]) {
+        mistakes[word.en] -= 1;
+        if (mistakes[word.en] <= 0) delete mistakes[word.en];
+        saveMistakeWords(mistakes);
+    }
+}
+
+function renderMistakeNotebook() {
+    const container = document.getElementById("mistakeList");
+    if (!container) return;
+
+    const mistakes = getMistakeWords();
+    const entries = Object.keys(mistakes);
+
+    if (!entries.length) {
+        container.innerHTML = `<p class="ai-settings-hint">🎉 Hozircha xato so'zlar yo'q — barchasi yaxshi eslab qolinmoqda!</p>`;
+        return;
+    }
+
+    container.innerHTML = entries.map(en => {
+        const w = (typeof words !== "undefined") ? words.find(x => x.en === en) : null;
+        if (!w) return "";
+        return `
+        <div class="phrase-row">
+            <button class="phrase-speak" data-speak="${en.replace(/"/g, "&quot;")}">🔊</button>
+            <div class="phrase-texts">
+                <div class="phrase-main">${en}</div>
+                <div class="phrase-uz">${w.uz} · ${mistakes[en]} marta xato qilingan</div>
+            </div>
+            <button class="mistake-clear-btn" data-word="${en.replace(/"/g, "&quot;")}">✅ Bilib oldim</button>
+        </div>`;
+    }).join("");
+
+    container.querySelectorAll("[data-speak]").forEach(el => {
+        el.addEventListener("click", () => speakText(el.dataset.speak, "en-US"));
+    });
+
+    container.querySelectorAll(".mistake-clear-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const m = getMistakeWords();
+            delete m[btn.dataset.word];
+            saveMistakeWords(m);
+            renderMistakeNotebook();
+        });
+    });
+}
+
+// =========================================================================
+// KUNLIK MASHQ REJASI (Daily Study Plan) — bosh sahifadagi kichik checklist
+// Har kuni yangilanadi, barcha vazifalar bajarilsa bonus XP/tanga beriladi.
+// =========================================================================
+
+const DAILY_TASKS = [
+    { id: "flash5", label: "📚 Kamida 5 ta so'zni ko'rish (Kartochka)" },
+    { id: "quiz1", label: "📝 1 ta testni yakunlash" },
+    { id: "game1", label: "🎮 1 ta o'yin yoki mashqni bajarish" }
+];
+
+function getDailyPlanState() {
+    const today = new Date().toISOString().slice(0, 10);
+    let state;
+    try {
+        state = JSON.parse(localStorage.getItem("dailyPlan") || "{}");
+    } catch (e) {
+        state = {};
+    }
+    if (state.date !== today) {
+        state = { date: today, done: {} };
+        localStorage.setItem("dailyPlan", JSON.stringify(state));
+    }
+    return state;
+}
+
+function saveDailyPlanState(state) {
+    localStorage.setItem("dailyPlan", JSON.stringify(state));
+}
+
+function renderDailyPlan() {
+    const container = document.getElementById("dailyPlanList");
+    if (!container) return;
+
+    const state = getDailyPlanState();
+    container.innerHTML = DAILY_TASKS.map(t => `
+        <label class="daily-task-row">
+            <input type="checkbox" class="daily-task-check" data-task="${t.id}" ${state.done[t.id] ? "checked" : ""}>
+            <span class="${state.done[t.id] ? "done" : ""}">${t.label}</span>
+        </label>
+    `).join("");
+
+    const allDone = DAILY_TASKS.every(t => state.done[t.id]);
+    const bonusEl = document.getElementById("dailyPlanBonus");
+    if (bonusEl) bonusEl.style.display = allDone ? "block" : "none";
+
+    container.querySelectorAll(".daily-task-check").forEach(cb => {
+        cb.addEventListener("change", () => {
+            const s = getDailyPlanState();
+            const wasAllDone = DAILY_TASKS.every(t => s.done[t.id]);
+            s.done[cb.dataset.task] = cb.checked;
+            saveDailyPlanState(s);
+            const nowAllDone = DAILY_TASKS.every(t => s.done[t.id]);
+
+            if (!wasAllDone && nowAllDone) {
+                xp += 20;
+                coins += 15;
+                updateStats();
+                if (typeof saveGame === "function") saveGame();
+                if (typeof celebrate === "function") celebrate();
+            }
+            renderDailyPlan();
+        });
+    });
+}
+
+renderDailyPlan();
+
+console.log("Mistake Notebook + Daily Study Plan Loaded");
