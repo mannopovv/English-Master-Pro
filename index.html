@@ -68,6 +68,9 @@
             <button id="sentenceBtn">🧩 Gap tuzish</button>
             <button id="grammarQuizBtn">📐 Grammatika testi</button>
             <button id="mistakeBtn">📖 Qiyin so'zlar</button>
+            <button id="certificateBtn2">🎓 Sertifikat</button>
+            <button id="premiumBtn">💎 Premium</button>
+            <button id="adminBtn">🛠️ Admin panel</button>
             <button id="quizBtn">📝 Test</button>
             <button id="aiBtn">🤖 AI Teacher</button>
             <button id="assistantBtn">💬 AI Assistant</button>
@@ -170,6 +173,8 @@
             <div class="beginner-lang-tabs" id="beginnerLangTabs">
                 <button class="beginner-lang-tab active" data-blang="en">🇬🇧 Ingliz tili</button>
                 <button class="beginner-lang-tab" data-blang="ru">🇷🇺 Rus tili</button>
+                <button class="beginner-lang-tab" data-blang="tr">🇹🇷 Turk tili</button>
+                <button class="beginner-lang-tab" data-blang="zh">🇨🇳 Xitoy tili</button>
             </div>
 
             <div class="beginner-topic-tabs" id="beginnerTopicTabs">
@@ -294,14 +299,56 @@
  
         
         <section id="statsPage" class="page">
-            <h2>Statistika</h2>
+            <h2>📊 Statistika</h2>
             <div class="stats">
                 <div>Level <h1 id="level">1</h1></div>
                 <div>XP <h1 id="xp">0</h1></div>
                 <div>Bilgan so'z <h1 id="known">0</h1></div>
                 <div>Streak <h1 id="streak">0🔥</h1></div>
             </div>
+
+            <div class="xp-progress-wrap">
+                <div class="xp-progress-label">Keyingi levelgacha: <span id="xpToNext">0</span>/100 XP</div>
+                <div class="xp-progress-bar"><div id="xpProgressFill" class="xp-progress-fill"></div></div>
+            </div>
+
+            <div class="stats stats-secondary">
+                <div>💰 Tanga <h1 id="statsCoins">0</h1></div>
+                <div>📖 Qiyin so'zlar <h1 id="statsMistakes">0</h1></div>
+                <div>⚡ Tezkor rekord <h1 id="statsSpeedHigh">0</h1></div>
+                <div>🏆 Eng yaxshi test <h1 id="statsBestScore">0</h1></div>
+            </div>
+
             <div id="recommendationCard" class="recommendation-card"></div>
+        </section>
+
+        <section id="certificatePage" class="page tool-page">
+            <h2>🎓 Sertifikat</h2>
+            <p class="ai-settings-hint">O'z ismingizni kiriting va hozirgi darajangizga mos shaxsiy sertifikatingizni yarating — rasm sifatida yuklab olishingiz mumkin.</p>
+            <input type="text" id="certificateName" placeholder="To'liq ismingiz (masalan: Aliyev Vali)">
+            <button id="generateCertBtn">🎓 Sertifikat yaratish</button>
+            <div id="certificateNote" class="ai-settings-hint"></div>
+            <canvas id="certificateCanvas" width="900" height="640" style="display:none; max-width:100%; border-radius:16px; margin-top:16px;"></canvas>
+            <button id="certificateDownloadBtn" style="display:none;">⬇️ Rasm sifatida yuklab olish</button>
+        </section>
+
+        <section id="premiumPage" class="page tool-page">
+            <h2>💎 Premium</h2>
+            <p class="ai-settings-hint">To'liq to'lov tizimi (Payme, Click va h.k.) uchun server (backend) kerak bo'ladi — bu ilova esa faqat brauzeringizda ishlaydi. Hozircha shu qurilma uchun mahalliy "Premium" rejimini yoqib ko'rishingiz mumkin (demo maqsadida, real to'lovsiz):</p>
+            <div id="premiumStatusCard" class="premium-status-card"></div>
+            <button id="togglePremiumBtn">💎 Premium rejimni yoqish / o'chirish</button>
+        </section>
+
+        <section id="adminPage" class="page tool-page">
+            <h2>🛠️ Admin / Debug panel</h2>
+            <p class="ai-settings-hint">Bu — real serverli admin panel emas (chunki ilova backend'siz), balki shu qurilmadagi haqiqiy ma'lumotlaringizni ko'rish va boshqarish uchun mahalliy panel.</p>
+            <div id="adminRealStats" class="admin-real-stats"></div>
+            <div class="admin-actions">
+                <button id="adminRefreshBtn">🔄 Yangilash</button>
+                <button id="adminExportBtn">⬇️ Zaxira nusxa (JSON)</button>
+                <button id="adminResetBtn">🗑️ Progressni tozalash</button>
+            </div>
+            <div id="adminActionStatus" class="ai-settings-hint"></div>
         </section>
  
         

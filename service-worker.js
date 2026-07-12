@@ -1,15 +1,11 @@
-const CACHE_NAME = "english-master-v5";
+const CACHE_NAME = "english-master-v6";
 
 const ASSETS = [
   "./",
   "./index.html",
   "./index.css",
   "./index.js",
-  "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png",
-  "./icon-192-maskable.png",
-  "./icon-512-maskable.png"
+  "./manifest.json"
 ];
 
 // cache.addAll() fails (and aborts install) the moment ANY single asset is

@@ -190,15 +190,16 @@ nav {
 }
  
 nav button {
-    padding: 10px 18px;
+    padding: 6px 12px;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     background: linear-gradient(135deg, #2563eb, #3b82f6);
     color: white;
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
-    font-size: 14px;
+    font-size: 11.5px;
     font-weight: 500;
+    letter-spacing: .01em;
 }
  
 nav button:hover {
@@ -252,39 +253,51 @@ hr {
 
 #homePage {
     text-align: center;
-    padding-top: 80px;
+    padding-top: 56px;
 }
- 
+
 #homePage h1 {
-    font-size: 55px;
-    margin-bottom: 20px;
-    background: linear-gradient(to right, #38bdf8, #3b82f6);
+    font-size: 42px;
+    font-family: var(--display-font, 'Space Grotesk', sans-serif);
+    font-weight: 700;
+    letter-spacing: -.01em;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #38bdf8, #818cf8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
- 
+
 #homePage p {
-    font-size: 22px;
-    color: #cbd5e1;
-    margin-bottom: 30px;
+    font-size: 15px;
+    color: #94a3b8;
+    margin-bottom: 26px;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
 }
- 
+
 #startBtn {
-    padding: 16px 45px;
-    font-size: 20px;
+    padding: 10px 26px;
+    font-size: 14px;
     border: none;
-    border-radius: 15px;
-    background: #22c55e;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
     color: white;
     cursor: pointer;
-    transition: .3s;
+    transition: transform .2s ease, box-shadow .2s ease;
     font-weight: 600;
-    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
+    letter-spacing: .01em;
+    box-shadow: 0 6px 18px rgba(34, 197, 94, 0.35);
+    margin-top: 4px;
 }
- 
+
 #startBtn:hover {
-    transform: scale(1.05);
-    background: #16a34a;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 22px rgba(34, 197, 94, 0.45);
+}
+
+#startBtn:active {
+    transform: translateY(0) scale(.97);
 }
  
 
@@ -781,7 +794,8 @@ input[type="file"] {
     #mainNav button {
         width: 100%;
         text-align: left;
-        font-size: 15px;
+        font-size: 14px;
+        padding: 9px 14px;
     }
 }
 
@@ -796,11 +810,16 @@ input[type="file"] {
     }
  
     #homePage h1 {
-        font-size: 36px;
+        font-size: 30px;
     }
  
     #homePage p {
-        font-size: 18px;
+        font-size: 14px;
+        padding: 0 12px;
+    }
+
+    #homePage {
+        padding-top: 36px;
     }
  
     .card {
@@ -2465,31 +2484,37 @@ input[type="text"]:focus, input:not([type]):focus, textarea:focus, select:focus 
    BOSH SAHIFA — KUNLIK MAQSAD KARTASI
    ========================================= */
 .daily-goal-card {
-    max-width: 460px;
-    margin: 0 auto 30px;
+    max-width: 440px;
+    margin: 0 auto 20px;
     background: linear-gradient(145deg, rgba(30,41,59,.9), rgba(15,23,42,.9));
     border: 1px solid rgba(148,163,184,.15);
-    border-radius: 18px;
-    padding: 22px 24px;
+    border-radius: 16px;
+    padding: 18px 20px;
     text-align: left;
     box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.daily-goal-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 34px rgba(0,0,0,.38);
 }
 
 .daily-goal-header {
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #cbd5e1;
-    margin-bottom: 10px;
+    margin-bottom: 9px;
 }
 
 .daily-goal-track {
-    height: 10px;
+    height: 8px;
     background: #0f172a;
     border-radius: 20px;
     overflow: hidden;
-    margin-bottom: 18px;
+    margin-bottom: 15px;
 }
 
 .daily-goal-fill {
@@ -2503,15 +2528,15 @@ input[type="text"]:focus, input:not([type]):focus, textarea:focus, select:focus 
 .home-mini-stats {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
-    font-size: 14px;
+    gap: 8px;
+    font-size: 12.5px;
     color: #e2e8f0;
 }
 
 .home-mini-stats div {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     font-weight: 600;
 }
 
@@ -3246,51 +3271,63 @@ body[data-theme="light"] .ai-settings-card {
 
 /* ---- Word of the Day widget ---- */
 .wotd-card {
-    max-width: 480px;
-    margin: 22px auto 0;
+    max-width: 440px;
+    margin: 16px auto 0;
     background: linear-gradient(160deg, rgba(245,158,11,.14), rgba(255,255,255,.03));
     border: 1px solid var(--lang-amber-soft);
-    border-radius: 20px;
-    padding: 20px 24px;
+    border-radius: 16px;
+    padding: 16px 20px;
     text-align: left;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.wotd-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0,0,0,.28);
 }
 
 .wotd-label {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: .04em;
     color: var(--lang-amber);
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .wotd-lang-block {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 6px;
+    gap: 8px;
+    margin-bottom: 5px;
 }
 
 .wotd-flag {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .wotd-word {
-    font-size: 22px;
+    font-size: 19px;
     font-weight: 700;
     color: #f8fafc;
     flex: 1;
 }
 
 .wotd-speak {
-    width: 34px;
-    height: 34px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     border: none;
     background: rgba(255,255,255,.12);
     color: #fff;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 11px;
+    transition: transform .15s ease, background .15s ease;
+}
+
+.wotd-speak:hover {
+    background: rgba(255,255,255,.22);
+    transform: scale(1.08);
 }
 
 .wotd-uz {
@@ -3652,21 +3689,27 @@ body[data-theme="light"] .speed-word {
 }
 
 .daily-plan-card {
-    max-width: 480px;
-    margin: 22px auto 0;
+    max-width: 440px;
+    margin: 16px auto 0;
     background: linear-gradient(160deg, rgba(56,189,248,.12), rgba(255,255,255,.03));
     border: 1px solid var(--lang-glass-border, rgba(255,255,255,.12));
-    border-radius: 20px;
-    padding: 20px 24px;
+    border-radius: 16px;
+    padding: 16px 20px;
     text-align: left;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.daily-plan-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0,0,0,.28);
 }
 
 .daily-task-row {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 8px 0;
-    font-size: 14px;
+    padding: 6px 0;
+    font-size: 13px;
     color: #e2e8f0;
     cursor: pointer;
 }
@@ -3701,3 +3744,217 @@ body[data-theme="light"] .daily-plan-card {
 }
 
 body[data-theme="light"] .daily-task-row { color: #1e293b; }
+
+/* =========================================================================
+   STATISTIKA + SERTIFIKAT + PREMIUM + ADMIN PANEL + Xitoy belgilari
+   ========================================================================= */
+
+.xp-progress-wrap { margin: 18px 0; }
+
+.xp-progress-label {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 6px;
+}
+
+.xp-progress-bar {
+    width: 100%;
+    height: 14px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.08);
+    overflow: hidden;
+}
+
+.xp-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #2563eb, #38bdf8);
+    transition: width .4s ease;
+}
+
+.stats-secondary { margin-top: 18px; }
+
+.premium-status-card {
+    margin: 16px 0;
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: var(--lang-glass, rgba(255,255,255,.05));
+    border: 1px solid var(--lang-glass-border, rgba(255,255,255,.12));
+    font-weight: 600;
+}
+
+.premium-active-badge { color: var(--lang-amber, #f59e0b); }
+.premium-inactive-badge { color: #94a3b8; }
+
+body.premium-active {
+    --lang-amber: #fbbf24;
+}
+
+body.premium-active #mainNav {
+    box-shadow: 0 0 24px rgba(251, 191, 36, .25);
+}
+
+.admin-real-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.admin-stat-row {
+    background: var(--lang-glass, rgba(255,255,255,.05));
+    border: 1px solid var(--lang-glass-border, rgba(255,255,255,.12));
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #e2e8f0;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+#certificateCanvas {
+    box-shadow: 0 12px 30px rgba(0,0,0,.35);
+}
+
+/* Xitoy ierogliflari lotin harflaridan kattaroq va aniqroq ko'rinishi uchun */
+.tile-letter:lang(zh),
+.alpha-tile[data-speak*="妈"] .tile-letter,
+.alpha-tile[data-speak*="麻"] .tile-letter,
+.alpha-tile[data-speak*="马"] .tile-letter,
+.alpha-tile[data-speak*="骂"] .tile-letter {
+    font-size: 22px;
+}
+
+body[data-theme="light"] .admin-stat-row,
+body[data-theme="light"] .premium-status-card {
+    background: rgba(37,99,235,.05);
+    color: #1e293b;
+    border-color: rgba(37,99,235,.15);
+}
+
+/* =========================================================================
+   TELEFON VERSIYASI UCHUN YAKUNIY DIZAYN TUZATISHLARI (Mobile polish)
+   ========================================================================= */
+
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+* { box-sizing: border-box; }
+
+/* Sertifikat canvas — mobil ekranda proporsiyasi buzilmasligi uchun */
+#certificateCanvas {
+    width: 100%;
+    height: auto;
+}
+
+/* Video darslar — mobilda balandligi ekran kengligiga mos moslashadi */
+.lesson iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    /* Tugmalar barmoq bilan bosish uchun yetarlicha katta bo'lsin */
+    button {
+        min-height: 44px;
+    }
+
+    .tile-grid {
+        grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+        gap: 10px;
+    }
+
+    .admin-real-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-secondary {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Ikki tugmali qatorlar tor ekranda ustma-ust joylashadi */
+    .speed-actions,
+    .sentence-actions,
+    .admin-actions,
+    .listening-controls,
+    .match-toolbar {
+        flex-direction: column;
+    }
+
+    .speed-actions button,
+    .sentence-actions button,
+    .admin-actions button,
+    .listening-controls button {
+        width: 100%;
+    }
+
+    .match-grid {
+        gap: 8px;
+    }
+
+    .grammar-quiz-question,
+    .speed-word {
+        font-size: 20px;
+    }
+
+    .wotd-card,
+    .daily-plan-card {
+        max-width: 100%;
+        padding: 16px 18px;
+    }
+
+    .phrase-row {
+        flex-wrap: wrap;
+    }
+
+    .beginner-lang-tabs .beginner-lang-tab,
+    .beginner-topic-tabs .beginner-topic-tab,
+    .grammar-quiz-lang-btn,
+    .grammar-quiz-level-btn,
+    .quiz-level-btn,
+    .course-lang-btn {
+        font-size: 13px;
+        padding: 9px 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .tile-grid {
+        grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
+        gap: 8px;
+    }
+
+    .tile {
+        padding: 12px 6px 10px;
+    }
+
+    .tile-letter {
+        font-size: 22px;
+    }
+
+    .grammar-quiz-question,
+    .speed-word {
+        font-size: 18px;
+    }
+
+    .speed-hud {
+        gap: 6px;
+    }
+
+    .speed-hud-item {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    h2 {
+        word-break: break-word;
+    }
+}
