@@ -74,6 +74,8 @@
             <button id="quizBtn">📝 Test</button>
             <button id="aiBtn">🤖 AI Teacher</button>
             <button id="assistantBtn">💬 AI Assistant</button>
+            <button id="roleplayBtn">🎭 Rolli suhbat</button>
+            <button id="duelBtn">🤝 Do'st bilan raqobat</button>
             <button id="courseBtn">📖 Lug'at</button>
             <button id="aiToolsBtn">🛠 Tarjima</button>
             <button id="speakingBtn">🎤 Speaking</button>
@@ -105,6 +107,14 @@
                     <div><i class="fa-solid fa-star"></i> <span id="homeXp">0</span> XP</div>
                     <div><i class="fa-solid fa-book"></i> <span id="homeKnown">0</span> so'z</div>
                 </div>
+            </div>
+
+            <div class="review-due-card" id="reviewDueCard">
+                <div class="review-due-text">
+                    <span class="review-due-icon">🧠</span>
+                    <span>Bugun takrorlash kerak: <b id="reviewDueCount">0</b> ta so'z</span>
+                </div>
+                <button id="reviewDueBtn">Takrorlashni boshlash</button>
             </div>
 
             <div class="daily-plan-card">
@@ -147,7 +157,12 @@
                     <input type="checkbox" id="favOnlyToggle">
                     ⭐ Faqat sevimlilar
                 </label>
+                <label class="fav-only-toggle">
+                    <input type="checkbox" id="dueOnlyToggle">
+                    ⏰ Faqat takrorlanishi kerak
+                </label>
             </div>
+            <div id="srsDueWidget" class="srs-due-widget"></div>
 
             <div class="card" id="flashCard">
                 <button id="favBtn" class="fav-btn" aria-label="Sevimlilarga qo'shish">☆</button>
@@ -296,6 +311,51 @@
             <h2>🎤 Voice Assistant</h2>
             <button id="voiceAssistant">Boshlash</button>
         </section>
+
+        <!-- AI ROLEPLAY (Rolli suhbat) -->
+        <section id="roleplayPage" class="page">
+            <h2>🎭 Rolli suhbat</h2>
+            <p class="ai-settings-hint">Haqiqiy hayotdagi vaziyatni tanlang va AI bilan ingliz tilida suhbatlashing — AI xatolaringizni muloyimlik bilan tuzatib boradi.</p>
+
+            <div class="roleplay-scenarios" id="roleplayScenarios"></div>
+
+            <div id="roleplayChatWrap" class="roleplay-chat-wrap" style="display:none;">
+                <div class="roleplay-active-bar">
+                    <span id="roleplayActiveLabel"></span>
+                    <button id="roleplayEndBtn">🔁 Boshqa vaziyat</button>
+                </div>
+                <div id="roleplayChatBox" class="roleplay-chatbox"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="roleplayInput" placeholder="Inglizcha javob yozing...">
+                    <button id="roleplaySend">Yuborish</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FRIEND DUEL (Do'st bilan raqobat) -->
+        <section id="duelPage" class="page">
+            <h2>🤝 Do'st bilan raqobat</h2>
+            <p class="ai-settings-hint">10 ta savoldan iborat sinov yarating, kodni do'stingizga yuboring. U ham xuddi shu savollarni yechadi va natijalar taqqoslanadi — internetsiz, faqat kod orqali!</p>
+
+            <div class="duel-create-card">
+                <h3>➕ Yangi sinov yaratish</h3>
+                <input type="text" id="duelNameInput" placeholder="Ismingiz">
+                <button id="duelCreateBtn">🎲 Sinov yaratish</button>
+                <div id="duelCreateResult"></div>
+            </div>
+
+            <hr>
+
+            <div class="duel-join-card">
+                <h3>🔑 Do'stimning kodi bor</h3>
+                <input type="text" id="duelJoinName" placeholder="Ismingiz">
+                <textarea id="duelJoinCode" placeholder="Do'stingiz yuborgan kodni shu yerga joylang..."></textarea>
+                <button id="duelJoinBtn">▶️ Sinovni boshlash</button>
+            </div>
+
+            <div id="duelPlayArea" class="duel-play-area" style="display:none;"></div>
+            <div id="duelResultArea"></div>
+        </section>
  
         
         <section id="statsPage" class="page">
@@ -363,6 +423,15 @@
                 <input type="text" id="aiModelInput" placeholder="Model nomi (ixtiyoriy, default: gpt-4o-mini)">
                 <button id="saveAiSettings">💾 Saqlash</button>
                 <div id="aiSettingsStatus"></div>
+            </div>
+
+            <div class="streak-freeze-card" id="streakFreezeCard">
+                <h3>🧊 Streak-Freeze himoyasi</h3>
+                <p class="ai-settings-hint">Bir kun mashq qilishni unutib qolsangiz ham, streak-freeze streak'ingizni saqlab qoladi. Har biri 50 tanga turadi.</p>
+                <div class="streak-freeze-row">
+                    <span>Sizda: <b id="freezeCount">0</b> ta himoya bor</span>
+                    <button id="buyFreezeBtn">🧊 Sotib olish (50 tanga)</button>
+                </div>
             </div>
 
             <button id="darkMode">🌙 Dark Mode</button>

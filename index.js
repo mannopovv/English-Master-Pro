@@ -288,7 +288,9 @@ const menuButtons = {
     "mistakeBtn": "mistakePage",
     "certificateBtn2": "certificatePage",
     "premiumBtn": "premiumPage",
-    "adminBtn": "adminPage"
+    "adminBtn": "adminPage",
+    "roleplayBtn": "roleplayPage",
+    "duelBtn": "duelPage"
 };
 
 Object.keys(menuButtons).forEach(btnId => {
@@ -326,6 +328,12 @@ Object.keys(menuButtons).forEach(btnId => {
             }
             if (btnId === "adminBtn" && typeof renderAdminPanel === "function") {
                 renderAdminPanel();
+            }
+            if (btnId === "roleplayBtn" && typeof renderRoleplayScenarios === "function") {
+                renderRoleplayScenarios();
+            }
+            if (btnId === "duelBtn" && typeof renderDuelPage === "function") {
+                renderDuelPage();
             }
             syncBottomNav(menuButtons[btnId]);
         };
@@ -596,6 +604,7 @@ function bumpWordWeight(word, delta) {
     localStorage.setItem("wordWeights", JSON.stringify(wordWeights));
     // Mavjud chaqiruvlar bo'yicha: manfiy delta = to'g'ri javob, musbat = xato javob
     scheduleWordReview(word, delta < 0);
+    if (typeof renderDueWidgets === "function") renderDueWidgets();
 }
 
 
@@ -687,20 +696,59 @@ const cardCounterEl = document.getElementById("cardCounter");
 
 function wordKey(w) { return w.en; }
 
+const dueOnlyToggleEl = document.getElementById("dueOnlyToggle");
+
 function buildDeck() {
     const cat = categoryFilterEl ? categoryFilterEl.value : "all";
     const favOnly = favOnlyToggleEl ? favOnlyToggleEl.checked : false;
+    const dueOnly = dueOnlyToggleEl ? dueOnlyToggleEl.checked : false;
 
     deck = words.filter(w => {
         const matchCat = cat === "all" || w.category === cat;
         const matchFav = !favOnly || favoriteWords.includes(wordKey(w));
-        return matchCat && matchFav;
+        const matchDue = !dueOnly || isDue(w);
+        return matchCat && matchFav && matchDue;
     });
 
-    if (deck.length === 0) deck = words;
+    if (deck.length === 0) deck = dueOnly ? [] : words;
     index = 0;
     loadCard();
 }
+
+if (dueOnlyToggleEl) {
+    dueOnlyToggleEl.addEventListener("change", buildDeck);
+}
+
+// ---- Bugungi takrorlash widgeti (home + flashcard sahifalari) ---------
+function getDueWordsCount() {
+    return words.filter(isDue).length;
+}
+
+function renderDueWidgets() {
+    const dueCount = getDueWordsCount();
+    const homeCountEl = document.getElementById("reviewDueCount");
+    if (homeCountEl) homeCountEl.textContent = dueCount;
+
+    const srsWidget = document.getElementById("srsDueWidget");
+    if (srsWidget) {
+        srsWidget.innerHTML = dueCount > 0
+            ? `⏰ Bugun <b>${dueCount}</b> ta so'zni takrorlash vaqti keldi`
+            : `✅ Hozircha barcha so'zlar yangilangan — ajoyib!`;
+    }
+}
+
+const reviewDueBtn = document.getElementById("reviewDueBtn");
+if (reviewDueBtn) {
+    reviewDueBtn.addEventListener("click", () => {
+        openPage("flashPage");
+        if (dueOnlyToggleEl) {
+            dueOnlyToggleEl.checked = true;
+            buildDeck();
+        }
+    });
+}
+
+renderDueWidgets();
 
 if (categoryFilterEl) {
     const categories = ["all", ...new Set(words.map(w => w.category))];
@@ -1431,6 +1479,34 @@ async function callAI(userPrompt, systemPrompt) {
             body: JSON.stringify({ model, messages, max_tokens: 600 })
         });
 
+        if (!res.ok) {
+            console.error("AI so'rovi xato qaytardi:", res.status);
+            return null;
+        }
+        const data = await res.json();
+        const text = data?.choices?.[0]?.message?.content;
+        return text ? text.trim() : null;
+    } catch (err) {
+        console.error("AI ulanish xatosi:", err);
+        return null;
+    }
+}
+
+// Ko'p bosqichli (multi-turn) suhbat uchun — Rolli suhbat (roleplay) rejimida
+// butun tarix (system + oldingi xabarlar) birgalikda yuboriladi, shunda AI
+// kontekstni "unutmaydi".
+async function callAIConversation(messages) {
+    const { key, endpoint, model } = getAISettings();
+    if (!key) return null;
+    try {
+        const res = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${key}`
+            },
+            body: JSON.stringify({ model, messages, max_tokens: 500 })
+        });
         if (!res.ok) {
             console.error("AI so'rovi xato qaytardi:", res.status);
             return null;
@@ -4847,7 +4923,19 @@ function updateDailyStreak() {
         if (diff === 1) {
             streak = (streak || 1) + 1;
         } else if (diff > 1) {
-            streak = 1;
+            const freezes = getFreezeCount();
+            if (freezes > 0) {
+                // Streak-freeze ishlatiladi: streak buzilmaydi, faqat 1 kunlik
+                // tanaffus "kechiriladi". Bir nechta kun o'tkazib yuborilgan
+                // bo'lsa ham, faqat bitta freeze sarflanadi va streak saqlanadi.
+                localStorage.setItem("streakFreezes", freezes - 1);
+                setTimeout(() => {
+                    if (typeof renderFreezeUI === "function") renderFreezeUI();
+                    alert("🧊 Streak-freeze ishlatildi! Bir kun mashq qilmagan bo'lsangiz ham, " + streak + " kunlik streak'ingiz saqlab qolindi.");
+                }, 300);
+            } else {
+                streak = 1;
+            }
         }
     }
 
@@ -4865,6 +4953,37 @@ function updateDailyStreak() {
         }, 300);
     }
 }
+
+// ---- Streak-Freeze himoyasi ------------------------------------------
+// Foydalanuvchi tangalar evaziga "muzlatgich" sotib olishi mumkin. Agar bir
+// kun mashq qilish unutilsa (diff > 1), mavjud freeze avtomatik ishlatiladi
+// va streak buzilmaydi.
+function getFreezeCount() {
+    return Number(localStorage.getItem("streakFreezes")) || 0;
+}
+function setFreezeCount(n) {
+    localStorage.setItem("streakFreezes", Math.max(0, n));
+    renderFreezeUI();
+}
+function renderFreezeUI() {
+    const el = document.getElementById("freezeCount");
+    if (el) el.textContent = getFreezeCount();
+}
+
+const buyFreezeBtn = document.getElementById("buyFreezeBtn");
+if (buyFreezeBtn) {
+    buyFreezeBtn.addEventListener("click", () => {
+        if (coins < 50) {
+            if (settingsStatusEl) settingsStatusEl.innerHTML = "❌ Tangalar yetarli emas (50 tanga kerak)";
+            return;
+        }
+        coins -= 50;
+        setFreezeCount(getFreezeCount() + 1);
+        if (typeof saveGame === "function") saveGame();
+        if (settingsStatusEl) settingsStatusEl.innerHTML = "✅ Streak-freeze sotib olindi! Endi 1 kun o'tkazib yuborsangiz ham streak saqlanadi.";
+    });
+}
+renderFreezeUI();
 
 updateDailyStreak();
 
@@ -5238,3 +5357,321 @@ if (adminResetBtn) {
 renderAdminPanel();
 
 console.log("Statistika + Sertifikat + Premium + Admin panel Loaded");
+
+// =========================================================================
+// AI ROLEPLAY (Rolli suhbat) — foydalanuvchi haqiqiy hayotiy vaziyatda
+// (restoran, aeroport, do'kon, ish suhbati va h.k.) AI bilan ingliz tilida
+// erkin suhbatlashadi. AI xarakterda qoladi va har javobdan so'ng
+// xatolarni muloyimlik bilan (o'zbek tilida, qavs ichida) tuzatib boradi.
+// =========================================================================
+
+const ROLEPLAY_SCENARIOS = [
+    {
+        id: "restaurant",
+        icon: "🍽️",
+        title: "Restoranda buyurtma berish",
+        opener: "Good evening! Welcome to our restaurant. What would you like to order today?",
+        persona: "You are a friendly, patient waiter at a restaurant talking to an English learner. Keep sentences short and simple (A2-B1 level). Stay fully in character as the waiter."
+    },
+    {
+        id: "airport",
+        icon: "✈️",
+        title: "Aeroportda ro'yxatdan o'tish",
+        opener: "Hello! May I see your passport and ticket, please?",
+        persona: "You are an airport check-in officer talking to an English learner. Keep sentences short and simple (A2-B1 level). Stay fully in character."
+    },
+    {
+        id: "shopping",
+        icon: "🛍️",
+        title: "Do'konda xarid qilish",
+        opener: "Hi there! Are you looking for anything special today?",
+        persona: "You are a helpful shop assistant talking to an English learner. Keep sentences short and simple (A2-B1 level). Stay fully in character."
+    },
+    {
+        id: "interview",
+        icon: "💼",
+        title: "Ish suhbati (Job interview)",
+        opener: "Thank you for coming today. Can you tell me a little about yourself?",
+        persona: "You are a professional job interviewer talking to an English learner candidate. Keep questions simple and clear (B1 level). Stay fully in character."
+    },
+    {
+        id: "hotel",
+        icon: "🏨",
+        title: "Mehmonxonaga joylashish",
+        opener: "Good afternoon! Welcome to our hotel. Do you have a reservation?",
+        persona: "You are a hotel receptionist talking to an English learner guest. Keep sentences short and simple (A2-B1 level). Stay fully in character."
+    },
+    {
+        id: "doctor",
+        icon: "🩺",
+        title: "Shifokor qabulida",
+        opener: "Hello, please come in. What seems to be the problem today?",
+        persona: "You are a calm, kind doctor talking to an English learner patient. Keep sentences short and simple (A2-B1 level). Stay fully in character."
+    },
+    {
+        id: "friend",
+        icon: "🙋",
+        title: "Do'st bilan tanishuv suhbati",
+        opener: "Hey! I don't think we've met before. What's your name?",
+        persona: "You are a friendly peer meeting an English learner for the first time at a park. Keep sentences short, casual and simple (A2-B1 level). Stay fully in character."
+    }
+];
+
+let roleplayHistory = [];
+let roleplayScenario = null;
+
+function renderRoleplayScenarios() {
+    const wrap = document.getElementById("roleplayScenarios");
+    if (!wrap) return;
+    wrap.innerHTML = ROLEPLAY_SCENARIOS.map(s =>
+        `<button class="roleplay-scenario-btn" data-id="${s.id}"><span class="rp-icon">${s.icon}</span>${s.title}</button>`
+    ).join("");
+    wrap.querySelectorAll(".roleplay-scenario-btn").forEach(btn => {
+        btn.addEventListener("click", () => startRoleplay(btn.dataset.id));
+    });
+}
+
+function roleplaySystemPrompt(scenario) {
+    return `${scenario.persona} After every reply of yours, on a new line, if the learner's last message had English mistakes, add a short correction starting with "🧑‍🏫 Tuzatish:" written in Uzbek, explaining the mistake briefly and giving the corrected sentence. If there were no mistakes, add a line "🧑‍🏫 Ajoyib, xato yo'q!". Never break character in the main reply itself.`;
+}
+
+function appendRoleplayMessage(role, text) {
+    const box = document.getElementById("roleplayChatBox");
+    if (!box) return;
+    const div = document.createElement("div");
+    div.className = role === "user" ? "rp-msg rp-user" : "rp-msg rp-ai";
+    div.innerHTML = (role === "user" ? "🧑 " : "🎭 ") + text.replace(/\n/g, "<br>");
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+}
+
+function startRoleplay(id) {
+    const scenario = ROLEPLAY_SCENARIOS.find(s => s.id === id);
+    if (!scenario) return;
+    roleplayScenario = scenario;
+    roleplayHistory = [{ role: "system", content: roleplaySystemPrompt(scenario) }];
+
+    document.getElementById("roleplayScenarios").style.display = "none";
+    const chatWrap = document.getElementById("roleplayChatWrap");
+    if (chatWrap) chatWrap.style.display = "";
+    const label = document.getElementById("roleplayActiveLabel");
+    if (label) label.textContent = `${scenario.icon} ${scenario.title}`;
+    const box = document.getElementById("roleplayChatBox");
+    if (box) box.innerHTML = "";
+
+    const hasKey = !!getAISettings().key;
+    if (hasKey) {
+        roleplayHistory.push({ role: "assistant", content: scenario.opener });
+        appendRoleplayMessage("ai", scenario.opener);
+    } else {
+        appendRoleplayMessage("ai", scenario.opener + "<br><small>ℹ️ To'liq AI suhbat uchun Sozlamalarda API kalit kiriting. Hozircha oddiy demo rejimda.</small>");
+    }
+}
+
+const roleplayEndBtn = document.getElementById("roleplayEndBtn");
+if (roleplayEndBtn) {
+    roleplayEndBtn.addEventListener("click", () => {
+        document.getElementById("roleplayChatWrap").style.display = "none";
+        document.getElementById("roleplayScenarios").style.display = "";
+        roleplayScenario = null;
+        roleplayHistory = [];
+    });
+}
+
+async function sendRoleplayMessage() {
+    const input = document.getElementById("roleplayInput");
+    if (!input || !roleplayScenario) return;
+    const text = input.value.trim();
+    if (!text) return;
+    appendRoleplayMessage("user", text);
+    input.value = "";
+    roleplayHistory.push({ role: "user", content: text });
+
+    const hasKey = !!getAISettings().key;
+    if (!hasKey) {
+        appendRoleplayMessage("ai", "🤖 (demo) Yaxshi urinish! To'liq AI suhbat va xatolarni tuzatish uchun Sozlamalarda API kalit kiriting.");
+        return;
+    }
+
+    const loadingId = "rp_" + Date.now();
+    const box = document.getElementById("roleplayChatBox");
+    if (box) {
+        const div = document.createElement("div");
+        div.className = "rp-msg rp-ai";
+        div.id = loadingId;
+        div.textContent = "🎭 ...";
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    const reply = await callAIConversation(roleplayHistory);
+    const loadingEl = document.getElementById(loadingId);
+    if (loadingEl) loadingEl.remove();
+
+    if (reply) {
+        roleplayHistory.push({ role: "assistant", content: reply });
+        appendRoleplayMessage("ai", reply);
+        if (typeof bumpWordWeight === "function") { /* no-op hook point */ }
+    } else {
+        appendRoleplayMessage("ai", "⚠️ AI bilan bog'lanib bo'lmadi. Birozdan so'ng qayta urinib ko'ring.");
+    }
+}
+
+const roleplaySendBtn = document.getElementById("roleplaySend");
+if (roleplaySendBtn) roleplaySendBtn.addEventListener("click", sendRoleplayMessage);
+const roleplayInputEl = document.getElementById("roleplayInput");
+if (roleplayInputEl) {
+    roleplayInputEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") sendRoleplayMessage();
+    });
+}
+
+// =========================================================================
+// DO'ST BILAN RAQOBAT (Async Friend Duel) — server kerak emas: 10 ta so'z
+// asosida test yaratiladi va shifrlangan matn kod sifatida taqdim etiladi.
+// Do'st shu kodni kiritib xuddi shu savollarni yechadi, so'ng ikkala natija
+// taqqoslanadi. Kod ichida savol ro'yxati + yaratuvchi ismi va ballari bor.
+// =========================================================================
+
+function renderDuelPage() {
+    const resultArea = document.getElementById("duelResultArea");
+    if (resultArea) resultArea.innerHTML = "";
+    const playArea = document.getElementById("duelPlayArea");
+    if (playArea) playArea.style.display = "none";
+    const createResult = document.getElementById("duelCreateResult");
+    if (createResult) createResult.innerHTML = "";
+}
+
+function encodeDuelCode(obj) {
+    return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+}
+function decodeDuelCode(code) {
+    return JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+}
+
+function pickDuelWords(count) {
+    const shuffled = [...words].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, count).map(w => w.en);
+}
+
+function buildDuelQuestion(enWord) {
+    const w = words.find(x => x.en === enWord);
+    if (!w) return null;
+    const wrongPool = words.filter(x => x.en !== enWord).sort(() => Math.random() - 0.5).slice(0, 3);
+    const options = [...wrongPool.map(x => x.uz), w.uz].sort(() => Math.random() - 0.5);
+    return { en: w.en, correct: w.uz, options };
+}
+
+const duelCreateBtn = document.getElementById("duelCreateBtn");
+if (duelCreateBtn) {
+    duelCreateBtn.addEventListener("click", () => {
+        const nameInput = document.getElementById("duelNameInput");
+        const name = (nameInput && nameInput.value.trim()) || "Do'stim";
+        const enWords = pickDuelWords(10);
+
+        // Yaratuvchi o'zi ham darhol yechadi
+        startDuelPlay(enWords, (myScore) => {
+            const code = encodeDuelCode({ v: 1, name, score: myScore, total: enWords.length, enWords });
+            const resultBox = document.getElementById("duelCreateResult");
+            if (resultBox) {
+                resultBox.innerHTML = `
+                    <p>✅ Siz <b>${myScore}/${enWords.length}</b> to'g'ri javob berdingiz!</p>
+                    <p>Quyidagi kodni do'stingizga yuboring:</p>
+                    <textarea readonly class="duel-code-box">${code}</textarea>
+                    <button id="duelCopyBtn">📋 Kodni nusxalash</button>
+                `;
+                const copyBtn = document.getElementById("duelCopyBtn");
+                if (copyBtn) {
+                    copyBtn.addEventListener("click", () => {
+                        navigator.clipboard.writeText(code).then(() => {
+                            copyBtn.textContent = "✅ Nusxalandi!";
+                            setTimeout(() => { copyBtn.textContent = "📋 Kodni nusxalash"; }, 1500);
+                        });
+                    });
+                }
+            }
+        }, "duelCreateResult");
+    });
+}
+
+const duelJoinBtn = document.getElementById("duelJoinBtn");
+if (duelJoinBtn) {
+    duelJoinBtn.addEventListener("click", () => {
+        const codeInput = document.getElementById("duelJoinCode");
+        const nameInput = document.getElementById("duelJoinName");
+        const myName = (nameInput && nameInput.value.trim()) || "Men";
+        let data;
+        try {
+            data = decodeDuelCode(codeInput.value);
+            if (!data.enWords || !Array.isArray(data.enWords)) throw new Error("bad code");
+        } catch (err) {
+            const resultArea = document.getElementById("duelResultArea");
+            if (resultArea) resultArea.innerHTML = `<p>❌ Kod noto'g'ri yoki buzilgan. Qaytadan nusxalab ko'ring.</p>`;
+            return;
+        }
+
+        startDuelPlay(data.enWords, (myScore) => {
+            const resultArea = document.getElementById("duelResultArea");
+            if (!resultArea) return;
+            const total = data.enWords.length;
+            let verdict;
+            if (myScore > data.score) verdict = `🏆 Tabriklaymiz, ${myName}! Siz ${data.name}dan (${data.score}/${total}) oldinda ketdingiz!`;
+            else if (myScore < data.score) verdict = `😅 ${data.name} bu safar oldinda (${data.score}/${total}). Qaytadan urinib ko'ring!`;
+            else verdict = `🤝 Durrang! Ikkovingiz ham ${myScore}/${total} to'pladingiz.`;
+
+            resultArea.innerHTML = `
+                <div class="duel-result-card">
+                    <p>${data.name}: <b>${data.score}/${total}</b></p>
+                    <p>${myName}: <b>${myScore}/${total}</b></p>
+                    <p class="duel-verdict">${verdict}</p>
+                </div>
+            `;
+            coins += 15;
+            xp += 10;
+            if (typeof saveGame === "function") saveGame();
+            if (typeof celebrate === "function" && myScore >= data.score) celebrate();
+        }, "duelResultArea");
+    });
+}
+
+function startDuelPlay(enWords, onFinish, feedbackTargetId) {
+    const playArea = document.getElementById("duelPlayArea");
+    if (!playArea) return;
+    playArea.style.display = "";
+    let qIndex = 0;
+    let score = 0;
+    const questions = enWords.map(buildDuelQuestion).filter(Boolean);
+
+    function renderQ() {
+        if (qIndex >= questions.length) {
+            playArea.style.display = "none";
+            onFinish(score);
+            return;
+        }
+        const q = questions[qIndex];
+        playArea.innerHTML = `
+            <div class="duel-question-card">
+                <div class="duel-q-counter">${qIndex + 1} / ${questions.length}</div>
+                <h3>${q.en}</h3>
+                <div class="duel-options"></div>
+            </div>
+        `;
+        const optWrap = playArea.querySelector(".duel-options");
+        q.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "duel-option-btn";
+            btn.textContent = opt;
+            btn.addEventListener("click", () => {
+                const isCorrect = opt === q.correct;
+                btn.classList.add(isCorrect ? "correct" : "wrong");
+                if (isCorrect) score++;
+                optWrap.querySelectorAll("button").forEach(b => b.disabled = true);
+                setTimeout(() => { qIndex++; renderQ(); }, 500);
+            });
+            optWrap.appendChild(btn);
+        });
+    }
+    renderQ();
+}
+
+console.log("Roleplay + Streak-Freeze + SRS Dashboard + Friend Duel Loaded");
