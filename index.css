@@ -2990,6 +2990,11 @@ body[data-theme="light"] .ai-settings-card {
     --lang-glass: rgba(255, 255, 255, .05);
     --lang-glass-border: rgba(255, 255, 255, .12);
     --display-font: 'Space Grotesk', 'Poppins', sans-serif;
+    --user-font-scale: 1;
+}
+
+html {
+    font-size: calc(16px * var(--user-font-scale));
 }
 
 /* Sarlavhalarda va raqamlarda "display" shrift ishlatamiz — o'ziga xoslik uchun */
@@ -4235,4 +4240,439 @@ main button, nav button {
 @media (max-width: 640px) {
     .roleplay-scenarios { grid-template-columns: 1fr; }
     .review-due-card { flex-direction: column; align-items: flex-start; }
+}
+/* =========================================================================
+   IKKINCHI BOSQICH: Haftalik challenge, Idiomalar, Grammatika, Mening
+   so'zlarim, Imtihon rejimi, Reading (click-to-translate), Dictation diff,
+   Qulaylik sozlamalari va umumiy "ideal dizayn" jilosi.
+   ========================================================================= */
+
+/* ---- Haftalik challenge ---- */
+.weekly-challenge-card {
+    background: linear-gradient(135deg, rgba(245, 158, 11, .12), rgba(56, 189, 248, .08));
+    border: 1px solid var(--lang-glass-border);
+    border-radius: 20px;
+    padding: 16px 20px;
+    margin: 18px 0;
+}
+
+.weekly-challenge-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.daily-goal-track {
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.08);
+    overflow: hidden;
+}
+
+.daily-goal-fill, #weeklyChallengeFill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--lang-amber), var(--lang-cyan));
+    border-radius: 999px;
+    transition: width .4s ease;
+}
+
+/* ---- Kunning idiomasi ---- */
+.idiom-of-day-card {
+    background: var(--lang-glass);
+    border: 1px solid var(--lang-glass-border);
+    border-radius: 20px;
+    padding: 16px 20px;
+    margin: 18px 0;
+}
+
+.idiom-of-day-main {
+    font-family: var(--display-font);
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--lang-cyan);
+}
+
+.idiom-of-day-uz { margin-top: 4px; opacity: .9; }
+.idiom-of-day-example { margin-top: 8px; font-style: italic; opacity: .75; font-size: 13.5px; }
+
+/* ---- Idiomalar sahifasi ---- */
+.idiom-tabs {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.idiom-tab {
+    flex: 1;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid var(--lang-glass-border);
+    background: var(--lang-glass);
+    color: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.idiom-tab.active {
+    background: linear-gradient(135deg, var(--lang-cyan), var(--lang-indigo));
+    color: #0f172a;
+    border-color: transparent;
+}
+
+.idioms-list {
+    display: grid;
+    gap: 12px;
+}
+
+.idiom-card {
+    background: var(--lang-glass);
+    border: 1px solid var(--lang-glass-border);
+    border-radius: 16px;
+    padding: 14px 16px;
+}
+
+.idiom-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+}
+
+.idiom-speak-btn {
+    border: none;
+    background: rgba(56, 189, 248, .15);
+    border-radius: 10px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.idiom-card-uz { margin-top: 4px; opacity: .85; }
+.idiom-card-example { margin-top: 6px; font-style: italic; opacity: .65; font-size: 13px; }
+
+/* ---- Grammatika qo'llanmasi ---- */
+.grammar-lib-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+}
+
+.grammar-lib-tab {
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--lang-glass-border);
+    background: var(--lang-glass);
+    color: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 13.5px;
+}
+
+.grammar-lib-tab.active {
+    background: linear-gradient(135deg, var(--lang-amber), #f97316);
+    color: #1e293b;
+    border-color: transparent;
+}
+
+.grammar-box {
+    background: var(--lang-glass);
+    border: 1px solid var(--lang-glass-border);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+}
+
+.grammar-box h4 {
+    font-family: var(--display-font);
+    color: var(--lang-cyan);
+    margin-bottom: 6px;
+}
+
+.grammar-example {
+    margin-top: 8px;
+    font-style: italic;
+    opacity: .75;
+    font-size: 13.5px;
+}
+
+/* ---- Mening so'zlarim ---- */
+.my-word-form {
+    display: grid;
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.my-word-form input {
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--lang-glass-border);
+    background: rgba(0,0,0,.15);
+    color: inherit;
+}
+
+#myWordAddBtn {
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--lang-cyan), var(--lang-indigo));
+    color: #0f172a;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.my-words-list { display: grid; gap: 10px; margin-top: 14px; }
+
+.my-word-delete-btn {
+    border: none;
+    background: rgba(239, 68, 68, .15);
+    color: #ef4444;
+    border-radius: 10px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+/* ---- Imtihon rejimi ---- */
+.exam-level-tabs {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.exam-level-tab {
+    flex: 1;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid var(--lang-glass-border);
+    background: var(--lang-glass);
+    color: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.exam-level-tab.active {
+    background: linear-gradient(135deg, var(--lang-indigo), #6366f1);
+    color: #fff;
+    border-color: transparent;
+}
+
+.exam-intro-card {
+    text-align: center;
+    padding: 24px;
+    background: var(--lang-glass);
+    border: 1px solid var(--lang-glass-border);
+    border-radius: 18px;
+}
+
+#examStartBtn {
+    margin-top: 12px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--lang-cyan), var(--lang-indigo));
+    color: #0f172a;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.exam-question-card {
+    padding: 22px;
+    border-radius: 18px;
+    background: var(--lang-glass);
+    border: 1px solid var(--lang-glass-border);
+    text-align: center;
+}
+
+.exam-top-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    opacity: .8;
+    margin-bottom: 10px;
+}
+
+.exam-timer { font-weight: 700; color: var(--lang-amber); }
+
+/* ---- Reading (click-to-translate) ---- */
+.reading-passage-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 14px 0;
+}
+
+.reading-tab {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--lang-glass-border);
+    background: var(--lang-glass);
+    color: inherit;
+    font-size: 12.5px;
+    cursor: pointer;
+}
+
+.reading-tab.active {
+    background: linear-gradient(135deg, var(--lang-cyan), var(--lang-indigo));
+    color: #0f172a;
+    border-color: transparent;
+}
+
+.reading-passage-text {
+    line-height: 2;
+    font-size: 16px;
+    padding: 18px;
+    border-radius: 16px;
+    background: var(--lang-glass);
+    border: 1px solid var(--lang-glass-border);
+}
+
+.reading-word {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 1px 2px;
+    transition: background .15s ease;
+}
+
+.reading-word:hover {
+    background: rgba(56, 189, 248, .25);
+}
+
+.reading-word-translation {
+    min-height: 20px;
+    margin: 10px 0 4px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(245, 158, 11, .1);
+    border: 1px solid var(--lang-amber-soft);
+    font-size: 14px;
+}
+
+/* ---- Dictation diff ---- */
+.dictation-word {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin: 2px;
+}
+
+.dictation-correct { background: rgba(34, 197, 94, .2); color: #22c55e; }
+.dictation-wrong { background: rgba(239, 68, 68, .2); color: #ef4444; }
+
+/* ---- Kuchsiz tomonlar tahlili ---- */
+.weak-areas-card {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 20px;
+    background: var(--lang-glass);
+    border: 1px solid var(--lang-glass-border);
+}
+
+.weak-area-row {
+    margin: 12px 0;
+}
+
+.weak-area-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13.5px;
+    margin-bottom: 6px;
+}
+
+.weak-area-track {
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.08);
+    overflow: hidden;
+}
+
+.weak-area-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #ef4444, var(--lang-amber));
+}
+
+/* ---- Qulaylik sozlamalari ---- */
+.accessibility-card {
+    margin: 18px 0;
+    padding: 18px 20px;
+    border-radius: 20px;
+    background: var(--lang-glass);
+    border: 1px solid var(--lang-glass-border);
+}
+
+.settings-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+}
+
+.settings-slider-row label { flex: 1 1 140px; font-size: 14px; }
+
+.settings-slider-row input[type="range"] {
+    flex: 2 1 160px;
+    accent-color: var(--lang-cyan);
+}
+
+.settings-slider-row input[type="time"] {
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--lang-glass-border);
+    background: rgba(0,0,0,.15);
+    color: inherit;
+}
+
+/* =========================================================================
+   IDEAL DIZAYN JILOSI — chuqurroq depth, silliq animatsiyalar, aniqroq
+   fokus holatlari va yaxlit vizual til.
+   ========================================================================= */
+
+* {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-attachment: fixed;
+}
+
+.page {
+    animation: pageFadeIn .35s ease;
+}
+
+@keyframes pageFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+main button:focus-visible, nav button:focus-visible,
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--lang-cyan);
+    outline-offset: 2px;
+}
+
+main button, .roleplay-scenario-btn, .duel-option-btn, .grammar-lib-tab,
+.exam-level-tab, .idiom-tab, .reading-tab {
+    box-shadow: 0 4px 14px rgba(0,0,0,.14);
+}
+
+main button:hover, .roleplay-scenario-btn:hover, .duel-option-btn:hover:not(:disabled) {
+    box-shadow: 0 8px 20px rgba(56, 189, 248, .22);
+}
+
+::selection {
+    background: var(--lang-cyan);
+    color: #0f172a;
+}
+
+.card, .daily-goal-card, .daily-plan-card, .wotd-card, .review-due-card,
+.weekly-challenge-card, .idiom-of-day-card, .streak-freeze-card,
+.accessibility-card, .weak-areas-card {
+    box-shadow: 0 10px 28px rgba(0,0,0,.2);
+}
+
+@media (max-width: 640px) {
+    .exam-level-tabs, .idiom-tabs { flex-direction: column; }
+    .settings-slider-row { flex-direction: column; align-items: stretch; }
 }

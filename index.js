@@ -290,7 +290,11 @@ const menuButtons = {
     "premiumBtn": "premiumPage",
     "adminBtn": "adminPage",
     "roleplayBtn": "roleplayPage",
-    "duelBtn": "duelPage"
+    "duelBtn": "duelPage",
+    "grammarLibraryBtn": "grammarLibraryPage",
+    "idiomsBtn": "idiomsPage",
+    "myWordsBtn": "myWordsPage",
+    "examBtn": "examPage"
 };
 
 Object.keys(menuButtons).forEach(btnId => {
@@ -334,6 +338,18 @@ Object.keys(menuButtons).forEach(btnId => {
             }
             if (btnId === "duelBtn" && typeof renderDuelPage === "function") {
                 renderDuelPage();
+            }
+            if (btnId === "grammarLibraryBtn" && typeof renderGrammarLibrary === "function") {
+                renderGrammarLibrary();
+            }
+            if (btnId === "idiomsBtn" && typeof renderIdiomsPage === "function") {
+                renderIdiomsPage();
+            }
+            if (btnId === "myWordsBtn" && typeof renderMyWordsPage === "function") {
+                renderMyWordsPage();
+            }
+            if (btnId === "examBtn" && typeof renderExamPage === "function") {
+                renderExamPage();
             }
             syncBottomNav(menuButtons[btnId]);
         };
@@ -750,11 +766,18 @@ if (reviewDueBtn) {
 
 renderDueWidgets();
 
-if (categoryFilterEl) {
+function refreshCategoryFilter() {
+    if (!categoryFilterEl) return;
+    const prevValue = categoryFilterEl.value || "all";
     const categories = ["all", ...new Set(words.map(w => w.category))];
     categoryFilterEl.innerHTML = categories.map(c =>
         `<option value="${c}">${c === "all" ? "🗂 Barcha kategoriya" : c}</option>`
     ).join("");
+    if (categories.includes(prevValue)) categoryFilterEl.value = prevValue;
+}
+
+if (categoryFilterEl) {
+    refreshCategoryFilter();
     categoryFilterEl.addEventListener("change", buildDeck);
 }
 
@@ -827,7 +850,7 @@ if (voiceBtn) {
         if (!deck[index]) return;
         const speech = new SpeechSynthesisUtterance(getTargetWord(deck[index]));
         speech.lang = getVoiceLang();
-        speech.rate = 0.9;
+        speech.rate = (typeof getVoiceRate === "function") ? getVoiceRate() : 0.9;
         speechSynthesis.cancel();
         speechSynthesis.speak(speech);
     };
@@ -1118,6 +1141,7 @@ function correctAnswer() {
     coins += 5;
     known = Math.min(known + 1, words.length);
     incrementDailyGoal();
+    if (typeof incrementWeeklyChallenge === "function") incrementWeeklyChallenge();
     if (combo % 5 === 0) {
         coins += 20;
         alert("🔥 Combo Bonus! +20 Coin");
@@ -4047,11 +4071,16 @@ console.log("Ultimate Edition Loaded");
 // sonlar, salomlashish, grammatika asoslari. Har biri talaffuz bilan.
 // =========================================================================
 
+function getVoiceRate() {
+    const saved = parseFloat(localStorage.getItem("voiceRate"));
+    return isNaN(saved) ? 0.85 : saved;
+}
+
 function speakText(text, langCode) {
     if (!("speechSynthesis" in window) || !text) return;
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = langCode;
-    utter.rate = 0.85;
+    utter.rate = getVoiceRate();
     speechSynthesis.cancel();
     speechSynthesis.speak(utter);
 }
@@ -4985,6 +5014,73 @@ if (buyFreezeBtn) {
 }
 renderFreezeUI();
 
+// ---- Qulaylik sozlamalari: shrift o'lchami, talaffuz tezligi, eslatma vaqti ----
+const fontSizeRangeEl = document.getElementById("fontSizeRange");
+const fontSizeValueEl = document.getElementById("fontSizeValue");
+function applyFontScale(scale) {
+    document.documentElement.style.setProperty("--user-font-scale", (scale / 100).toString());
+    if (fontSizeValueEl) fontSizeValueEl.textContent = scale + "%";
+}
+if (fontSizeRangeEl) {
+    const savedScale = Number(localStorage.getItem("fontScale")) || 100;
+    fontSizeRangeEl.value = savedScale;
+    applyFontScale(savedScale);
+    fontSizeRangeEl.addEventListener("input", () => {
+        const val = Number(fontSizeRangeEl.value);
+        localStorage.setItem("fontScale", val);
+        applyFontScale(val);
+    });
+} else {
+    applyFontScale(Number(localStorage.getItem("fontScale")) || 100);
+}
+
+const voiceRateRangeEl = document.getElementById("voiceRateRange");
+const voiceRateValueEl = document.getElementById("voiceRateValue");
+if (voiceRateRangeEl) {
+    const savedRate = getVoiceRate();
+    voiceRateRangeEl.value = savedRate;
+    if (voiceRateValueEl) voiceRateValueEl.textContent = savedRate.toFixed(2) + "x";
+    voiceRateRangeEl.addEventListener("input", () => {
+        const val = parseFloat(voiceRateRangeEl.value);
+        localStorage.setItem("voiceRate", val);
+        if (voiceRateValueEl) voiceRateValueEl.textContent = val.toFixed(2) + "x";
+    });
+}
+
+const reminderTimeInputEl = document.getElementById("reminderTimeInput");
+if (reminderTimeInputEl) {
+    reminderTimeInputEl.value = localStorage.getItem("reminderTime") || "19:00";
+    reminderTimeInputEl.addEventListener("change", () => {
+        localStorage.setItem("reminderTime", reminderTimeInputEl.value);
+    });
+}
+
+// Ilova ochilganda, agar joriy vaqt foydalanuvchi belgilagan eslatma vaqtidan
+// keyin bo'lsa va bugun hali eslatma ko'rsatilmagan bo'lsa — bildirishnoma
+// beriladi. PWA fon rejimida (yopiq holatda) aniq vaqtda otish server push
+// xizmatini talab qiladi — bu esa server talab qilmaydigan eng yaqin yechim.
+function checkPersonalizedReminderTime() {
+    if (!("Notification" in window)) return;
+    if (localStorage.getItem("dailyReminder") !== "true") return;
+    if (Notification.permission !== "granted") return;
+
+    const today = new Date().toDateString();
+    if (localStorage.getItem("lastReminderDate") === today) return;
+
+    const prefTime = localStorage.getItem("reminderTime") || "19:00";
+    const [h, m] = prefTime.split(":").map(Number);
+    const now = new Date();
+    const target = new Date();
+    target.setHours(h, m, 0, 0);
+    if (now < target) return;
+
+    localStorage.setItem("lastReminderDate", today);
+    new Notification("English Master Pro", {
+        body: "⏰ Sizning shaxsiy eslatma vaqtingiz keldi — bugungi mashqni bajarib qo'ying!"
+    });
+}
+checkPersonalizedReminderTime();
+
 updateDailyStreak();
 
 console.log("Sentence Builder + Speed Round + Grammar Quiz + Daily Streak Loaded");
@@ -5159,6 +5255,8 @@ function renderExtraStats() {
 
     if (xpToNextEl) xpToNextEl.textContent = xp;
     if (xpFillEl) xpFillEl.style.width = Math.min(100, xp) + "%";
+
+    if (typeof renderWeakAreas === "function") renderWeakAreas();
 }
 
 renderExtraStats();
@@ -5675,3 +5773,677 @@ function startDuelPlay(enWords, onFinish, feedbackTargetId) {
 }
 
 console.log("Roleplay + Streak-Freeze + SRS Dashboard + Friend Duel Loaded");
+
+// =========================================================================
+// HAFTALIK CHALLENGE — hafta davomida (Dushanbadan boshlab) to'g'ri
+// javoblar soni hisoblanadi, 50 taga yetganda bonus beriladi.
+// =========================================================================
+
+const WEEKLY_GOAL = 50;
+
+function getWeekStartStr() {
+    const now = new Date();
+    const day = now.getDay(); // 0=Yakshanba ... 1=Dushanba
+    const diffToMonday = (day === 0) ? 6 : day - 1;
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - diffToMonday);
+    monday.setHours(0, 0, 0, 0);
+    return monday.toISOString().slice(0, 10);
+}
+
+function getWeeklyState() {
+    let state;
+    try {
+        state = JSON.parse(localStorage.getItem("weeklyChallenge") || "null");
+    } catch (e) { state = null; }
+    const weekStart = getWeekStartStr();
+    if (!state || state.weekStart !== weekStart) {
+        state = { weekStart, count: 0, bonusGiven: false };
+        localStorage.setItem("weeklyChallenge", JSON.stringify(state));
+    }
+    return state;
+}
+
+function incrementWeeklyChallenge() {
+    const state = getWeeklyState();
+    state.count = Math.min(WEEKLY_GOAL, state.count + 1);
+    if (state.count >= WEEKLY_GOAL && !state.bonusGiven) {
+        state.bonusGiven = true;
+        coins += 40;
+        xp += 30;
+        if (typeof saveGame === "function") saveGame();
+        if (typeof celebrate === "function") celebrate();
+        setTimeout(() => alert("🏁 Haftalik challenge bajarildi! +40 tanga, +30 XP oldingiz!"), 300);
+    }
+    localStorage.setItem("weeklyChallenge", JSON.stringify(state));
+    renderWeeklyChallenge();
+}
+
+function renderWeeklyChallenge() {
+    const state = getWeeklyState();
+    const countEl = document.getElementById("weeklyChallengeCount");
+    const fillEl = document.getElementById("weeklyChallengeFill");
+    const noteEl = document.getElementById("weeklyChallengeNote");
+    if (countEl) countEl.textContent = `${state.count} / ${WEEKLY_GOAL} so'z`;
+    if (fillEl) fillEl.style.width = Math.min(100, (state.count / WEEKLY_GOAL) * 100) + "%";
+    if (noteEl) {
+        noteEl.textContent = state.count >= WEEKLY_GOAL
+            ? "🎉 Bu haftalik maqsad bajarildi! Keyingi hafta yangi challenge boshlanadi."
+            : `Yana ${WEEKLY_GOAL - state.count} ta to'g'ri javob — va +40 tanga, +30 XP sizniki!`;
+    }
+}
+
+renderWeeklyChallenge();
+
+
+// =========================================================================
+// KUNNING IDIOMASI (Idiom of the Day) — bosh sahifada har kuni bitta
+// yangi idioma yoki frazaviy fe'l ko'rsatiladi.
+// =========================================================================
+
+const IDIOMS_DATA = [
+    { type: "idiom", en: "Break the ice", uz: "Muzni eritmoq (noqulaylikni yo'qotib, suhbatni boshlash)", example: "He told a joke to break the ice at the meeting." },
+    { type: "idiom", en: "Piece of cake", uz: "Juda oson ish", example: "Don't worry, this exam will be a piece of cake." },
+    { type: "idiom", en: "Hit the books", uz: "Qattiq o'qishga o'tirmoq", example: "I need to hit the books before the test." },
+    { type: "idiom", en: "Under the weather", uz: "O'zini yomon his qilmoq (kasal)", example: "I'm feeling a bit under the weather today." },
+    { type: "idiom", en: "Cost an arm and a leg", uz: "Juda qimmat turmoq", example: "That new phone costs an arm and a leg." },
+    { type: "idiom", en: "Once in a blue moon", uz: "Juda kamdan-kam", example: "We only meet once in a blue moon." },
+    { type: "idiom", en: "Let the cat out of the bag", uz: "Sirni oshkor qilib qo'ymoq", example: "She let the cat out of the bag about the surprise party." },
+    { type: "idiom", en: "On the ball", uz: "Diqqatli, tez tushunuvchan", example: "Our new manager is really on the ball." },
+    { type: "idiom", en: "Speak of the devil", uz: "Kimnidir eslasang, o'shanda paydo bo'lishi", example: "Speak of the devil — here comes Alex now!" },
+    { type: "idiom", en: "Time flies", uz: "Vaqt tez o'tadi", example: "Time flies when you're having fun." },
+    { type: "phrasal", en: "Give up", uz: "Voz kechmoq", example: "Never give up on your dreams." },
+    { type: "phrasal", en: "Look forward to", uz: "Intiqlik bilan kutmoq", example: "I look forward to seeing you soon." },
+    { type: "phrasal", en: "Run out of", uz: "Tugab qolmoq", example: "We ran out of milk this morning." },
+    { type: "phrasal", en: "Get along with", uz: "Kelishib yashamoq/ishlashmoq", example: "She gets along with everyone at work." },
+    { type: "phrasal", en: "Put off", uz: "Kechiktirmoq", example: "Don't put off your homework until tomorrow." },
+    { type: "phrasal", en: "Turn down", uz: "Rad etmoq", example: "He turned down the job offer." },
+    { type: "phrasal", en: "Figure out", uz: "Yechim topmoq, tushunib olmoq", example: "I can't figure out this math problem." },
+    { type: "phrasal", en: "Take off", uz: "Yechmoq / (samolyot) uchib ketmoq", example: "The plane will take off in ten minutes." },
+    { type: "phrasal", en: "Bring up", uz: "Mavzuni ko'tarib chiqmoq / tarbiyalamoq", example: "She was brought up by her grandparents." },
+    { type: "phrasal", en: "Come across", uz: "Tasodifan duch kelmoq", example: "I came across an old photo yesterday." }
+];
+
+function getIdiomOfDay() {
+    const dayIndex = Math.floor(Date.now() / (24 * 60 * 60 * 1000));
+    return IDIOMS_DATA[dayIndex % IDIOMS_DATA.length];
+}
+
+function renderIdiomOfDay() {
+    const el = document.getElementById("idiomOfDayText");
+    if (!el) return;
+    const idiom = getIdiomOfDay();
+    el.innerHTML = `
+        <div class="idiom-of-day-main">${idiom.en}</div>
+        <div class="idiom-of-day-uz">${idiom.uz}</div>
+        <div class="idiom-of-day-example">"${idiom.example}"</div>
+    `;
+}
+renderIdiomOfDay();
+
+function renderIdiomsPage() {
+    renderIdiomsList("idiom");
+    document.querySelectorAll(".idiom-tab").forEach(tab => {
+        tab.classList.toggle("active", tab.dataset.cat === "idiom");
+    });
+}
+
+function renderIdiomsList(cat) {
+    const container = document.getElementById("idiomsList");
+    if (!container) return;
+    const items = IDIOMS_DATA.filter(i => i.type === cat);
+    container.innerHTML = items.map(i => `
+        <div class="idiom-card">
+            <div class="idiom-card-top">
+                <b>${i.en}</b>
+                <button class="idiom-speak-btn" data-speak="${i.en.replace(/"/g, "&quot;")}">🔊</button>
+            </div>
+            <div class="idiom-card-uz">${i.uz}</div>
+            <div class="idiom-card-example">"${i.example}"</div>
+        </div>
+    `).join("");
+    container.querySelectorAll("[data-speak]").forEach(btn => {
+        btn.addEventListener("click", () => speakText(btn.dataset.speak, "en-US"));
+    });
+}
+
+document.querySelectorAll(".idiom-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+        document.querySelectorAll(".idiom-tab").forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        renderIdiomsList(tab.dataset.cat);
+    });
+});
+
+
+// =========================================================================
+// KUCHSIZ TOMONLAR TAHLILI (Weak Areas Dashboard) — mistakeWords ro'yxatini
+// so'z kategoriyasi bo'yicha guruhlab, eng ko'p xato qilingan mavzularni
+// ko'rsatadi.
+// =========================================================================
+
+function renderWeakAreas() {
+    const container = document.getElementById("weakAreasList");
+    if (!container) return;
+
+    const mistakes = getMistakeWords();
+    const byCategory = {};
+    Object.keys(mistakes).forEach(en => {
+        const w = words.find(x => x.en === en);
+        const cat = w ? (w.category || "Boshqa") : "Boshqa";
+        byCategory[cat] = (byCategory[cat] || 0) + mistakes[en];
+    });
+
+    const entries = Object.entries(byCategory).sort((a, b) => b[1] - a[1]);
+    if (!entries.length) {
+        container.innerHTML = `<p class="ai-settings-hint">🎉 Hozircha xatolar yo'q — tahlil qilish uchun ma'lumot kerak.</p>`;
+        return;
+    }
+    const max = entries[0][1];
+    container.innerHTML = entries.map(([cat, count]) => `
+        <div class="weak-area-row">
+            <div class="weak-area-label">${cat} <span>${count}</span></div>
+            <div class="weak-area-track"><div class="weak-area-fill" style="width:${(count / max) * 100}%"></div></div>
+        </div>
+    `).join("");
+}
+
+
+// =========================================================================
+// GRAMMATIKA QO'LLANMASI (Grammar Library) — asosiy qoidalar, qisqa va
+// aniq tushuntirish + misollar bilan.
+// =========================================================================
+
+const GRAMMAR_LIBRARY = [
+    {
+        id: "tenses",
+        title: "⏳ Zamonlar (Tenses)",
+        items: [
+            { rule: "Present Simple", desc: "Doimiy holat yoki odat uchun ishlatiladi.", example: "She works every day. / I don't like coffee." },
+            { rule: "Present Continuous", desc: "Hozir sodir bo'layotgan harakat uchun.", example: "I am reading a book right now." },
+            { rule: "Past Simple", desc: "O'tган tugallangan harakat uchun.", example: "They visited Samarkand last year." },
+            { rule: "Future Simple", desc: "Kelasi vaqtdagi harakat uchun.", example: "We will travel to London next month." },
+            { rule: "Present Perfect", desc: "O'tmishda boshlangan, natijasi hozirgacha dolzarb harakat uchun.", example: "I have finished my homework." }
+        ]
+    },
+    {
+        id: "articles",
+        title: "📎 Artikllar (a / an / the)",
+        items: [
+            { rule: "a / an", desc: "Noaniq artikl — birinchi marta tilga olinayotgan, sanaladigan ot uchun. 'an' unli tovush oldidan.", example: "I saw a cat. She has an apple." },
+            { rule: "the", desc: "Aniq artikl — allaqachon ma'lum bo'lgan narsa uchun.", example: "The cat I saw yesterday was black." },
+            { rule: "artiklsiz", desc: "Ko'plik va sanalmaydigan otlarda umumiy holatda artikl ishlatilmaydi.", example: "I love music. Dogs are loyal animals." }
+        ]
+    },
+    {
+        id: "prepositions",
+        title: "🧭 Predloglar (Prepositions)",
+        items: [
+            { rule: "in", desc: "Katta joy, oy, yil ichida.", example: "I live in Tashkent. She was born in 2001." },
+            { rule: "on", desc: "Kun, sana, sirt ustida.", example: "The meeting is on Monday. The book is on the table." },
+            { rule: "at", desc: "Aniq vaqt yoki nuqta.", example: "We meet at 6 PM. He is at the door." }
+        ]
+    },
+    {
+        id: "modals",
+        title: "🔑 Modal fe'llar",
+        items: [
+            { rule: "can / could", desc: "Qobiliyat yoki ruxsat.", example: "I can swim. Could you help me?" },
+            { rule: "must / have to", desc: "Majburiyat.", example: "You must wear a seatbelt." },
+            { rule: "should", desc: "Tavsiya.", example: "You should see a doctor." }
+        ]
+    },
+    {
+        id: "conditionals",
+        title: "🔀 Shart gaplar (Conditionals)",
+        items: [
+            { rule: "Zero Conditional", desc: "Umumiy haqiqat.", example: "If you heat ice, it melts." },
+            { rule: "First Conditional", desc: "Real kelajakdagi shart.", example: "If it rains, I will stay home." },
+            { rule: "Second Conditional", desc: "Xayoliy/hozirgi vaziyat.", example: "If I had money, I would travel." }
+        ]
+    }
+];
+
+function renderGrammarLibrary() {
+    const tabsEl = document.getElementById("grammarLibTabs");
+    if (tabsEl && !tabsEl.dataset.built) {
+        tabsEl.innerHTML = GRAMMAR_LIBRARY.map((g, i) =>
+            `<button class="grammar-lib-tab${i === 0 ? " active" : ""}" data-id="${g.id}">${g.title}</button>`
+        ).join("");
+        tabsEl.dataset.built = "1";
+        tabsEl.querySelectorAll(".grammar-lib-tab").forEach(btn => {
+            btn.addEventListener("click", () => {
+                tabsEl.querySelectorAll(".grammar-lib-tab").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                renderGrammarLibContent(btn.dataset.id);
+            });
+        });
+    }
+    renderGrammarLibContent(GRAMMAR_LIBRARY[0].id);
+}
+
+function renderGrammarLibContent(id) {
+    const content = document.getElementById("grammarLibContent");
+    if (!content) return;
+    const topic = GRAMMAR_LIBRARY.find(g => g.id === id);
+    if (!topic) return;
+    content.innerHTML = topic.items.map(item => `
+        <div class="grammar-box">
+            <h4>${item.rule}</h4>
+            <p>${item.desc}</p>
+            <p class="grammar-example">💬 ${item.example}</p>
+        </div>
+    `).join("");
+}
+
+
+// =========================================================================
+// MENING SO'ZLARIM (Custom Vocabulary) — foydalanuvchi o'zi qo'shgan so'zlar
+// asosiy `words` massiviga qo'shiladi, shu bilan flashcard/quiz/SRS avtomatik
+// ularni ham qamrab oladi ("Mening so'zlarim" kategoriyasi ostida).
+// =========================================================================
+
+const CUSTOM_CATEGORY = "Mening so'zlarim";
+
+function getCustomWords() {
+    try {
+        return JSON.parse(localStorage.getItem("customWords") || "[]");
+    } catch (e) { return []; }
+}
+
+function saveCustomWords(list) {
+    localStorage.setItem("customWords", JSON.stringify(list));
+}
+
+// Sahifa yuklanganda avval saqlangan shaxsiy so'zlarni asosiy `words`
+// massiviga qo'shib qo'yamiz — shunda ular kartochka, test va SRS'da
+// avtomatik ishtirok etadi.
+(function loadCustomWordsIntoDeck() {
+    const custom = getCustomWords();
+    custom.forEach(w => {
+        if (!words.some(x => x.en === w.en)) {
+            words.push({
+                en: w.en, uz: w.uz,
+                example: w.example || `${w.en}.`,
+                ru: w.en, ruExample: w.example || `${w.en}.`,
+                category: CUSTOM_CATEGORY
+            });
+        }
+    });
+    if (typeof refreshCategoryFilter === "function") refreshCategoryFilter();
+})();
+
+function renderMyWordsPage() {
+    const list = getCustomWords();
+    const container = document.getElementById("myWordsList");
+    if (!container) return;
+    if (!list.length) {
+        container.innerHTML = `<p class="ai-settings-hint">Hali so'z qo'shmadingiz. Yuqoridagi formadan birinchi so'zingizni qo'shing!</p>`;
+        return;
+    }
+    container.innerHTML = list.map((w, i) => `
+        <div class="phrase-row">
+            <button class="phrase-speak" data-speak="${w.en.replace(/"/g, "&quot;")}">🔊</button>
+            <div class="phrase-texts">
+                <div class="phrase-main">${w.en}</div>
+                <div class="phrase-uz">${w.uz}${w.example ? " · " + w.example : ""}</div>
+            </div>
+            <button class="my-word-delete-btn" data-idx="${i}">🗑</button>
+        </div>
+    `).join("");
+    container.querySelectorAll("[data-speak]").forEach(el => {
+        el.addEventListener("click", () => speakText(el.dataset.speak, "en-US"));
+    });
+    container.querySelectorAll(".my-word-delete-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const idx = Number(btn.dataset.idx);
+            const current = getCustomWords();
+            const removed = current.splice(idx, 1)[0];
+            saveCustomWords(current);
+            if (removed) {
+                const wIdx = words.findIndex(x => x.en === removed.en && x.category === CUSTOM_CATEGORY);
+                if (wIdx !== -1) words.splice(wIdx, 1);
+            }
+            if (typeof refreshCategoryFilter === "function") refreshCategoryFilter();
+            renderMyWordsPage();
+        });
+    });
+}
+
+const myWordAddBtn = document.getElementById("myWordAddBtn");
+if (myWordAddBtn) {
+    myWordAddBtn.addEventListener("click", () => {
+        const enInput = document.getElementById("myWordEn");
+        const uzInput = document.getElementById("myWordUz");
+        const exInput = document.getElementById("myWordExample");
+        const statusEl = document.getElementById("myWordsStatus");
+
+        const en = enInput ? enInput.value.trim() : "";
+        const uz = uzInput ? uzInput.value.trim() : "";
+        const example = exInput ? exInput.value.trim() : "";
+
+        if (!en || !uz) {
+            if (statusEl) statusEl.innerHTML = "❌ Iltimos, ingliz va o'zbek so'zini kiriting.";
+            return;
+        }
+        if (words.some(w => w.en.toLowerCase() === en.toLowerCase())) {
+            if (statusEl) statusEl.innerHTML = "⚠️ Bu so'z lug'atda allaqachon mavjud.";
+            return;
+        }
+
+        const list = getCustomWords();
+        const entry = { en, uz, example };
+        list.push(entry);
+        saveCustomWords(list);
+
+        words.push({
+            en, uz, example: example || `${en}.`,
+            ru: en, ruExample: example || `${en}.`,
+            category: CUSTOM_CATEGORY
+        });
+        if (typeof refreshCategoryFilter === "function") refreshCategoryFilter();
+
+        enInput.value = ""; uzInput.value = ""; exInput.value = "";
+        if (statusEl) statusEl.innerHTML = "✅ So'z qo'shildi! Endi u kartochka va testlarda ham chiqadi.";
+        renderMyWordsPage();
+        coins += 3;
+        if (typeof saveGame === "function") saveGame();
+    });
+}
+
+
+// =========================================================================
+// IMTIHON REJIMI (Exam Prep Mode) — darajaga mos, vaqt bilan cheklangan
+// 20 savolli sinov (IELTS/CEFR uslubidagi tez tekshiruv).
+// =========================================================================
+
+let examLevel = "beginner";
+let examState = null;
+
+document.querySelectorAll(".exam-level-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+        document.querySelectorAll(".exam-level-tab").forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        examLevel = tab.dataset.lvl;
+    });
+});
+
+function renderExamPage() {
+    document.getElementById("examIntro").style.display = "";
+    document.getElementById("examPlayArea").style.display = "none";
+    document.getElementById("examResultArea").innerHTML = "";
+}
+
+function getExamWordPool(level) {
+    // Sodda taxminiy daraja bo'linishi: so'z uzunligiga qarab (real CEFR
+    // lug'at darajalash tizimi bo'lmagani uchun eng yaqin yondashuv).
+    if (level === "beginner") return words.filter(w => w.en.length <= 5);
+    if (level === "advanced") return words.filter(w => w.en.length >= 7);
+    return words.filter(w => w.en.length > 5 && w.en.length < 7);
+}
+
+const examStartBtn = document.getElementById("examStartBtn");
+if (examStartBtn) {
+    examStartBtn.addEventListener("click", () => {
+        let pool = getExamWordPool(examLevel);
+        if (pool.length < 20) pool = words;
+        const chosen = [...pool].sort(() => Math.random() - 0.5).slice(0, 20);
+
+        examState = {
+            questions: chosen.map(buildDuelQuestion).filter(Boolean),
+            index: 0,
+            score: 0,
+            timeLeft: 180
+        };
+
+        document.getElementById("examIntro").style.display = "none";
+        const playArea = document.getElementById("examPlayArea");
+        playArea.style.display = "";
+
+        if (window.__examTimer) clearInterval(window.__examTimer);
+        window.__examTimer = setInterval(() => {
+            examState.timeLeft--;
+            if (examState.timeLeft <= 0) {
+                clearInterval(window.__examTimer);
+                finishExam();
+                return;
+            }
+            renderExamQuestion(true);
+        }, 1000);
+
+        renderExamQuestion();
+    });
+}
+
+function renderExamQuestion(timerOnly) {
+    const playArea = document.getElementById("examPlayArea");
+    if (!playArea || !examState) return;
+    const min = Math.floor(examState.timeLeft / 60);
+    const sec = String(examState.timeLeft % 60).padStart(2, "0");
+
+    if (timerOnly) {
+        const timerEl = playArea.querySelector(".exam-timer");
+        if (timerEl) timerEl.textContent = `⏱️ ${min}:${sec}`;
+        return;
+    }
+
+    if (examState.index >= examState.questions.length) {
+        finishExam();
+        return;
+    }
+    const q = examState.questions[examState.index];
+    playArea.innerHTML = `
+        <div class="exam-question-card">
+            <div class="exam-top-row">
+                <span class="exam-timer">⏱️ ${min}:${sec}</span>
+                <span>${examState.index + 1} / ${examState.questions.length}</span>
+            </div>
+            <h3>${q.en}</h3>
+            <div class="duel-options"></div>
+        </div>
+    `;
+    const optWrap = playArea.querySelector(".duel-options");
+    q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "duel-option-btn";
+        btn.textContent = opt;
+        btn.addEventListener("click", () => {
+            const isCorrect = opt === q.correct;
+            btn.classList.add(isCorrect ? "correct" : "wrong");
+            if (isCorrect) examState.score++;
+            optWrap.querySelectorAll("button").forEach(b => b.disabled = true);
+            setTimeout(() => { examState.index++; renderExamQuestion(); }, 450);
+        });
+        optWrap.appendChild(btn);
+    });
+}
+
+function finishExam() {
+    if (window.__examTimer) clearInterval(window.__examTimer);
+    const playArea = document.getElementById("examPlayArea");
+    if (playArea) playArea.style.display = "none";
+    const resultArea = document.getElementById("examResultArea");
+    if (!resultArea || !examState) return;
+
+    const total = examState.questions.length;
+    const pct = Math.round((examState.score / total) * 100);
+    let band;
+    if (pct >= 85) band = "🏆 A'lo natija!";
+    else if (pct >= 60) band = "👍 Yaxshi natija";
+    else band = "💪 Mashq qilishda davom eting";
+
+    resultArea.innerHTML = `
+        <div class="duel-result-card">
+            <p>Natija: <b>${examState.score}/${total}</b> (${pct}%)</p>
+            <p class="duel-verdict">${band}</p>
+        </div>
+    `;
+    coins += Math.round(pct / 5);
+    xp += Math.round(pct / 4);
+    if (typeof saveGame === "function") saveGame();
+    if (pct >= 60 && typeof celebrate === "function") celebrate();
+    document.getElementById("examIntro").style.display = "";
+}
+
+
+// =========================================================================
+// MAQOLA O'QISH (Reading, click-to-translate) — bir nechta qisqa matn,
+// har bir so'zga bosilganda darhol tarjimasi ko'rsatiladi.
+// =========================================================================
+
+const READING_PASSAGES = [
+    {
+        title: "My Daily Routine",
+        text: "I wake up early every morning. I brush my teeth and eat breakfast with my family. Then I go to school by bus. After school, I do my homework and play with my friends.",
+        question: "What does the person do after school?",
+        answerContains: "homework"
+    },
+    {
+        title: "A Trip to the City",
+        text: "Last weekend, we visited a big city. We saw tall buildings and busy streets. We ate delicious food in a small restaurant. In the evening, we watched the beautiful lights from a bridge.",
+        question: "What did they eat in?",
+        answerContains: "restaurant"
+    },
+    {
+        title: "Learning a New Language",
+        text: "Learning English every day improves your communication skills. It helps you meet new people, travel easily, and find better jobs. Practice a little every day and never give up.",
+        question: "What improves your communication skills?",
+        answerContains: "learning english"
+    },
+    {
+        title: "Healthy Habits",
+        text: "Drinking water, eating vegetables, and sleeping well keep your body healthy. Exercise also makes you stronger and happier. Small daily habits create a big difference over time.",
+        question: "What keeps your body healthy?",
+        answerContains: "water"
+    }
+];
+
+let currentReadingIndex = 0;
+
+// Yaqin (offline) tarjima uchun asosiy lug'atdan (`words`) foydalanamiz,
+// topilmasa umumiy xabar chiqadi.
+function translateSingleWord(rawWord) {
+    const clean = rawWord.toLowerCase().replace(/[^a-z']/g, "");
+    if (!clean) return null;
+    const found = words.find(w => w.en.toLowerCase() === clean);
+    if (found) return found.uz;
+    return null;
+}
+
+function renderReadingPassageTabs() {
+    const tabsEl = document.getElementById("readingPassageTabs");
+    if (!tabsEl) return;
+    tabsEl.innerHTML = READING_PASSAGES.map((p, i) =>
+        `<button class="reading-tab${i === currentReadingIndex ? " active" : ""}" data-idx="${i}">${p.title}</button>`
+    ).join("");
+    tabsEl.querySelectorAll(".reading-tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+            currentReadingIndex = Number(btn.dataset.idx);
+            renderReadingPassageTabs();
+            renderReadingPassage();
+        });
+    });
+}
+
+function renderReadingPassage() {
+    const textEl = document.getElementById("readingText");
+    const translationEl = document.getElementById("readingWordTranslation");
+    const answerEl = document.getElementById("readingAnswer");
+    const resultEl = document.getElementById("readingResult");
+    if (!textEl) return;
+
+    const passage = READING_PASSAGES[currentReadingIndex];
+    const tokens = passage.text.split(/(\s+)/);
+    textEl.innerHTML = tokens.map(tok => {
+        if (/^\s+$/.test(tok) || !tok) return tok;
+        return `<span class="reading-word" data-word="${tok.replace(/"/g, "&quot;")}">${tok}</span>`;
+    }).join("");
+
+    textEl.querySelectorAll(".reading-word").forEach(span => {
+        span.addEventListener("click", () => {
+            const uz = translateSingleWord(span.dataset.word);
+            if (translationEl) {
+                translationEl.innerHTML = uz
+                    ? `<b>${span.dataset.word.replace(/[^a-zA-Z']/g, "")}</b> — ${uz}`
+                    : `<b>${span.dataset.word.replace(/[^a-zA-Z']/g, "")}</b> — lug'atda topilmadi`;
+            }
+            speakText(span.dataset.word.replace(/[^a-zA-Z']/g, ""), "en-US");
+        });
+    });
+
+    if (translationEl) translationEl.innerHTML = "";
+    if (answerEl) { answerEl.value = ""; answerEl.placeholder = passage.question; }
+    if (resultEl) resultEl.innerHTML = "";
+}
+
+renderReadingPassageTabs();
+renderReadingPassage();
+
+const checkReadingBtn2 = document.getElementById("checkReading");
+if (checkReadingBtn2) {
+    checkReadingBtn2.onclick = () => {
+        const readingAnswerEl = document.getElementById("readingAnswer");
+        const answer = readingAnswerEl ? readingAnswerEl.value.toLowerCase() : "";
+        const out = document.getElementById("readingResult");
+        const passage = READING_PASSAGES[currentReadingIndex];
+        if (answer.includes(passage.answerContains)) {
+            if (out) out.innerHTML = "✅ To'g'ri javob!";
+            coins += 10;
+            xp += 5;
+            if (typeof saveGame === "function") saveGame();
+            if (typeof celebrate === "function") celebrate();
+        } else {
+            if (out) out.innerHTML = "❌ Yana urinib ko'ring. Matnni diqqat bilan qayta o'qing.";
+        }
+    };
+}
+
+
+// =========================================================================
+// DIKTANT — SO'Z DARAJASIDAGI TAQQOSLASH (Word-level Dictation Diff)
+// Avvalgi versiya butun gapni "to'g'ri/xato" deb solishtirardi. Endi har
+// bir so'z alohida solishtirilib, aynan qaysi so'zda xato borligi
+// ko'rsatiladi — bu o'quvchiga aniq nima ustida ishlash kerakligini beradi.
+// =========================================================================
+
+const checkListeningBtn2 = document.getElementById("checkListening");
+if (checkListeningBtn2) {
+    checkListeningBtn2.onclick = () => {
+        const inputEl = document.getElementById("listeningAnswer");
+        const resultEl = document.getElementById("listeningResult");
+        if (!resultEl) return;
+
+        const clean = (s) => s.toLowerCase().replace(/[.!?,]+$/, "").trim();
+        const typedWords = clean(inputEl ? inputEl.value : "").split(/\s+/).filter(Boolean);
+        const targetWords = clean(listeningState.sentence).split(/\s+/).filter(Boolean);
+
+        if (!typedWords.length) {
+            resultEl.textContent = "❌ Avval eshitganingizni yozing.";
+            resultEl.className = "listening-result wrong";
+            return;
+        }
+
+        const maxLen = Math.max(typedWords.length, targetWords.length);
+        let correctCount = 0;
+        const diffHtml = targetWords.map((word, i) => {
+            const match = typedWords[i] && typedWords[i] === word;
+            if (match) correctCount++;
+            return `<span class="dictation-word ${match ? "dictation-correct" : "dictation-wrong"}">${word}</span>`;
+        }).join(" ");
+
+        const allCorrect = correctCount === targetWords.length && typedWords.length === targetWords.length;
+
+        if (allCorrect) {
+            xp += 10;
+            updateStats();
+            resultEl.innerHTML = "✅ To'g'ri! Ajoyib eshitib tushundingiz.";
+            resultEl.className = "listening-result correct";
+            if (typeof celebrate === "function") celebrate();
+        } else {
+            resultEl.innerHTML = `So'zma-so'z solishtiruv (yashil = to'g'ri, qizil = xato):<br>${diffHtml}`;
+            resultEl.className = "listening-result wrong";
+        }
+    };
+}
+
+console.log("Weekly Challenge + Idioms + Grammar Library + My Words + Exam Mode + Reading + Dictation Diff Loaded");

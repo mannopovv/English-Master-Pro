@@ -76,6 +76,10 @@
             <button id="assistantBtn">💬 AI Assistant</button>
             <button id="roleplayBtn">🎭 Rolli suhbat</button>
             <button id="duelBtn">🤝 Do'st bilan raqobat</button>
+            <button id="grammarLibraryBtn">📘 Grammatika qo'llanmasi</button>
+            <button id="idiomsBtn">💬 Idiomalar</button>
+            <button id="myWordsBtn">📝 Mening so'zlarim</button>
+            <button id="examBtn">🎯 Imtihon rejimi</button>
             <button id="courseBtn">📖 Lug'at</button>
             <button id="aiToolsBtn">🛠 Tarjima</button>
             <button id="speakingBtn">🎤 Speaking</button>
@@ -115,6 +119,22 @@
                     <span>Bugun takrorlash kerak: <b id="reviewDueCount">0</b> ta so'z</span>
                 </div>
                 <button id="reviewDueBtn">Takrorlashni boshlash</button>
+            </div>
+
+            <div class="weekly-challenge-card" id="weeklyChallengeCard">
+                <div class="weekly-challenge-header">
+                    <span>🏁 Haftalik challenge</span>
+                    <span id="weeklyChallengeCount">0 / 50 so'z</span>
+                </div>
+                <div class="daily-goal-track">
+                    <div id="weeklyChallengeFill" class="daily-goal-fill"></div>
+                </div>
+                <div id="weeklyChallengeNote" class="ai-settings-hint"></div>
+            </div>
+
+            <div class="idiom-of-day-card" id="idiomOfDayCard">
+                <div class="wotd-label">💬 Kunning idiomasi</div>
+                <div id="idiomOfDayText"></div>
             </div>
 
             <div class="daily-plan-card">
@@ -356,6 +376,56 @@
             <div id="duelPlayArea" class="duel-play-area" style="display:none;"></div>
             <div id="duelResultArea"></div>
         </section>
+
+        <!-- GRAMMAR LIBRARY -->
+        <section id="grammarLibraryPage" class="page tool-page">
+            <h2>📘 Grammatika qo'llanmasi</h2>
+            <p class="ai-settings-hint">Ingliz tili grammatikasining asosiy qoidalari — tez qarab olish uchun qisqa va aniq tushuntirishlar bilan.</p>
+            <div class="grammar-lib-tabs" id="grammarLibTabs"></div>
+            <div id="grammarLibContent"></div>
+        </section>
+
+        <!-- IDIOMS & PHRASAL VERBS -->
+        <section id="idiomsPage" class="page tool-page">
+            <h2>💬 Idiomalar va frazaviy fe'llar</h2>
+            <p class="ai-settings-hint">Kundalik nutqda ko'p ishlatiladigan iboralar. Har birini tinglab, misol bilan o'rganing.</p>
+            <div class="idiom-tabs" id="idiomTabs">
+                <button class="idiom-tab active" data-cat="idiom">💬 Idiomalar</button>
+                <button class="idiom-tab" data-cat="phrasal">🔗 Frazaviy fe'llar</button>
+            </div>
+            <div id="idiomsList" class="idioms-list"></div>
+        </section>
+
+        <!-- MY WORDS (custom vocabulary) -->
+        <section id="myWordsPage" class="page tool-page">
+            <h2>📝 Mening so'zlarim</h2>
+            <p class="ai-settings-hint">O'zingizga kerakli so'zlarni qo'shing — ular avtomatik ravishda kartochka va testlarga qo'shiladi.</p>
+            <div class="my-word-form">
+                <input type="text" id="myWordEn" placeholder="Inglizcha so'z (masalan: Achieve)">
+                <input type="text" id="myWordUz" placeholder="O'zbekcha tarjimasi (masalan: Erishmoq)">
+                <input type="text" id="myWordExample" placeholder="Misol gap (ixtiyoriy)">
+                <button id="myWordAddBtn">➕ Qo'shish</button>
+            </div>
+            <div id="myWordsStatus"></div>
+            <div id="myWordsList" class="my-words-list"></div>
+        </section>
+
+        <!-- EXAM PREP MODE -->
+        <section id="examPage" class="page tool-page">
+            <h2>🎯 Imtihon rejimi</h2>
+            <p class="ai-settings-hint">Darajangizga mos, vaqt bilan cheklangan sinov — imtihonga (IELTS/CEFR uslubida) tayyorlanish uchun.</p>
+            <div class="exam-level-tabs" id="examLevelTabs">
+                <button class="exam-level-tab active" data-lvl="beginner">🌱 A1-A2</button>
+                <button class="exam-level-tab" data-lvl="intermediate">🌿 B1-B2</button>
+                <button class="exam-level-tab" data-lvl="advanced">🌳 C1</button>
+            </div>
+            <div id="examIntro" class="exam-intro-card">
+                <p>20 ta savol, 3 daqiqa vaqt. Tayyor bo'lsangiz boshlang!</p>
+                <button id="examStartBtn">▶️ Imtihonni boshlash</button>
+            </div>
+            <div id="examPlayArea" class="exam-play-area" style="display:none;"></div>
+            <div id="examResultArea"></div>
+        </section>
  
         
         <section id="statsPage" class="page">
@@ -380,6 +450,12 @@
             </div>
 
             <div id="recommendationCard" class="recommendation-card"></div>
+
+            <div class="weak-areas-card">
+                <h3>🎯 Kuchsiz tomonlar tahlili</h3>
+                <p class="ai-settings-hint">Qaysi mavzularda ko'proq xato qilayotganingiz — shu joylarga ko'proq e'tibor bering.</p>
+                <div id="weakAreasList"></div>
+            </div>
         </section>
 
         <section id="certificatePage" class="page tool-page">
@@ -432,6 +508,25 @@
                     <span>Sizda: <b id="freezeCount">0</b> ta himoya bor</span>
                     <button id="buyFreezeBtn">🧊 Sotib olish (50 tanga)</button>
                 </div>
+            </div>
+
+            <div class="accessibility-card">
+                <h3>👁️ Qulaylik sozlamalari</h3>
+                <div class="settings-slider-row">
+                    <label for="fontSizeRange">🔤 Shrift o'lchami</label>
+                    <input type="range" id="fontSizeRange" min="90" max="130" step="5" value="100">
+                    <span id="fontSizeValue">100%</span>
+                </div>
+                <div class="settings-slider-row">
+                    <label for="voiceRateRange">🔊 Talaffuz tezligi</label>
+                    <input type="range" id="voiceRateRange" min="0.6" max="1.3" step="0.05" value="0.9">
+                    <span id="voiceRateValue">0.9x</span>
+                </div>
+                <div class="settings-slider-row">
+                    <label for="reminderTimeInput">⏰ Eslatma vaqti</label>
+                    <input type="time" id="reminderTimeInput" value="19:00">
+                </div>
+                <p class="ai-settings-hint" id="reminderTimeHint">Ilova shu vaqtdan keyin ochilganda, agar bugun hali eslatma ko'rsatilmagan bo'lsa, bildirishnoma beriladi. (Brauzer PWA'lari ilova yopiq holda aniq vaqtda bildirishnoma yubora olmaydi — bu eng yaqin ishlaydigan yechim.)</p>
             </div>
 
             <button id="darkMode">🌙 Dark Mode</button>
@@ -628,18 +723,18 @@ Check Essay
  
 <hr>
  
-<h2>📖 Reading Test</h2>
- 
-<p id="readingText">
- 
-Learning English every day improves your communication skills.
- 
-</p>
- 
+<h2>📖 Maqola o'qish (Reading)</h2>
+<p class="ai-settings-hint">Har qanday so'zga bosing — tarjimasi shu yerda chiqadi. Oxirida tushunganingizni tekshiruvchi savolga javob bering.</p>
+
+<div class="reading-passage-tabs" id="readingPassageTabs"></div>
+
+<div id="readingText" class="reading-passage-text"></div>
+<div id="readingWordTranslation" class="reading-word-translation"></div>
+
 <input
 id="readingAnswer"
-placeholder="What improves your communication skills?">
- 
+placeholder="Savolga javob yozing">
+
 <button id="checkReading">
 Check
 </button>
