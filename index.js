@@ -282,6 +282,7 @@ const menuButtons = {
     "avatarBtn": "avatarPage",
     "beginnerBtn": "beginnerPage",
     "matchBtn": "matchPage",
+    "scrambleBtn": "scramblePage",
     "speedBtn": "speedPage",
     "sentenceBtn": "sentencePage",
     "grammarQuizBtn": "grammarQuizPage",
@@ -308,6 +309,9 @@ Object.keys(menuButtons).forEach(btnId => {
             }
             if (btnId === "matchBtn" && typeof startMatchRound === "function") {
                 startMatchRound();
+            }
+            if (btnId === "scrambleBtn" && typeof pickScrambleWord === "function") {
+                pickScrambleWord();
             }
             if (btnId === "beginnerBtn" && typeof renderBeginnerContent === "function") {
                 renderBeginnerContent();
@@ -3465,6 +3469,26 @@ window.addEventListener("load", () => {
     }, 1200);
 });
 
+// manifest.json'dagi "shortcuts" (masalan, uzoq bosib ilova belgisidan
+// to'g'ridan-to'g'ri "Kartochka" yoki "Sertifikat"ga o'tish) ishlashi uchun
+// ?action=... query parametrini o'qib, tegishli sahifani ochamiz.
+(function handleShortcutDeepLink() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const action = params.get("action");
+        const actionToBtn = {
+            flash: "flashBtn",
+            speed: "speedBtn",
+            ai: "aiBtn",
+            certificate: "certificateBtn2"
+        };
+        if (action && actionToBtn[action]) {
+            const btn = document.getElementById(actionToBtn[action]);
+            if (btn) window.addEventListener("load", () => setTimeout(() => btn.click(), 100));
+        }
+    } catch (e) { /* URL parametrlari mavjud bo'lmasa e'tiborsiz qoldiramiz */ }
+})();
+
 const languageSelectEl = document.getElementById("languageSelect");
 if (languageSelectEl) {
     languageSelectEl.onchange = () => {
@@ -4562,6 +4586,114 @@ const newMatchRoundBtn = document.getElementById("newMatchRound");
 if (newMatchRoundBtn) newMatchRoundBtn.addEventListener("click", startMatchRound);
 
 // =========================================================================
+// HARFLARNI TARTIBLASH (Word Scramble) — yangi o'yin: aralashtirilgan
+// harflardan to'g'ri ingliz so'zini topish.
+// =========================================================================
+
+const scrambleState = {
+    word: null,
+    letters: [],
+    correct: 0,
+    skipped: 0,
+    hintUsed: false
+};
+
+function shuffleLetters(str) {
+    const arr = str.split("");
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    // Bir xil tartibda chiqib qolmasligi uchun tekshiramiz
+    if (arr.join("") === str && str.length > 1) return shuffleLetters(str);
+    return arr.join(" ");
+}
+
+function pickScrambleWord() {
+    if (typeof words === "undefined" || !words.length) return;
+    // Faqat 3-9 harfli so'zlarni tanlaymiz — juda uzun/qisqa so'zlar bilan
+    // o'yin qulaysiz bo'lib qolmasligi uchun.
+    const pool = words.filter(w => w.en && w.en.replace(/\s+/g, "").length >= 3 && w.en.replace(/\s+/g, "").length <= 9);
+    const source = pool.length ? pool : words;
+    scrambleState.word = source[Math.floor(Math.random() * source.length)];
+    scrambleState.letters = shuffleLetters(scrambleState.word.en.toUpperCase());
+    scrambleState.hintUsed = false;
+
+    const lettersEl = document.getElementById("scrambleLetters");
+    const hintEl = document.getElementById("scrambleHint");
+    const inputEl = document.getElementById("scrambleInput");
+    const resultEl = document.getElementById("scrambleResult");
+    if (lettersEl) lettersEl.textContent = scrambleState.letters;
+    if (hintEl) hintEl.textContent = "";
+    if (inputEl) inputEl.value = "";
+    if (resultEl) { resultEl.textContent = ""; resultEl.className = "scramble-result"; }
+}
+
+function updateScrambleScore() {
+    const scoreEl = document.getElementById("scrambleScore");
+    if (scoreEl) scoreEl.textContent = `✅ ${scrambleState.correct} / ⏭ ${scrambleState.skipped}`;
+}
+
+function checkScrambleAnswer() {
+    if (!scrambleState.word) return;
+    const inputEl = document.getElementById("scrambleInput");
+    const resultEl = document.getElementById("scrambleResult");
+    if (!inputEl || !resultEl) return;
+
+    const typed = inputEl.value.trim().toLowerCase();
+    const target = scrambleState.word.en.trim().toLowerCase();
+
+    if (!typed) return;
+
+    if (typed === target) {
+        scrambleState.correct++;
+        const gained = scrambleState.hintUsed ? 5 : 10;
+        xp += gained;
+        coins += 3;
+        updateStats();
+        updateScrambleScore();
+        resultEl.textContent = `✅ To'g'ri! "${scrambleState.word.en}" — ${scrambleState.word.uz}. (+${gained} XP)`;
+        resultEl.className = "scramble-result correct";
+        if (typeof celebrate === "function") celebrate();
+        setTimeout(pickScrambleWord, 1100);
+    } else {
+        resultEl.textContent = "❌ Hali to'g'ri emas, qayta urinib ko'ring.";
+        resultEl.className = "scramble-result wrong";
+    }
+}
+
+const scrambleCheckBtn = document.getElementById("scrambleCheckBtn");
+if (scrambleCheckBtn) scrambleCheckBtn.addEventListener("click", checkScrambleAnswer);
+
+const scrambleInputEl = document.getElementById("scrambleInput");
+if (scrambleInputEl) {
+    scrambleInputEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") checkScrambleAnswer();
+    });
+}
+
+const scrambleSkipBtn = document.getElementById("scrambleSkipBtn");
+if (scrambleSkipBtn) {
+    scrambleSkipBtn.addEventListener("click", () => {
+        scrambleState.skipped++;
+        updateScrambleScore();
+        pickScrambleWord();
+    });
+}
+
+const scrambleHintBtn = document.getElementById("scrambleHintBtn");
+if (scrambleHintBtn) {
+    scrambleHintBtn.addEventListener("click", () => {
+        if (!scrambleState.word) return;
+        scrambleState.hintUsed = true;
+        const hintEl = document.getElementById("scrambleHint");
+        if (hintEl) hintEl.textContent = `💡 Tarjimasi: ${scrambleState.word.uz} (${scrambleState.word.example || ""})`;
+    });
+}
+
+updateScrambleScore();
+
+// =========================================================================
 // KUNNING SO'ZI (Word of the Day) — bosh sahifadagi kichik vidjet
 // =========================================================================
 
@@ -5257,9 +5389,130 @@ function renderExtraStats() {
     if (xpFillEl) xpFillEl.style.width = Math.min(100, xp) + "%";
 
     if (typeof renderWeakAreas === "function") renderWeakAreas();
+    if (typeof renderWeeklyStatsChart === "function") renderWeeklyStatsChart();
+    if (typeof renderWordsKnownChart === "function") renderWordsKnownChart();
 }
 
 renderExtraStats();
+
+// =========================================================================
+// ULASHISH (ASO/SEO): foydalanuvchi ilovani do'stlariga yuborishi orqali
+// organik o'sishga (viral tarqalishga) yordam beradi.
+// =========================================================================
+
+function shareApp() {
+    const shareData = {
+        title: "English Master Pro",
+        text: "Men English Master Pro bilan ingliz tilini o'rganyapman — so'zlar, testlar, AI o'qituvchi va sertifikat bilan, hatto oflayn ham ishlaydi! Senga ham tavsiya qilaman 👇",
+        url: window.location.href
+    };
+    if (navigator.share) {
+        navigator.share(shareData).catch(() => { /* foydalanuvchi bekor qilgan bo'lishi mumkin */ });
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`).then(() => {
+            alert("🔗 Havola nusxalandi! Endi uni do'stingizga yuborishingiz mumkin.");
+        }).catch(() => {
+            alert(shareData.url);
+        });
+    } else {
+        alert(shareData.url);
+    }
+}
+
+const shareAppBtn = document.getElementById("shareAppBtn");
+if (shareAppBtn) shareAppBtn.addEventListener("click", shareApp);
+
+// =========================================================================
+// STATISTIKA: kengaytirilgan grafiklar — so'nggi 7 kunlik faollik (kunlik
+// XP o'sishi, mavjud xpHistory'dan hisoblanadi) va so'z boyligi taraqqiyoti.
+// =========================================================================
+
+function renderWeeklyStatsChart() {
+    const canvas = document.getElementById("weeklyStatsChart");
+    if (!canvas || typeof Chart === "undefined") return;
+
+    let history = [];
+    try { history = JSON.parse(localStorage.getItem("xpHistory") || "[]"); } catch (e) { /* ignore */ }
+
+    const last7 = history.slice(-7);
+    // Kunlik XP o'sishini (delta) hisoblaymiz, jami emas — shunda "bugun
+    // qancha mashq qildim" savoliga real javob bo'ladi.
+    const labels = [];
+    const deltas = [];
+    let prevXp = last7.length ? Math.max(0, (last7[0].xp || 0) - 20) : 0;
+    last7.forEach((h) => {
+        labels.push((h.date || "").split(" ").slice(1, 3).join(" "));
+        const delta = Math.max(0, (h.xp || 0) - prevXp);
+        deltas.push(delta);
+        prevXp = h.xp || 0;
+    });
+
+    if (!labels.length) {
+        labels.push("Bugun");
+        deltas.push(0);
+    }
+
+    if (window.__weeklyStatsChartInstance) {
+        window.__weeklyStatsChartInstance.data.labels = labels;
+        window.__weeklyStatsChartInstance.data.datasets[0].data = deltas;
+        window.__weeklyStatsChartInstance.update();
+        return;
+    }
+
+    window.__weeklyStatsChartInstance = new Chart(canvas.getContext("2d"), {
+        type: "bar",
+        data: {
+            labels,
+            datasets: [{
+                label: "Kunlik XP o'sishi",
+                data: deltas,
+                backgroundColor: "#f59e0b",
+                borderRadius: 8,
+                maxBarThickness: 34
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { labels: { color: "#fff" } } },
+            scales: {
+                x: { ticks: { color: "#cbd5e1" }, grid: { display: false } },
+                y: { ticks: { color: "#cbd5e1" }, beginAtZero: true }
+            }
+        }
+    });
+}
+
+function renderWordsKnownChart() {
+    const canvas = document.getElementById("wordsKnownChart");
+    if (!canvas || typeof Chart === "undefined" || typeof words === "undefined") return;
+
+    const total = words.length || 1;
+    const knownCount = Math.min(known || 0, total);
+    const remaining = Math.max(0, total - knownCount);
+
+    if (window.__wordsKnownChartInstance) {
+        window.__wordsKnownChartInstance.data.datasets[0].data = [knownCount, remaining];
+        window.__wordsKnownChartInstance.update();
+        return;
+    }
+
+    window.__wordsKnownChartInstance = new Chart(canvas.getContext("2d"), {
+        type: "doughnut",
+        data: {
+            labels: ["Bilgan so'zlar", "Qolgan so'zlar"],
+            datasets: [{
+                data: [knownCount, remaining],
+                backgroundColor: ["#22c55e", "#334155"],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: "68%",
+            plugins: { legend: { position: "bottom", labels: { color: "#fff" } } }
+        }
+    });
+}
 
 // =========================================================================
 // SERTIFIKAT (real, ishlaydigan versiya) — canvas orqali chizib,
@@ -5348,7 +5601,37 @@ if (generateCertBtn) {
                 tempLink.remove();
             };
         }
-        if (noteEl) noteEl.textContent = "✅ Sertifikat tayyor! Pastdagi tugma orqali yuklab oling.";
+
+        const shareBtn = document.getElementById("certificateShareBtn");
+        if (shareBtn && canvas) {
+            shareBtn.style.display = "inline-block";
+            shareBtn.onclick = () => {
+                canvas.toBlob(async (blob) => {
+                    if (!blob) return;
+                    const file = new File([blob], "sertifikat.png", { type: "image/png" });
+                    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                        try {
+                            await navigator.share({
+                                files: [file],
+                                title: "Mening English Master Pro sertifikatim",
+                                text: `Men ${name} ingliz tilini o'rganishda ${level}-levelga yetdim! 🎓`
+                            });
+                        } catch (err) { /* foydalanuvchi bekor qilgan bo'lishi mumkin */ }
+                    } else {
+                        // Web Share API mavjud bo'lmasa — oddiy yuklab olishga tushamiz
+                        const tempLink = document.createElement("a");
+                        tempLink.href = canvas.toDataURL("image/png");
+                        tempLink.download = "sertifikat.png";
+                        document.body.appendChild(tempLink);
+                        tempLink.click();
+                        tempLink.remove();
+                        if (noteEl) noteEl.textContent = "ℹ️ Bu qurilmada to'g'ridan-to'g'ri ulashish qo'llab-quvvatlanmaydi, shuning uchun rasm yuklab olindi.";
+                    }
+                }, "image/png");
+            };
+        }
+
+        if (noteEl) noteEl.textContent = "✅ Sertifikat tayyor! Pastdagi tugmalar orqali yuklab oling yoki ulashing.";
         if (typeof celebrate === "function") celebrate();
     });
 }
@@ -6446,4 +6729,4 @@ if (checkListeningBtn2) {
     };
 }
 
-console.log("Weekly Challenge + Idioms + Grammar Library + My Words + Exam Mode + Reading + Dictation Diff Loaded");
+console.log("Weekly Challenge + Idioms + Grammar Library + My Words + Exam Mode + Reading + Dictation Diff Loaded");    

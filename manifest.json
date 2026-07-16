@@ -1,17 +1,48 @@
 {
-  "name": "English Master Pro",
+  "name": "English Master Pro — Ingliz tilini o'rganing",
   "short_name": "English Pro",
-  "description": "Learn English vocabulary, play quizzes, and practice with AI tutor.",
-  "start_url": "./index.html",
+  "description": "Ingliz tilini so'zlar, testlar, grammatika, o'yinlar va AI o'qituvchi orqali o'rganing. Oflayn rejim, kunlik maqsad, seriya va sertifikat bilan.",
+  "start_url": "./index.html?source=pwa",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#1e293b",
   "theme_color": "#2563eb",
   "lang": "uz",
+  "dir": "ltr",
   "id": "/english-master-pro-pwa",
   "categories": [
-    "education"
+    "education",
+    "productivity",
+    "lifestyle"
+  ],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Kartochkalar",
+      "short_name": "Kartochka",
+      "description": "So'zlarni kartochka orqali yodlash",
+      "url": "./index.html?action=flash",
+      "icons": [{ "src": "./index.html", "sizes": "any" }]
+    },
+    {
+      "name": "Tezkor test",
+      "short_name": "Test",
+      "description": "60 soniyalik tezkor bilim testi",
+      "url": "./index.html?action=speed"
+    },
+    {
+      "name": "AI o'qituvchi",
+      "short_name": "AI",
+      "description": "AI bilan suhbat va mashqlar",
+      "url": "./index.html?action=ai"
+    },
+    {
+      "name": "Sertifikat",
+      "short_name": "Sertifikat",
+      "description": "Shaxsiy sertifikat yaratish",
+      "url": "./index.html?action=certificate"
+    }
   ],
   "icons": [
     {

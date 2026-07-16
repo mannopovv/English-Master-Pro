@@ -4,7 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>English Master Pro</title>
+    <title>English Master Pro — Ingliz tilini onlayn va oflayn o'rganing</title>
+
+    <!-- SEO / ASO: qidiruv tizimlari va ilova do'konlari uchun asosiy meta ma'lumotlar -->
+    <meta name="description" content="English Master Pro — ingliz tilini so'zlar, testlar, grammatika, AI o'qituvchi va o'yin shaklidagi mashqlar orqali bepul o'rganing. Oflayn ham ishlaydi, kunlik maqsad, seriya (streak) va sertifikat tizimi bilan.">
+    <meta name="keywords" content="ingliz tili o'rganish, english master, so'z yodlash, flashcard, ingliz tili testlari, grammatika, AI teacher, til o'rganish ilovasi, oflayn ingliz tili, sertifikat">
+    <meta name="author" content="English Master Pro">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://english-master-pro.app/">
+
+    <!-- Open Graph (Facebook, Telegram, LinkedIn ulashishlari uchun) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="English Master Pro — Ingliz tilini zamonaviy usulda o'rganing">
+    <meta property="og:description" content="So'zlar, testlar, o'yinlar, AI o'qituvchi va sertifikat — barchasi bitta ilovada. Internetsiz ham ishlaydi.">
+    <meta property="og:image" content="./icons/icon-512.png">
+    <meta property="og:url" content="https://english-master-pro.app/">
+    <meta property="og:locale" content="uz_UZ">
+    <meta property="og:site_name" content="English Master Pro">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="English Master Pro — Ingliz tilini o'rganing">
+    <meta name="twitter:description" content="So'zlar, testlar, o'yinlar va AI o'qituvchi bilan ingliz tilini oflayn ham o'rganing.">
+    <meta name="twitter:image" content="./icons/icon-512.png">
+
     <link rel="stylesheet" href="index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,6 +41,23 @@
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="English Pro">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="English Master Pro">
+
+    <!-- JSON-LD: qidiruv tizimlariga ilova haqida tuzilgan ma'lumot berish (ASO/SEO) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "English Master Pro",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any (PWA)",
+        "description": "Ingliz tilini so'zlar, testlar, grammatika, AI o'qituvchi va o'yinlar orqali o'rganish uchun oflayn ishlaydigan ilova.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "UZS" },
+        "inLanguage": "uz"
+    }
+    </script>
 </head>
  
 <body>
@@ -64,6 +104,7 @@
             <button id="beginnerBtn">🆕 Noldan boshlash</button>
             <button id="flashBtn">📚 Kartochka</button>
             <button id="matchBtn">🎮 So'z o'yini</button>
+            <button id="scrambleBtn">🔤 Harflarni tartiblash</button>
             <button id="speedBtn">⚡ Tezkor test</button>
             <button id="sentenceBtn">🧩 Gap tuzish</button>
             <button id="grammarQuizBtn">📐 Grammatika testi</button>
@@ -162,6 +203,10 @@
             </div>
 
             <button id="startBtn">Boshlash</button>
+
+            <button id="shareAppBtn" class="share-app-btn">
+                <i class="fa-solid fa-share-nodes"></i> Do'stlaringizga ulashing
+            </button>
         </section>
  
         
@@ -230,6 +275,23 @@
                 <button id="newMatchRound">🔀 Yangi round</button>
             </div>
             <div id="matchGrid" class="match-grid"></div>
+        </section>
+
+        <section id="scramblePage" class="page tool-page">
+            <h2>🔤 Harflarni tartiblash</h2>
+            <p class="ai-settings-hint">Aralashtirilgan harflardan to'g'ri ingliz so'zini yig'ing. Har to'g'ri javob uchun XP va tanga olasiz!</p>
+            <div class="scramble-toolbar">
+                <span id="scrambleScore" class="scramble-score">✅ 0 / ⏭ 0</span>
+                <button id="scrambleHintBtn">💡 Maslahat</button>
+                <button id="scrambleSkipBtn">⏭ O'tkazib yuborish</button>
+            </div>
+            <div class="scramble-card">
+                <div id="scrambleLetters" class="scramble-letters"></div>
+                <div id="scrambleHint" class="scramble-hint"></div>
+                <input type="text" id="scrambleInput" class="scramble-input" placeholder="So'zni shu yerga yozing..." autocomplete="off">
+                <button id="scrambleCheckBtn">✅ Tekshirish</button>
+                <div id="scrambleResult" class="scramble-result"></div>
+            </div>
         </section>
 
         <section id="speedPage" class="page tool-page">
@@ -456,6 +518,18 @@
                 <p class="ai-settings-hint">Qaysi mavzularda ko'proq xato qilayotganingiz — shu joylarga ko'proq e'tibor bering.</p>
                 <div id="weakAreasList"></div>
             </div>
+
+            <div class="stats-chart-card">
+                <h3>📅 So'nggi 7 kunlik faollik</h3>
+                <p class="ai-settings-hint">Har kuni qancha XP to'plaganingiz — muntazamlik eng muhim narsa.</p>
+                <canvas id="weeklyStatsChart" height="180"></canvas>
+            </div>
+
+            <div class="stats-chart-card">
+                <h3>📚 So'z boyligi taraqqiyoti</h3>
+                <p class="ai-settings-hint">Jami lug'atdagi so'zlardan qanchasini bilib olganingiz.</p>
+                <canvas id="wordsKnownChart" height="180"></canvas>
+            </div>
         </section>
 
         <section id="certificatePage" class="page tool-page">
@@ -465,7 +539,10 @@
             <button id="generateCertBtn">🎓 Sertifikat yaratish</button>
             <div id="certificateNote" class="ai-settings-hint"></div>
             <canvas id="certificateCanvas" width="900" height="640" style="display:none; max-width:100%; border-radius:16px; margin-top:16px;"></canvas>
-            <button id="certificateDownloadBtn" style="display:none;">⬇️ Rasm sifatida yuklab olish</button>
+            <div class="certificate-actions">
+                <button id="certificateDownloadBtn" style="display:none;">⬇️ Rasm sifatida yuklab olish</button>
+                <button id="certificateShareBtn" style="display:none;">📤 Ulashish</button>
+            </div>
         </section>
 
         <section id="premiumPage" class="page tool-page">
