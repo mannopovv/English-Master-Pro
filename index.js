@@ -2416,12 +2416,25 @@ function checkGrammarRules(text) {
 
 const checkGrammarBtn = document.getElementById("checkGrammar");
 if (checkGrammarBtn) {
-    checkGrammarBtn.onclick = () => {
+    checkGrammarBtn.onclick = async () => {
         const grammarInputEl = document.getElementById("grammarInput");
         const text = grammarInputEl ? grammarInputEl.value : "";
         if (!text) { alert("Gap yozing"); return; }
         const out = document.getElementById("grammarResult");
-        if (out) out.innerHTML = checkGrammarRules(text).map(i => `<div>${i}</div>`).join("");
+
+        if (hasAIKey()) {
+            if (out) out.innerHTML = "⏳ AI tekshirmoqda...";
+            const reply = await callAI(
+                "Quyidagi inglizcha matndagi grammatik xatolarni top va tushuntir:\n\n" + text,
+                "Sen ingliz tili grammatika tekshiruvchisisan. Matndagi har bir xatoni alohida qatorda ko'rsat: noto'g'ri qism, to'g'ri varianti va nima uchun xato ekanini o'zbek tilida qisqa tushuntir. Xato bo'lmasa, shuni tabriklab yoz."
+            );
+            if (out) out.innerHTML = reply
+                ? reply.replace(/\n/g, "<br>")
+                : ("⚠️ AI bilan bog'lanib bo'lmadi.<br>" + checkGrammarRules(text).map(i => `<div>${i}</div>`).join(""));
+        } else {
+            if (out) out.innerHTML = checkGrammarRules(text).map(i => `<div>${i}</div>`).join("") +
+                "<br><small>ℹ️ Chuqurroq AI tahlili uchun Sozlamalarda API kalit kiriting.</small>";
+        }
     };
 }
 
@@ -2699,10 +2712,28 @@ if (startPronunciationBtn) {
         const recognition = new SpeechRecognition();
         recognition.lang = "en-US";
         recognition.start();
-        recognition.onresult = (e) => {
+        recognition.onresult = async (e) => {
             const spoken = e.results[0][0].transcript;
             const scoreVal = pronunciationSimilarity(spoken, target);
             if (out) out.innerHTML = `🗣️ Siz aytdingiz: "${spoken}"<br>⭐ Score: ${scoreVal}/100`;
+
+            // AI Speaking Coach: agar API kalit sozlangan bo'lsa, brauzer
+            // aniqlagan matn asosida talaffuz bo'yicha maslahat beramiz.
+            // (Eslatma: bu haqiqiy audio-tahlil emas — brauzer eshitgan
+            // matnni maqsad so'z bilan solishtirib, AI orqali tushuntiruvchi
+            // maslahat beradi. Chinakam audio-fonetik baholash uchun maxsus
+            // nutq-baholash xizmati kerak bo'ladi.)
+            if (hasAIKey()) {
+                if (out) out.innerHTML += "<br>⏳ AI Speaking Coach tahlil qilmoqda...";
+                const tip = await callAI(
+                    `Maqsad so'z/ibora: "${target}". Foydalanuvchi talaffuz qilganda brauzer buni "${spoken}" deb eshitdi.`,
+                    "Sen ingliz tili talaffuzi bo'yicha murabbiysan (AI Speaking Coach). Eshitilgan matn maqsad so'zdan farq qilsa, qaysi tovush/bo'g'inda xato bo'lishi mumkinligini taxmin qil va uni qanday to'g'ri talaffuz qilishni o'zbek tilida, 2-3 gapda, iliq ohangda tushuntir. Agar mos kelsa, tabrikla."
+                );
+                if (out) {
+                    out.innerHTML = `🗣️ Siz aytdingiz: "${spoken}"<br>⭐ Score: ${scoreVal}/100` +
+                        (tip ? `<br>🎧 AI Coach: ${tip.replace(/\n/g, "<br>")}` : "<br>⚠️ AI maslahatini olishning imkoni bo'lmadi.");
+                }
+            }
         };
         recognition.onerror = () => {
             if (out) out.innerHTML = "❌ Ovoz aniqlanmadi, qayta urinib ko'ring.";
@@ -5000,6 +5031,35 @@ function renderWordOfDay() {
 }
 renderWordOfDay();
 
+// =========================================================================
+// KUNNING IQTIBOSI (Quote of the Day) — til o'rganishga undovchi motivatsion
+// gaplar, har kuni (Kunning so'zi kabi) navbat bilan almashib turadi.
+// =========================================================================
+
+const dailyQuotes = [
+    { en: "The limits of my language mean the limits of my world.", uz: "Mening tilim chegarasi — dunyoyim chegarasidir.", author: "Ludwig Wittgenstein" },
+    { en: "Learning another language is not only learning different words for the same things, but learning another way to think about things.", uz: "Boshqa tilni o'rganish — bir xil narsalar uchun boshqa so'zlarni emas, balki narsalar haqida boshqacha fikrlashni o'rganishdir.", author: "Flora Lewis" },
+    { en: "One language sets you in a corridor for life. Two languages open every door along the way.", uz: "Bitta til sizni umr yo'lagiga qamaydi. Ikkita til esa yo'ldagi har bir eshikni ochadi.", author: "Frank Smith" },
+    { en: "To have another language is to possess a second soul.", uz: "Yana bir tilga ega bo'lish — ikkinchi ruhga ega bo'lishdir.", author: "Charlemagne" },
+    { en: "Practice makes progress, not perfection — keep going.", uz: "Mashq mukammallikni emas, taraqqiyotni beradi — davom eting.", author: "English Master Pro" },
+    { en: "A different language is a different vision of life.", uz: "Boshqa til — hayotga boshqacha nazar.", author: "Federico Fellini" },
+    { en: "Every word you learn today is a door to tomorrow.", uz: "Bugun o'rgangan har bir so'zingiz — ertangi kunga ochiladigan eshikdir.", author: "English Master Pro" },
+    { en: "Small daily steps lead to big language wins.", uz: "Kichik kundalik qadamlar katta til yutuqlariga olib boradi.", author: "English Master Pro" }
+];
+
+function renderDailyQuote() {
+    if (!dailyQuotes.length) return;
+    const dayIndex = Math.floor(Date.now() / 86400000) % dailyQuotes.length;
+    const q = dailyQuotes[dayIndex];
+    const enEl = document.getElementById("quoteTextEn");
+    const uzEl = document.getElementById("quoteTextUz");
+    const authorEl = document.getElementById("quoteAuthor");
+    if (enEl) enEl.textContent = q.en;
+    if (uzEl) uzEl.textContent = q.uz;
+    if (authorEl) authorEl.textContent = `— ${q.author}`;
+}
+renderDailyQuote();
+
 console.log("Beginner Course + Word Game + Word of the Day Loaded");
 
 // =========================================================================
@@ -5674,9 +5734,44 @@ function renderExtraStats() {
     if (typeof renderWeeklyStatsChart === "function") renderWeeklyStatsChart();
     if (typeof renderWordsKnownChart === "function") renderWordsKnownChart();
     if (typeof renderWeeklyReport === "function") renderWeeklyReport();
+    if (typeof renderCefrBadge === "function") renderCefrBadge();
 }
 
 renderExtraStats();
+
+// =========================================================================
+// CEFR DARAJASI (A1-C2) — bu RASMIY sertifikat emas, faqat bilgan so'zlar
+// soni va XP asosidagi taxminiy, motivatsion o'z-o'zini baholash. Rasmiy
+// CEFR darajasi faqat aккreditatsiyalangan test markazlari (masalan, IELTS,
+// Cambridge) orqali beriladi.
+// =========================================================================
+
+const CEFR_LEVELS = [
+    { code: "A1", title: "Boshlang'ich", minWords: 0 },
+    { code: "A2", title: "Elementar", minWords: 60 },
+    { code: "B1", title: "O'rta darajadan past", minWords: 150 },
+    { code: "B2", title: "O'rta daraja", minWords: 300 },
+    { code: "C1", title: "Yuqori o'rta daraja", minWords: 500 },
+    { code: "C2", title: "Erkin daraja", minWords: 800 }
+];
+
+function computeCefrLevel() {
+    const knownCount = (typeof known !== "undefined") ? known : 0;
+    let current = CEFR_LEVELS[0];
+    for (const lvl of CEFR_LEVELS) {
+        if (knownCount >= lvl.minWords) current = lvl;
+    }
+    return current;
+}
+
+function renderCefrBadge() {
+    const badgeEl = document.getElementById("cefrBadge");
+    const titleEl = document.getElementById("cefrTitle");
+    if (!badgeEl || !titleEl) return;
+    const lvl = computeCefrLevel();
+    badgeEl.textContent = lvl.code;
+    titleEl.textContent = `${lvl.code} — ${lvl.title}`;
+}
 
 // =========================================================================
 // HAFTALIK HISOBOT (matnli) — xpHistory asosida "bu hafta qanday
@@ -5984,6 +6079,39 @@ function drawCertificate(name) {
     ctx.fillStyle = "#38bdf8";
     ctx.font = "bold 15px Poppins, sans-serif";
     ctx.fillText("✅ Muvaffaqiyatli davom etayotgani uchun tabriklaymiz!", w / 2, 590);
+
+    // ---- Tekshirish QR kodi -----------------------------------------
+    // MUHIM: bu QR kod markazlashtirilgan serverda tekshirilmaydi (ilova
+    // serversiz ishlaydi) — u faqat sertifikat ma'lumotlarini (ism, daraja,
+    // sana) qurilmadagi skaner orqali qayta o'qish uchun mo'ljallangan,
+    // ya'ni "rasmiy tasdiqlash" emas, balki qulaylik uchun.
+    if (typeof QRCode !== "undefined") {
+        const verifyText = `English Master Pro Sertifikat\nIsm: ${name}\nDaraja: Level ${level} (${computeCefrLevel().code})\nXP: ${xp}\nSana: ${today}`;
+        const qrHolder = document.createElement("div");
+        qrHolder.style.display = "none";
+        document.body.appendChild(qrHolder);
+        try {
+            new QRCode(qrHolder, { text: verifyText, width: 110, height: 110, correctLevel: QRCode.CorrectLevel.M });
+            setTimeout(() => {
+                const qrCanvas = qrHolder.querySelector("canvas");
+                const qrImg = qrHolder.querySelector("img");
+                const qrSize = 96;
+                const qrX = w - qrSize - 50;
+                const qrY = h - qrSize - 50;
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(qrX - 6, qrY - 6, qrSize + 12, qrSize + 12);
+                if (qrCanvas) ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
+                else if (qrImg) ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+                ctx.fillStyle = "#64748b";
+                ctx.font = "10px Poppins, sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("Ma'lumot kodi", qrX + qrSize / 2, qrY + qrSize + 16);
+                document.body.removeChild(qrHolder);
+            }, 60);
+        } catch (e) {
+            document.body.removeChild(qrHolder);
+        }
+    }
 }
 
 const generateCertBtn = document.getElementById("generateCertBtn");
@@ -6012,6 +6140,21 @@ if (generateCertBtn) {
                 document.body.appendChild(tempLink);
                 tempLink.click();
                 tempLink.remove();
+            };
+        }
+
+        const pdfBtn = document.getElementById("certificatePdfBtn");
+        if (pdfBtn && canvas) {
+            pdfBtn.style.display = "inline-block";
+            pdfBtn.onclick = () => {
+                const jsPDFRef = window.jspdf && window.jspdf.jsPDF;
+                if (!jsPDFRef) {
+                    alert("PDF kutubxonasi yuklanmadi. Internetga ulaning va qayta urinib ko'ring.");
+                    return;
+                }
+                const pdf = new jsPDFRef({ orientation: "landscape", unit: "px", format: [canvas.width, canvas.height] });
+                pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, canvas.width, canvas.height);
+                pdf.save("sertifikat.pdf");
             };
         }
 

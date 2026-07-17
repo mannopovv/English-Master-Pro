@@ -34,6 +34,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     
     
@@ -214,6 +216,13 @@
                     <div class="wotd-uz" id="wotdUzbek">—</div>
                     <div class="wotd-example" id="wotdExample">—</div>
                 </div>
+            </div>
+
+            <div class="quote-card" id="quoteCard">
+                <div class="quote-icon">❝</div>
+                <div class="quote-text" id="quoteTextEn">—</div>
+                <div class="quote-translation" id="quoteTextUz">—</div>
+                <div class="quote-author" id="quoteAuthor">—</div>
             </div>
 
             <button id="startBtn">Boshlash</button>
@@ -553,6 +562,15 @@
         
         <section id="statsPage" class="page">
             <h2>📊 Statistika</h2>
+
+            <div class="cefr-badge-card" id="cefrBadgeCard">
+                <div class="cefr-badge" id="cefrBadge">A1</div>
+                <div class="cefr-info">
+                    <div class="cefr-title" id="cefrTitle">Boshlang'ich</div>
+                    <div class="ai-settings-hint" id="cefrHint">Bu — bilgan so'zlar va XP asosidagi taxminiy daraja (rasmiy CEFR sertifikat emas).</div>
+                </div>
+            </div>
+
             <div class="stats">
                 <div>Level <h1 id="level">1</h1></div>
                 <div>XP <h1 id="xp">0</h1></div>
@@ -607,6 +625,7 @@
             <canvas id="certificateCanvas" width="900" height="640" style="display:none; max-width:100%; border-radius:16px; margin-top:16px;"></canvas>
             <div class="certificate-actions">
                 <button id="certificateDownloadBtn" style="display:none;">⬇️ Rasm sifatida yuklab olish</button>
+                <button id="certificatePdfBtn" style="display:none;">📄 PDF yuklab olish</button>
                 <button id="certificateShareBtn" style="display:none;">📤 Ulashish</button>
             </div>
         </section>
