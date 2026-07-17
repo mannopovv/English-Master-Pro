@@ -105,6 +105,9 @@
             <button id="flashBtn">📚 Kartochka</button>
             <button id="matchBtn">🎮 So'z o'yini</button>
             <button id="scrambleBtn">🔤 Harflarni tartiblash</button>
+            <button id="typingRaceBtn">⌨️ Tezkor yozish</button>
+            <button id="fillBlankBtn">✏️ Bo'sh joyni to'ldirish</button>
+            <button id="bossBattleBtn">👹 Haftalik Boss</button>
             <button id="speedBtn">⚡ Tezkor test</button>
             <button id="sentenceBtn">🧩 Gap tuzish</button>
             <button id="grammarQuizBtn">📐 Grammatika testi</button>
@@ -152,6 +155,17 @@
                     <div><i class="fa-solid fa-star"></i> <span id="homeXp">0</span> XP</div>
                     <div><i class="fa-solid fa-book"></i> <span id="homeKnown">0</span> so'z</div>
                 </div>
+            </div>
+
+            <div class="quick-access-grid" id="quickAccessGrid">
+                <button class="qa-btn" data-target="flashBtn"><span class="qa-icon qa-icon-1"><i class="fa-solid fa-layer-group"></i></span><span>Kartochka</span></button>
+                <button class="qa-btn" data-target="quizBtn"><span class="qa-icon qa-icon-2"><i class="fa-solid fa-pen"></i></span><span>Test</span></button>
+                <button class="qa-btn" data-target="matchBtn"><span class="qa-icon qa-icon-3"><i class="fa-solid fa-gamepad"></i></span><span>O'yin</span></button>
+                <button class="qa-btn" data-target="scrambleBtn"><span class="qa-icon qa-icon-4"><i class="fa-solid fa-shuffle"></i></span><span>Harflar</span></button>
+                <button class="qa-btn" data-target="aiBtn"><span class="qa-icon qa-icon-5"><i class="fa-solid fa-robot"></i></span><span>AI Teacher</span></button>
+                <button class="qa-btn" data-target="certificateBtn2"><span class="qa-icon qa-icon-6"><i class="fa-solid fa-award"></i></span><span>Sertifikat</span></button>
+                <button class="qa-btn" data-target="statsBtn"><span class="qa-icon qa-icon-7"><i class="fa-solid fa-chart-simple"></i></span><span>Statistika</span></button>
+                <button class="qa-btn" data-target="settingsBtn"><span class="qa-icon qa-icon-8"><i class="fa-solid fa-gear"></i></span><span>Sozlama</span></button>
             </div>
 
             <div class="review-due-card" id="reviewDueCard">
@@ -291,6 +305,53 @@
                 <input type="text" id="scrambleInput" class="scramble-input" placeholder="So'zni shu yerga yozing..." autocomplete="off">
                 <button id="scrambleCheckBtn">✅ Tekshirish</button>
                 <div id="scrambleResult" class="scramble-result"></div>
+            </div>
+        </section>
+
+        <section id="typingRacePage" class="page tool-page">
+            <h2>⌨️ Tezkor yozish (Typing Race)</h2>
+            <p class="ai-settings-hint">Ekranda chiqqan ingliz so'zini imkon qadar tez va xatosiz yozing. 30 soniyada nechta so'z yoza olasiz?</p>
+            <div class="typing-hud">
+                <span id="typingTimer" class="typing-timer">⏱ 30s</span>
+                <span id="typingScore" class="typing-score">✅ 0</span>
+            </div>
+            <div class="typing-card">
+                <div id="typingTargetWord" class="typing-target">—</div>
+                <input type="text" id="typingInputRace" class="scramble-input" placeholder="So'zni shu yerga yozing..." autocomplete="off" disabled>
+                <button id="typingStartBtn">▶️ Boshlash</button>
+            </div>
+        </section>
+
+        <section id="fillBlankPage" class="page tool-page">
+            <h2>✏️ Bo'sh joyni to'ldirish</h2>
+            <p class="ai-settings-hint">Gapdagi bo'sh joyga mos so'zni tanlang yoki yozing.</p>
+            <div class="fillblank-card">
+                <div id="fillBlankSentence" class="fillblank-sentence">—</div>
+                <div id="fillBlankOptions" class="fillblank-options"></div>
+                <div id="fillBlankResult" class="scramble-result"></div>
+                <button id="fillBlankNextBtn">➡️ Keyingisi</button>
+            </div>
+        </section>
+
+        <section id="bossBattlePage" class="page tool-page">
+            <h2>👹 Haftalik Boss</h2>
+            <p class="ai-settings-hint">Bu haftaning eng qiyin so'zlaridan yasalgan "Boss" bilan jang qiling — har to'g'ri javob unga zarba beradi!</p>
+            <div class="boss-hud">
+                <div class="boss-side">
+                    <span>👹 Boss</span>
+                    <div class="hp-track"><div id="bossHpFill" class="hp-fill boss-hp"></div></div>
+                </div>
+                <div class="boss-side">
+                    <span>🧑 Siz</span>
+                    <div class="hp-track"><div id="playerHpFill" class="hp-fill player-hp"></div></div>
+                </div>
+            </div>
+            <div class="boss-card">
+                <div id="bossQuestion" class="boss-question">—</div>
+                <input type="text" id="bossAnswerInput" class="scramble-input" placeholder="Tarjimasini yozing..." autocomplete="off">
+                <button id="bossAttackBtn">⚔️ Zarba berish</button>
+                <div id="bossResult" class="scramble-result"></div>
+                <div id="bossRewardNote" class="ai-settings-hint"></div>
             </div>
         </section>
 
@@ -519,6 +580,11 @@
                 <div id="weakAreasList"></div>
             </div>
 
+            <div class="stats-chart-card" id="weeklyReportCard">
+                <h3>🗞️ Haftalik hisobot</h3>
+                <div id="weeklyReportText" class="ai-settings-hint"></div>
+            </div>
+
             <div class="stats-chart-card">
                 <h3>📅 So'nggi 7 kunlik faollik</h3>
                 <p class="ai-settings-hint">Har kuni qancha XP to'plaganingiz — muntazamlik eng muhim narsa.</p>
@@ -587,6 +653,17 @@
                 </div>
             </div>
 
+            <div class="referral-card" id="referralCard">
+                <h3>🎁 Do'stlaringizni taklif qiling</h3>
+                <p class="ai-settings-hint">Shaxsiy havolangizni ulashing — havola orqali kirgan har bir do'stingiz +20 tanga bonus bilan boshlaydi. (Eslatma: bu qurilma ichida ishlaydigan tizim, sizga bonus faqat shu havola orqali kirgan yangi foydalanuvchi ekanini o'zi tasdiqlasa hisoblanadi — chunki ilova serversiz ishlaydi.)</p>
+                <div class="referral-row">
+                    <input type="text" id="referralLinkInput" readonly>
+                    <button id="copyReferralBtn">📋 Nusxalash</button>
+                </div>
+                <button id="shareReferralBtn">📤 Do'stga yuborish</button>
+                <div id="referralNote" class="ai-settings-hint"></div>
+            </div>
+
             <div class="accessibility-card">
                 <h3>👁️ Qulaylik sozlamalari</h3>
                 <div class="settings-slider-row">
@@ -604,6 +681,10 @@
                     <input type="time" id="reminderTimeInput" value="19:00">
                 </div>
                 <p class="ai-settings-hint" id="reminderTimeHint">Ilova shu vaqtdan keyin ochilganda, agar bugun hali eslatma ko'rsatilmagan bo'lsa, bildirishnoma beriladi. (Brauzer PWA'lari ilova yopiq holda aniq vaqtda bildirishnoma yubora olmaydi — bu eng yaqin ishlaydigan yechim.)</p>
+                <label class="fav-only-toggle">
+                    <input type="checkbox" id="autoThemeToggle" checked>
+                    🌗 Tizim mavzusiga avtomatik moslashish (Dark/Light)
+                </label>
             </div>
 
             <button id="darkMode">🌙 Dark Mode</button>

@@ -283,6 +283,9 @@ const menuButtons = {
     "beginnerBtn": "beginnerPage",
     "matchBtn": "matchPage",
     "scrambleBtn": "scramblePage",
+    "typingRaceBtn": "typingRacePage",
+    "fillBlankBtn": "fillBlankPage",
+    "bossBattleBtn": "bossBattlePage",
     "speedBtn": "speedPage",
     "sentenceBtn": "sentencePage",
     "grammarQuizBtn": "grammarQuizPage",
@@ -312,6 +315,12 @@ Object.keys(menuButtons).forEach(btnId => {
             }
             if (btnId === "scrambleBtn" && typeof pickScrambleWord === "function") {
                 pickScrambleWord();
+            }
+            if (btnId === "fillBlankBtn" && typeof pickFillBlank === "function") {
+                pickFillBlank();
+            }
+            if (btnId === "bossBattleBtn" && typeof initBossBattle === "function") {
+                initBossBattle();
             }
             if (btnId === "beginnerBtn" && typeof renderBeginnerContent === "function") {
                 renderBeginnerContent();
@@ -1706,7 +1715,52 @@ if (darkBtn) {
         dark = !dark;
         document.body.dataset.theme = dark ? "dark" : "light";
         localStorage.setItem("dark", dark);
+        localStorage.setItem("appTheme", dark ? "dark" : "light");
+        setAutoThemeEnabled(false); // qo'lda tanlashni tizim tanlovi bosib qo'ymasligi uchun
     };
+}
+
+// =========================================================================
+// AVTOMATIK MAVZU (Dark/Light) — qurilma/brauzer sozlamasiga
+// (prefers-color-scheme) qarab avtomatik moslashadi. Foydalanuvchi
+// yuqoridagi "Dark Mode" yoki Avatar sahifasidagi mavzu tugmalaridan birini
+// bossa, avtomatik rejim o'chadi va tanlovi saqlanib qoladi.
+// =========================================================================
+
+function isAutoThemeEnabled() {
+    return localStorage.getItem("autoThemeEnabled") !== "0";
+}
+
+function setAutoThemeEnabled(enabled) {
+    localStorage.setItem("autoThemeEnabled", enabled ? "1" : "0");
+    const toggleEl = document.getElementById("autoThemeToggle");
+    if (toggleEl) toggleEl.checked = enabled;
+}
+
+function applySystemTheme() {
+    if (!window.matchMedia) return;
+    const isDarkSystem = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const theme = isDarkSystem ? "dark" : "light";
+    document.body.dataset.theme = theme;
+    localStorage.setItem("appTheme", theme);
+    localStorage.setItem("dark", String(isDarkSystem));
+    dark = isDarkSystem;
+}
+
+const autoThemeToggleEl = document.getElementById("autoThemeToggle");
+if (autoThemeToggleEl) {
+    autoThemeToggleEl.checked = isAutoThemeEnabled();
+    autoThemeToggleEl.addEventListener("change", () => {
+        setAutoThemeEnabled(autoThemeToggleEl.checked);
+        if (autoThemeToggleEl.checked) applySystemTheme();
+    });
+}
+
+if (window.matchMedia) {
+    if (isAutoThemeEnabled()) applySystemTheme();
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+        if (isAutoThemeEnabled()) applySystemTheme();
+    });
 }
 
 if (resetBtn) {
@@ -3420,13 +3474,13 @@ const skinsEl = document.getElementById("skins");
 if (skinsEl) skins.forEach(item => skinsEl.innerHTML += `<div class="skin">${item}</div>`);
 
 const darkThemeBtn = document.getElementById("darkTheme");
-if (darkThemeBtn) darkThemeBtn.onclick = () => { document.body.dataset.theme = "dark"; localStorage.setItem("appTheme", "dark"); };
+if (darkThemeBtn) darkThemeBtn.onclick = () => { document.body.dataset.theme = "dark"; localStorage.setItem("appTheme", "dark"); if (typeof setAutoThemeEnabled === "function") setAutoThemeEnabled(false); };
 
 const lightThemeBtn = document.getElementById("lightTheme");
-if (lightThemeBtn) lightThemeBtn.onclick = () => { document.body.dataset.theme = "light"; localStorage.setItem("appTheme", "light"); };
+if (lightThemeBtn) lightThemeBtn.onclick = () => { document.body.dataset.theme = "light"; localStorage.setItem("appTheme", "light"); if (typeof setAutoThemeEnabled === "function") setAutoThemeEnabled(false); };
 
 const neonThemeBtn = document.getElementById("neonTheme");
-if (neonThemeBtn) neonThemeBtn.onclick = () => { document.body.dataset.theme = "neon"; localStorage.setItem("appTheme", "neon"); };
+if (neonThemeBtn) neonThemeBtn.onclick = () => { document.body.dataset.theme = "neon"; localStorage.setItem("appTheme", "neon"); if (typeof setAutoThemeEnabled === "function") setAutoThemeEnabled(false); };
 
 const effects = ["✨ Glow", "🔥 Fire", "❄️ Ice", "⚡ Lightning"];
 const effectsDivEl = document.getElementById("effects");
@@ -3537,20 +3591,11 @@ if (enableNotificationBtn) {
     };
 }
 
-let installPrompt;
-window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    installPrompt = e;
-});
-
-const installAppBtn2 = document.getElementById("installAppPWA");
-if (installAppBtn2) {
-    installAppBtn2.onclick = async () => {
-        const out = document.getElementById("installStatus");
-        if (!installPrompt) { if (out) out.innerHTML = "Already Installed"; return; }
-        installPrompt.prompt();
-    };
-}
+// Eslatma: bu ilovada "installAppPWA" tugmasi mavjud emas edi (o'chirilgan
+// yoki hech qachon qo'shilmagan), shuning uchun bu yerda ikkinchi marta
+// "beforeinstallprompt" listener o'rnatib, uni qayta ishlatmaymiz — buning
+// o'rniga yuqoridagi bitta umumiy `deferredPrompt` o'zgaruvchisidan
+// foydalaniladi ("📱 Ilovani o'rnatish" tugmasi orqali).
 
 const syncCloudBtn = document.getElementById("syncCloud");
 if (syncCloudBtn) {
@@ -4694,6 +4739,243 @@ if (scrambleHintBtn) {
 updateScrambleScore();
 
 // =========================================================================
+// TEZKOR YOZISH (Typing Race) — 30 soniyada imkon qadar ko'proq so'zni
+// to'g'ri va tez yozish o'yini.
+// =========================================================================
+
+const typingRaceState = { timeLeft: 30, score: 0, timerId: null, currentWord: null, running: false };
+
+function pickTypingWord() {
+    if (typeof words === "undefined" || !words.length) return;
+    typingRaceState.currentWord = words[Math.floor(Math.random() * words.length)];
+    const targetEl = document.getElementById("typingTargetWord");
+    if (targetEl) targetEl.textContent = typingRaceState.currentWord.en;
+    const inputEl = document.getElementById("typingInputRace");
+    if (inputEl) inputEl.value = "";
+}
+
+function endTypingRace() {
+    typingRaceState.running = false;
+    clearInterval(typingRaceState.timerId);
+    const inputEl = document.getElementById("typingInputRace");
+    if (inputEl) inputEl.disabled = true;
+    const targetEl = document.getElementById("typingTargetWord");
+    const gained = typingRaceState.score * 4;
+    const gainedCoins = Math.floor(typingRaceState.score / 2);
+    if (typingRaceState.score > 0) {
+        xp += gained;
+        coins += gainedCoins;
+        updateStats();
+    }
+    if (targetEl) targetEl.textContent = `🏁 Tugadi! ${typingRaceState.score} ta so'z (+${gained} XP)`;
+    if (typeof celebrate === "function" && typingRaceState.score > 0) celebrate();
+    const startBtn = document.getElementById("typingStartBtn");
+    if (startBtn) { startBtn.disabled = false; startBtn.textContent = "🔁 Qayta boshlash"; }
+}
+
+function startTypingRace() {
+    typingRaceState.timeLeft = 30;
+    typingRaceState.score = 0;
+    typingRaceState.running = true;
+    const inputEl = document.getElementById("typingInputRace");
+    const timerEl = document.getElementById("typingTimer");
+    const scoreEl = document.getElementById("typingScore");
+    const startBtn = document.getElementById("typingStartBtn");
+    if (inputEl) { inputEl.disabled = false; inputEl.value = ""; inputEl.focus(); }
+    if (timerEl) timerEl.textContent = `⏱ ${typingRaceState.timeLeft}s`;
+    if (scoreEl) scoreEl.textContent = `✅ 0`;
+    if (startBtn) startBtn.disabled = true;
+
+    pickTypingWord();
+    clearInterval(typingRaceState.timerId);
+    typingRaceState.timerId = setInterval(() => {
+        typingRaceState.timeLeft--;
+        if (timerEl) timerEl.textContent = `⏱ ${typingRaceState.timeLeft}s`;
+        if (typingRaceState.timeLeft <= 0) endTypingRace();
+    }, 1000);
+}
+
+const typingStartBtn = document.getElementById("typingStartBtn");
+if (typingStartBtn) typingStartBtn.addEventListener("click", startTypingRace);
+
+const typingInputRaceEl = document.getElementById("typingInputRace");
+if (typingInputRaceEl) {
+    typingInputRaceEl.addEventListener("input", () => {
+        if (!typingRaceState.running || !typingRaceState.currentWord) return;
+        const typed = typingInputRaceEl.value.trim().toLowerCase();
+        const target = typingRaceState.currentWord.en.trim().toLowerCase();
+        if (typed === target) {
+            typingRaceState.score++;
+            const scoreEl = document.getElementById("typingScore");
+            if (scoreEl) scoreEl.textContent = `✅ ${typingRaceState.score}`;
+            pickTypingWord();
+        }
+    });
+}
+
+// =========================================================================
+// BO'SH JOYNI TO'LDIRISH (Fill in the Blank) — gapdagi so'zni misol
+// gaplardan avtomatik olib, o'rniga bo'shliq qo'yamiz va variantlar beramiz.
+// =========================================================================
+
+function pickFillBlank() {
+    if (typeof words === "undefined" || !words.length) return;
+    const pool = words.filter(w => w.example && w.example.toLowerCase().includes(w.en.toLowerCase()));
+    const source = pool.length ? pool : words;
+    const word = source[Math.floor(Math.random() * source.length)];
+
+    const sentenceEl = document.getElementById("fillBlankSentence");
+    const optionsEl = document.getElementById("fillBlankOptions");
+    const resultEl = document.getElementById("fillBlankResult");
+    if (!sentenceEl || !optionsEl) return;
+
+    const re = new RegExp(word.en, "i");
+    const blanked = word.example && re.test(word.example)
+        ? word.example.replace(re, "_____")
+        : `_____ — ${word.uz}`;
+    sentenceEl.textContent = blanked;
+    if (resultEl) { resultEl.textContent = ""; resultEl.className = "scramble-result"; }
+
+    // 3 ta noto'g'ri variant + 1 ta to'g'ri javobni aralashtirib chiqaramiz
+    const wrongPool = words.filter(w => w.en !== word.en);
+    const wrongs = [];
+    while (wrongs.length < 3 && wrongPool.length) {
+        const candidate = wrongPool[Math.floor(Math.random() * wrongPool.length)];
+        if (!wrongs.includes(candidate.en)) wrongs.push(candidate.en);
+    }
+    const options = [word.en, ...wrongs].sort(() => Math.random() - 0.5);
+
+    optionsEl.innerHTML = "";
+    options.forEach((opt) => {
+        const btn = document.createElement("button");
+        btn.className = "fillblank-option";
+        btn.textContent = opt;
+        btn.onclick = () => {
+            const isCorrect = opt.toLowerCase() === word.en.toLowerCase();
+            document.querySelectorAll(".fillblank-option").forEach((b) => { b.disabled = true; });
+            btn.classList.add(isCorrect ? "correct" : "wrong");
+            if (isCorrect) {
+                xp += 8;
+                coins += 2;
+                updateStats();
+                if (resultEl) { resultEl.textContent = "✅ To'g'ri! (+8 XP)"; resultEl.className = "scramble-result correct"; }
+                if (typeof celebrate === "function") celebrate();
+            } else {
+                if (resultEl) { resultEl.textContent = `❌ To'g'ri javob: "${word.en}"`; resultEl.className = "scramble-result wrong"; }
+            }
+        };
+        optionsEl.appendChild(btn);
+    });
+}
+
+const fillBlankNextBtn = document.getElementById("fillBlankNextBtn");
+if (fillBlankNextBtn) fillBlankNextBtn.addEventListener("click", pickFillBlank);
+
+// =========================================================================
+// HAFTALIK BOSS BATTLE — foydalanuvchining "qiyin so'zlar" ro'yxatidagi
+// so'zlar bilan tuzilgan haftalik "Boss"ga qarshi jang. Har to'g'ri javob
+// bossga zarba beradi, har noto'g'ri javob esa o'zingizga.
+// =========================================================================
+
+const bossBattleState = { bossHp: 100, playerHp: 100, queue: [], active: false };
+
+function getBossWordPool() {
+    let pool = [];
+    try {
+        const mistakes = (typeof getMistakeWords === "function") ? getMistakeWords() : {};
+        const mistakeNames = Object.keys(mistakes);
+        if (mistakeNames.length && typeof words !== "undefined") {
+            pool = words.filter(w => mistakeNames.includes(w.en));
+        }
+    } catch (e) { /* ignore */ }
+    if (!pool.length && typeof words !== "undefined") {
+        // Qiyin so'zlar hali yo'q bo'lsa — haftaning kuniga qarab tasodifiy
+        // (lekin bir kun davomida bir xil) so'zlar to'plamidan boss yasaymiz.
+        const seed = Math.floor(Date.now() / (7 * 86400000));
+        pool = [...words].sort((a, b) => (a.en.charCodeAt(0) + seed) % 7 - (b.en.charCodeAt(0) + seed) % 7).slice(0, 10);
+    }
+    return pool;
+}
+
+function updateBossHud() {
+    const bossFill = document.getElementById("bossHpFill");
+    const playerFill = document.getElementById("playerHpFill");
+    if (bossFill) bossFill.style.width = Math.max(0, bossBattleState.bossHp) + "%";
+    if (playerFill) playerFill.style.width = Math.max(0, bossBattleState.playerHp) + "%";
+}
+
+function nextBossQuestion() {
+    const questionEl = document.getElementById("bossQuestion");
+    const inputEl = document.getElementById("bossAnswerInput");
+    if (!bossBattleState.queue.length) bossBattleState.queue = [...getBossWordPool()];
+    const word = bossBattleState.queue[Math.floor(Math.random() * bossBattleState.queue.length)];
+    bossBattleState.currentWord = word;
+    if (questionEl) questionEl.textContent = word ? `"${word.en}" so'zining tarjimasi?` : "—";
+    if (inputEl) inputEl.value = "";
+}
+
+function initBossBattle() {
+    bossBattleState.bossHp = 100;
+    bossBattleState.playerHp = 100;
+    bossBattleState.active = true;
+    bossBattleState.queue = getBossWordPool();
+    updateBossHud();
+    nextBossQuestion();
+    const rewardNote = document.getElementById("bossRewardNote");
+    if (rewardNote) rewardNote.textContent = "";
+    const resultEl = document.getElementById("bossResult");
+    if (resultEl) { resultEl.textContent = ""; resultEl.className = "scramble-result"; }
+}
+
+function bossAttack() {
+    if (!bossBattleState.active || !bossBattleState.currentWord) return;
+    const inputEl = document.getElementById("bossAnswerInput");
+    const resultEl = document.getElementById("bossResult");
+    if (!inputEl || !resultEl) return;
+
+    const typed = inputEl.value.trim().toLowerCase();
+    const target = bossBattleState.currentWord.uz.trim().toLowerCase();
+
+    if (typed === target) {
+        bossBattleState.bossHp -= 20;
+        resultEl.textContent = "⚔️ Zarba! Boss jarohatlandi.";
+        resultEl.className = "scramble-result correct";
+    } else {
+        bossBattleState.playerHp -= 15;
+        resultEl.textContent = `❌ Noto'g'ri. To'g'ri javob: "${bossBattleState.currentWord.uz}". Boss sizga zarba berdi!`;
+        resultEl.className = "scramble-result wrong";
+    }
+    updateBossHud();
+
+    const rewardNote = document.getElementById("bossRewardNote");
+    if (bossBattleState.bossHp <= 0) {
+        bossBattleState.active = false;
+        xp += 60;
+        coins += 40;
+        updateStats();
+        if (rewardNote) rewardNote.textContent = "🏆 G'alaba! Boss mag'lub etildi. +60 XP, +40 tanga!";
+        if (typeof celebrate === "function") celebrate();
+        return;
+    }
+    if (bossBattleState.playerHp <= 0) {
+        bossBattleState.active = false;
+        if (rewardNote) rewardNote.textContent = "💀 Mag'lub bo'ldingiz. Qayta urinish uchun sahifani qayta oching.";
+        return;
+    }
+    nextBossQuestion();
+}
+
+const bossAttackBtn = document.getElementById("bossAttackBtn");
+if (bossAttackBtn) bossAttackBtn.addEventListener("click", bossAttack);
+
+const bossAnswerInputEl = document.getElementById("bossAnswerInput");
+if (bossAnswerInputEl) {
+    bossAnswerInputEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") bossAttack();
+    });
+}
+
+// =========================================================================
 // KUNNING SO'ZI (Word of the Day) — bosh sahifadagi kichik vidjet
 // =========================================================================
 
@@ -5391,9 +5673,48 @@ function renderExtraStats() {
     if (typeof renderWeakAreas === "function") renderWeakAreas();
     if (typeof renderWeeklyStatsChart === "function") renderWeeklyStatsChart();
     if (typeof renderWordsKnownChart === "function") renderWordsKnownChart();
+    if (typeof renderWeeklyReport === "function") renderWeeklyReport();
 }
 
 renderExtraStats();
+
+// =========================================================================
+// HAFTALIK HISOBOT (matnli) — xpHistory asosida "bu hafta qanday
+// o'tgani"ni oddiy, tushunarli til bilan tushuntiradi.
+// =========================================================================
+
+function renderWeeklyReport() {
+    const el = document.getElementById("weeklyReportText");
+    if (!el) return;
+
+    let history = [];
+    try { history = JSON.parse(localStorage.getItem("xpHistory") || "[]"); } catch (e) { /* ignore */ }
+
+    if (history.length < 2) {
+        el.textContent = "Hali hisobot tuzish uchun yetarli ma'lumot yo'q — bir necha kun mashq qiling!";
+        return;
+    }
+
+    const thisWeek = history.slice(-7);
+    const lastWeek = history.slice(-14, -7);
+
+    const weekXpGain = Math.max(0, (thisWeek[thisWeek.length - 1]?.xp || 0) - (thisWeek[0]?.xp || 0));
+    const lastWeekXpGain = lastWeek.length ? Math.max(0, (lastWeek[lastWeek.length - 1]?.xp || 0) - (lastWeek[0]?.xp || 0)) : null;
+
+    let comparisonText = "";
+    if (lastWeekXpGain !== null && lastWeekXpGain > 0) {
+        const diffPercent = Math.round(((weekXpGain - lastWeekXpGain) / lastWeekXpGain) * 100);
+        if (diffPercent > 0) comparisonText = ` — bu o'tgan haftadan <b>${diffPercent}% ko'proq</b>! 🎉`;
+        else if (diffPercent < 0) comparisonText = ` — o'tgan haftadan ${Math.abs(diffPercent)}% kam, yana harakat qilib ko'ring 💪`;
+        else comparisonText = " — o'tgan haftaga teng natija.";
+    }
+
+    const activeDays = thisWeek.filter(h => h.xp > 0).length;
+    const streakVal = (typeof streak !== "undefined") ? streak : 0;
+
+    el.innerHTML = `Bu hafta <b>${weekXpGain} XP</b> to'pladingiz${comparisonText}<br>` +
+        `${activeDays} / 7 kun faol bo'ldingiz, hozirgi seriyangiz: <b>${streakVal} kun 🔥</b>.`;
+}
 
 // =========================================================================
 // ULASHISH (ASO/SEO): foydalanuvchi ilovani do'stlariga yuborishi orqali
@@ -5421,6 +5742,98 @@ function shareApp() {
 
 const shareAppBtn = document.getElementById("shareAppBtn");
 if (shareAppBtn) shareAppBtn.addEventListener("click", shareApp);
+
+// =========================================================================
+// REFERRAL (do'stni taklif qilish) — bu ilova serversiz ishlagani uchun
+// taklif qilgan tomonga avtomatik bonus berish imkonsiz (buning uchun
+// backend kerak). Shu bois yechim halol: havola orqali birinchi marta
+// kirgan YANGI foydalanuvchiga xush kelibsiz bonusi beriladi.
+// =========================================================================
+
+function getOrCreateReferralCode() {
+    let code = localStorage.getItem("myReferralCode");
+    if (!code) {
+        code = Math.random().toString(36).slice(2, 8).toUpperCase();
+        localStorage.setItem("myReferralCode", code);
+    }
+    return code;
+}
+
+function getReferralLink() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("ref", getOrCreateReferralCode());
+    return url.toString();
+}
+
+function initReferralUI() {
+    const linkInput = document.getElementById("referralLinkInput");
+    if (linkInput) linkInput.value = getReferralLink();
+}
+
+const copyReferralBtn = document.getElementById("copyReferralBtn");
+if (copyReferralBtn) {
+    copyReferralBtn.addEventListener("click", () => {
+        const noteEl = document.getElementById("referralNote");
+        const link = getReferralLink();
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(link).then(() => {
+                if (noteEl) noteEl.textContent = "🔗 Havola nusxalandi!";
+            });
+        }
+    });
+}
+
+const shareReferralBtn = document.getElementById("shareReferralBtn");
+if (shareReferralBtn) {
+    shareReferralBtn.addEventListener("click", () => {
+        const link = getReferralLink();
+        const shareData = {
+            title: "English Master Pro",
+            text: "Men English Master Pro bilan ingliz tilini o'rganyapman — sen ham qo'shil, mening havolam orqali kirsang bonus bilan boshlaysan! 🎁",
+            url: link
+        };
+        if (navigator.share) {
+            navigator.share(shareData).catch(() => { /* bekor qilingan */ });
+        } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(`${shareData.text}\n${link}`);
+            const noteEl = document.getElementById("referralNote");
+            if (noteEl) noteEl.textContent = "🔗 Havola nusxalandi, do'stingizga yuboring!";
+        }
+    });
+}
+
+// Havola orqali (?ref=CODE) birinchi marta kirilganda — bir martalik
+// "xush kelibsiz" bonusini beramiz.
+(function handleIncomingReferral() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const refCode = params.get("ref");
+        const alreadyUsed = localStorage.getItem("referralWelcomeClaimed");
+        const isOwnCode = refCode && refCode === localStorage.getItem("myReferralCode");
+        if (refCode && !alreadyUsed && !isOwnCode) {
+            coins += 20;
+            localStorage.setItem("referralWelcomeClaimed", "1");
+            localStorage.setItem("coins", coins);
+            if (typeof updateStats === "function") updateStats();
+            window.addEventListener("load", () => {
+                setTimeout(() => alert("🎁 Xush kelibsiz! Do'stingiz havolasi orqali kirganingiz uchun +20 tanga bonus oldingiz!"), 1500);
+            });
+        }
+    } catch (e) { /* URL parametrlari yo'q bo'lsa e'tiborsiz qoldiramiz */ }
+})();
+
+initReferralUI();
+
+// Bosh sahifadagi "Tezkor kirish" tugmalari — har biri asosiy menyudagi
+// tegishli tugmani "bosadi", shu bilan kodni takrorlamasdan bir xil
+// ochilish mantig'idan foydalanamiz.
+document.querySelectorAll(".qa-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+        const targetId = btn.dataset.target;
+        const targetBtn = targetId && document.getElementById(targetId);
+        if (targetBtn) targetBtn.click();
+    });
+});
 
 // =========================================================================
 // STATISTIKA: kengaytirilgan grafiklar — so'nggi 7 kunlik faollik (kunlik
@@ -6729,4 +7142,4 @@ if (checkListeningBtn2) {
     };
 }
 
-console.log("Weekly Challenge + Idioms + Grammar Library + My Words + Exam Mode + Reading + Dictation Diff Loaded");    
+console.log("Weekly Challenge + Idioms + Grammar Library + My Words + Exam Mode + Reading + Dictation Diff Loaded");
