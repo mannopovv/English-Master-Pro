@@ -6158,6 +6158,30 @@ if (generateCertBtn) {
             };
         }
 
+        const printBtn = document.getElementById("certificatePrintBtn");
+        if (printBtn && canvas) {
+            printBtn.style.display = "inline-block";
+            printBtn.onclick = () => {
+                const dataUrl = canvas.toDataURL("image/png");
+                const printWindow = window.open("", "_blank");
+                if (!printWindow) {
+                    alert("Chop etish oynasi ochilmadi — brauzeringiz popup'larni bloklagan bo'lishi mumkin.");
+                    return;
+                }
+                printWindow.document.write(`
+                    <html><head><title>Sertifikat — chop etish</title>
+                    <style>
+                        body { margin: 0; display: flex; align-items: center; justify-content: center; }
+                        img { max-width: 100%; height: auto; }
+                    </style>
+                    </head><body>
+                    <img src="${dataUrl}" onload="window.print(); window.onafterprint = () => window.close();">
+                    </body></html>
+                `);
+                printWindow.document.close();
+            };
+        }
+
         const shareBtn = document.getElementById("certificateShareBtn");
         if (shareBtn && canvas) {
             shareBtn.style.display = "inline-block";
