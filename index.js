@@ -286,6 +286,7 @@ const menuButtons = {
     "typingRaceBtn": "typingRacePage",
     "fillBlankBtn": "fillBlankPage",
     "bossBattleBtn": "bossBattlePage",
+    "pomodoroBtn": "pomodoroPage",
     "speedBtn": "speedPage",
     "sentenceBtn": "sentencePage",
     "grammarQuizBtn": "grammarQuizPage",
@@ -3575,13 +3576,80 @@ window.addEventListener("load", () => {
 })();
 
 const languageSelectEl = document.getElementById("languageSelect");
+
+// =========================================================================
+// INTERFEYS TILI (UI i18n) — asosiy menyu, "Tezkor kirish" grid va
+// "Boshlash" tugmasi uchun real tarjima. ESLATMA: bu ilova ichidagi
+// KONTENT (so'zlar, misollar) allaqachon uch tilda (uz/ru/en) — bu yerdagi
+// tizim esa MENYU/TUGMALAR kabi interfeys elementlarini tarjima qiladi.
+// Hozircha to'liq ilova emas, eng ko'p ishlatiladigan qismlar qamrab
+// olingan; qolgan sahifalar hali o'zbekcha qoladi.
+// =========================================================================
+
+const UI_TRANSLATIONS = {
+    homeBtn: { uz: "🏠 Bosh sahifa", en: "🏠 Home", ru: "🏠 Главная", tr: "🏠 Ana Sayfa" },
+    beginnerBtn: { uz: "🆕 Noldan boshlash", en: "🆕 Start from Zero", ru: "🆕 Начать с нуля", tr: "🆕 Sıfırdan Başla" },
+    flashBtn: { uz: "📚 Kartochka", en: "📚 Flashcards", ru: "📚 Карточки", tr: "📚 Kartlar" },
+    matchBtn: { uz: "🎮 So'z o'yini", en: "🎮 Word Game", ru: "🎮 Игра слов", tr: "🎮 Kelime Oyunu" },
+    scrambleBtn: { uz: "🔤 Harflarni tartiblash", en: "🔤 Word Scramble", ru: "🔤 Собери слово", tr: "🔤 Harfleri Sırala" },
+    typingRaceBtn: { uz: "⌨️ Tezkor yozish", en: "⌨️ Typing Race", ru: "⌨️ Скоростной набор", tr: "⌨️ Hızlı Yazma" },
+    fillBlankBtn: { uz: "✏️ Bo'sh joyni to'ldirish", en: "✏️ Fill in the Blank", ru: "✏️ Заполни пропуск", tr: "✏️ Boşluk Doldurma" },
+    bossBattleBtn: { uz: "👹 Haftalik Boss", en: "👹 Weekly Boss", ru: "👹 Недельный босс", tr: "👹 Haftalık Boss" },
+    pomodoroBtn: { uz: "🍅 Fokus rejimi", en: "🍅 Focus Mode", ru: "🍅 Режим фокуса", tr: "🍅 Odak Modu" },
+    speedBtn: { uz: "⚡ Tezkor test", en: "⚡ Speed Quiz", ru: "⚡ Быстрый тест", tr: "⚡ Hızlı Test" },
+    sentenceBtn: { uz: "🧩 Gap tuzish", en: "🧩 Sentence Builder", ru: "🧩 Составь предложение", tr: "🧩 Cümle Kurma" },
+    grammarQuizBtn: { uz: "📐 Grammatika testi", en: "📐 Grammar Quiz", ru: "📐 Тест по грамматике", tr: "📐 Dilbilgisi Testi" },
+    mistakeBtn: { uz: "📖 Qiyin so'zlar", en: "📖 Difficult Words", ru: "📖 Сложные слова", tr: "📖 Zor Kelimeler" },
+    certificateBtn2: { uz: "🎓 Sertifikat", en: "🎓 Certificate", ru: "🎓 Сертификат", tr: "🎓 Sertifika" },
+    premiumBtn: { uz: "💎 Premium", en: "💎 Premium", ru: "💎 Премиум", tr: "💎 Premium" },
+    adminBtn: { uz: "🛠️ Admin panel", en: "🛠️ Admin Panel", ru: "🛠️ Админ-панель", tr: "🛠️ Yönetici Paneli" },
+    quizBtn: { uz: "📝 Test", en: "📝 Quiz", ru: "📝 Тест", tr: "📝 Test" },
+    aiBtn: { uz: "🤖 AI Teacher", en: "🤖 AI Teacher", ru: "🤖 AI Учитель", tr: "🤖 AI Öğretmen" },
+    assistantBtn: { uz: "💬 AI Assistant", en: "💬 AI Assistant", ru: "💬 AI Ассистент", tr: "💬 AI Asistan" },
+    roleplayBtn: { uz: "🎭 Rolli suhbat", en: "🎭 Roleplay", ru: "🎭 Ролевая игра", tr: "🎭 Rol Yapma" },
+    duelBtn: { uz: "🤝 Do'st bilan raqobat", en: "🤝 Compete with a Friend", ru: "🤝 Соревнование с другом", tr: "🤝 Arkadaşla Yarış" },
+    grammarLibraryBtn: { uz: "📘 Grammatika qo'llanmasi", en: "📘 Grammar Guide", ru: "📘 Справочник грамматики", tr: "📘 Dilbilgisi Rehberi" },
+    idiomsBtn: { uz: "💬 Idiomalar", en: "💬 Idioms", ru: "💬 Идиомы", tr: "💬 Deyimler" },
+    myWordsBtn: { uz: "📝 Mening so'zlarim", en: "📝 My Words", ru: "📝 Мои слова", tr: "📝 Kelimelerim" },
+    examBtn: { uz: "🎯 Imtihon rejimi", en: "🎯 Exam Mode", ru: "🎯 Режим экзамена", tr: "🎯 Sınav Modu" },
+    courseBtn: { uz: "📖 Lug'at", en: "📖 Vocabulary", ru: "📖 Словарь", tr: "📖 Kelime Bilgisi" },
+    aiToolsBtn: { uz: "🛠 Tarjima", en: "🛠 Translate", ru: "🛠 Перевод", tr: "🛠 Çeviri" },
+    speakingBtn: { uz: "🎤 Speaking", en: "🎤 Speaking", ru: "🎤 Говорение", tr: "🎤 Konuşma" },
+    grammarBtn: { uz: "✏️ Grammatika", en: "✏️ Grammar", ru: "✏️ Грамматика", tr: "✏️ Dilbilgisi" },
+    achievementBtn: { uz: "🏆 Yutuqlar", en: "🏆 Achievements", ru: "🏆 Достижения", tr: "🏆 Başarılar" },
+    avatarBtn: { uz: "🧑 Avatar", en: "🧑 Avatar", ru: "🧑 Аватар", tr: "🧑 Avatar" },
+    statsBtn: { uz: "📊 Statistika", en: "📊 Statistics", ru: "📊 Статистика", tr: "📊 İstatistik" },
+    settingsBtn: { uz: "⚙️ Sozlamalar", en: "⚙️ Settings", ru: "⚙️ Настройки", tr: "⚙️ Ayarlar" },
+    startBtn: { uz: "Boshlash", en: "Start", ru: "Начать", tr: "Başla" },
+    qa_flash: { uz: "Kartochka", en: "Flashcards", ru: "Карточки", tr: "Kartlar" },
+    qa_quiz: { uz: "Test", en: "Quiz", ru: "Тест", tr: "Test" },
+    qa_match: { uz: "O'yin", en: "Game", ru: "Игра", tr: "Oyun" },
+    qa_scramble: { uz: "Harflar", en: "Letters", ru: "Буквы", tr: "Harfler" },
+    qa_ai: { uz: "AI Teacher", en: "AI Teacher", ru: "AI Учитель", tr: "AI Öğretmen" },
+    qa_cert: { uz: "Sertifikat", en: "Certificate", ru: "Сертификат", tr: "Sertifika" },
+    qa_stats: { uz: "Statistika", en: "Stats", ru: "Статистика", tr: "İstatistik" },
+    qa_settings: { uz: "Sozlama", en: "Settings", ru: "Настройки", tr: "Ayarlar" }
+};
+
+function applyUILanguage(lang) {
+    if (!["uz", "en", "ru", "tr"].includes(lang)) lang = "uz";
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const key = el.dataset.i18n;
+        const dict = UI_TRANSLATIONS[key];
+        if (dict) el.textContent = dict[lang] || dict.uz;
+    });
+    localStorage.setItem("uiLang", lang);
+    if (languageSelectEl) languageSelectEl.value = lang;
+}
+
 if (languageSelectEl) {
     languageSelectEl.onchange = () => {
-        const lang = languageSelectEl.value;
-        localStorage.setItem("language", lang);
-        alert("Language: " + lang);
+        applyUILanguage(languageSelectEl.value);
     };
 }
+
+// Ilova ochilganda avval saqlangan tanlovni qo'llaymiz (uz — standart)
+applyUILanguage(localStorage.getItem("uiLang") || "uz");
 
 const notificationToggleEl = document.getElementById("notificationToggle");
 if (notificationToggleEl) {
@@ -5005,6 +5073,139 @@ if (bossAnswerInputEl) {
         if (e.key === "Enter") bossAttack();
     });
 }
+
+// =========================================================================
+// FOKUS REJIMI (Pomodoro) — 25 daqiqa mashq / 5 daqiqa dam olish sikli.
+// Bugun tugatilgan davrlar soni localStorage'da kunlik saqlanadi.
+// =========================================================================
+
+const POMODORO_WORK_SECONDS = 25 * 60;
+const POMODORO_BREAK_SECONDS = 5 * 60;
+const POMODORO_RING_CIRCUMFERENCE = 2 * Math.PI * 52;
+
+const pomodoroState = {
+    secondsLeft: POMODORO_WORK_SECONDS,
+    totalSeconds: POMODORO_WORK_SECONDS,
+    mode: "work", // "work" | "break"
+    running: false,
+    timerId: null
+};
+
+function getPomodoroCountToday() {
+    const today = new Date().toDateString();
+    const stored = JSON.parse(localStorage.getItem("pomodoroCount") || "{}");
+    return stored.date === today ? (stored.count || 0) : 0;
+}
+
+function incrementPomodoroCount() {
+    const today = new Date().toDateString();
+    const current = getPomodoroCountToday();
+    localStorage.setItem("pomodoroCount", JSON.stringify({ date: today, count: current + 1 }));
+    updatePomodoroCountDisplay();
+}
+
+function updatePomodoroCountDisplay() {
+    const el = document.getElementById("pomodoroCount");
+    if (el) el.textContent = getPomodoroCountToday();
+}
+
+function formatPomodoroTime(totalSec) {
+    const m = Math.floor(totalSec / 60).toString().padStart(2, "0");
+    const s = Math.floor(totalSec % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+}
+
+function renderPomodoroUI() {
+    const timeEl = document.getElementById("pomodoroTime");
+    const labelEl = document.getElementById("pomodoroLabel");
+    const ringFillEl = document.getElementById("pomodoroRingFill");
+    if (timeEl) timeEl.textContent = formatPomodoroTime(pomodoroState.secondsLeft);
+    if (labelEl) labelEl.textContent = pomodoroState.mode === "work" ? "Mashq vaqti" : "Dam olish vaqti";
+    if (ringFillEl) {
+        const progress = 1 - pomodoroState.secondsLeft / pomodoroState.totalSeconds;
+        const offset = POMODORO_RING_CIRCUMFERENCE * (1 - progress);
+        ringFillEl.style.strokeDasharray = `${POMODORO_RING_CIRCUMFERENCE}`;
+        ringFillEl.style.strokeDashoffset = `${offset}`;
+    }
+}
+
+function pomodoroTick() {
+    pomodoroState.secondsLeft--;
+    renderPomodoroUI();
+    if (pomodoroState.secondsLeft <= 0) {
+        clearInterval(pomodoroState.timerId);
+        pomodoroState.running = false;
+        const wasWork = pomodoroState.mode === "work";
+        if (wasWork) {
+            incrementPomodoroCount();
+            xp += 15;
+            coins += 5;
+            if (typeof updateStats === "function") updateStats();
+            if (typeof celebrate === "function") celebrate();
+        }
+        pomodoroState.mode = wasWork ? "break" : "work";
+        pomodoroState.totalSeconds = wasWork ? POMODORO_BREAK_SECONDS : POMODORO_WORK_SECONDS;
+        pomodoroState.secondsLeft = pomodoroState.totalSeconds;
+        renderPomodoroUI();
+
+        const startBtn = document.getElementById("pomodoroStartBtn");
+        const pauseBtn = document.getElementById("pomodoroPauseBtn");
+        if (startBtn) startBtn.style.display = "inline-block";
+        if (pauseBtn) pauseBtn.style.display = "none";
+
+        if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+            new Notification(wasWork ? "🍅 Davr tugadi!" : "💪 Dam tugadi!", {
+                body: wasWork ? "Ajoyib! Endi 5 daqiqa dam oling." : "Yangi mashq davrini boshlashga tayyormisiz?"
+            });
+        } else {
+            alert(wasWork ? "🍅 Davr tugadi! Endi 5 daqiqa dam oling. (+15 XP, +5 tanga)" : "💪 Dam tugadi! Yangi mashq davrini boshlaymizmi?");
+        }
+    }
+}
+
+function startPomodoro() {
+    if (pomodoroState.running) return;
+    pomodoroState.running = true;
+    pomodoroState.timerId = setInterval(pomodoroTick, 1000);
+    const startBtn = document.getElementById("pomodoroStartBtn");
+    const pauseBtn = document.getElementById("pomodoroPauseBtn");
+    if (startBtn) startBtn.style.display = "none";
+    if (pauseBtn) pauseBtn.style.display = "inline-block";
+}
+
+function pausePomodoro() {
+    pomodoroState.running = false;
+    clearInterval(pomodoroState.timerId);
+    const startBtn = document.getElementById("pomodoroStartBtn");
+    const pauseBtn = document.getElementById("pomodoroPauseBtn");
+    if (startBtn) { startBtn.style.display = "inline-block"; startBtn.textContent = "▶️ Davom ettirish"; }
+    if (pauseBtn) pauseBtn.style.display = "none";
+}
+
+function resetPomodoro() {
+    pomodoroState.running = false;
+    clearInterval(pomodoroState.timerId);
+    pomodoroState.mode = "work";
+    pomodoroState.totalSeconds = POMODORO_WORK_SECONDS;
+    pomodoroState.secondsLeft = POMODORO_WORK_SECONDS;
+    renderPomodoroUI();
+    const startBtn = document.getElementById("pomodoroStartBtn");
+    const pauseBtn = document.getElementById("pomodoroPauseBtn");
+    if (startBtn) { startBtn.style.display = "inline-block"; startBtn.textContent = "▶️ Boshlash"; }
+    if (pauseBtn) pauseBtn.style.display = "none";
+}
+
+const pomodoroStartBtn = document.getElementById("pomodoroStartBtn");
+if (pomodoroStartBtn) pomodoroStartBtn.addEventListener("click", startPomodoro);
+
+const pomodoroPauseBtn = document.getElementById("pomodoroPauseBtn");
+if (pomodoroPauseBtn) pomodoroPauseBtn.addEventListener("click", pausePomodoro);
+
+const pomodoroResetBtn = document.getElementById("pomodoroResetBtn");
+if (pomodoroResetBtn) pomodoroResetBtn.addEventListener("click", resetPomodoro);
+
+renderPomodoroUI();
+updatePomodoroCountDisplay();
 
 // =========================================================================
 // KUNNING SO'ZI (Word of the Day) — bosh sahifadagi kichik vidjet
