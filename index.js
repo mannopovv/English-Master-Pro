@@ -3578,6 +3578,163 @@ window.addEventListener("load", () => {
 const languageSelectEl = document.getElementById("languageSelect");
 
 // =========================================================================
+// "BIZNI BAHOLANG" SO'ROVI — foydalanuvchi kamida 3 kun streak qilgach
+// (ya'ni ilovadan mamnun bo'lish ehtimoli yuqori bo'lganda), bir marta
+// so'raladi. "Boshqa so'ralmasin" tanlansa, qayta ko'rsatilmaydi. Bu Play
+// Store'dagi haqiqiy reyting sahifasiga o'tkazadi (PLAY_STORE_URL'ni o'z
+// ilova havolangiz bilan almashtiring).
+// =========================================================================
+
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=YOUR_PACKAGE_NAME";
+
+function maybeShowRateUsPrompt() {
+    const dismissed = localStorage.getItem("rateUsNever") === "1";
+    const alreadyShownToday = localStorage.getItem("rateUsLastShown") === new Date().toDateString();
+    const currentStreak = (typeof streak !== "undefined") ? streak : 0;
+    if (dismissed || alreadyShownToday || currentStreak < 3) return;
+
+    const modal = document.getElementById("rateUsModal");
+    if (!modal) return;
+    modal.classList.add("show");
+    localStorage.setItem("rateUsLastShown", new Date().toDateString());
+}
+
+document.querySelectorAll("#rateUsStars span").forEach((star) => {
+    star.addEventListener("click", () => {
+        const value = parseInt(star.dataset.star, 10);
+        document.querySelectorAll("#rateUsStars span").forEach((s) => {
+            s.classList.toggle("active", parseInt(s.dataset.star, 10) <= value);
+        });
+        const goBtn = document.getElementById("rateUsGoBtn");
+        if (goBtn) goBtn.style.display = "inline-block";
+        localStorage.setItem("rateUsGivenStars", String(value));
+    });
+});
+
+const rateUsGoBtn = document.getElementById("rateUsGoBtn");
+if (rateUsGoBtn) {
+    rateUsGoBtn.addEventListener("click", () => {
+        window.open(PLAY_STORE_URL, "_blank");
+        localStorage.setItem("rateUsNever", "1");
+        const modal = document.getElementById("rateUsModal");
+        if (modal) modal.classList.remove("show");
+    });
+}
+
+const rateUsLaterBtn = document.getElementById("rateUsLaterBtn");
+if (rateUsLaterBtn) {
+    rateUsLaterBtn.addEventListener("click", () => {
+        const modal = document.getElementById("rateUsModal");
+        if (modal) modal.classList.remove("show");
+    });
+}
+
+const rateUsNeverBtn = document.getElementById("rateUsNeverBtn");
+if (rateUsNeverBtn) {
+    rateUsNeverBtn.addEventListener("click", () => {
+        localStorage.setItem("rateUsNever", "1");
+        const modal = document.getElementById("rateUsModal");
+        if (modal) modal.classList.remove("show");
+    });
+}
+
+setTimeout(maybeShowRateUsPrompt, 4000);
+
+// =========================================================================
+// ONBOARDING TUR — birinchi marta kirgan foydalanuvchiga asosiy yangi
+// joylarni (Tezkor kirish, Fokus rejimi, Boss Battle, Sertifikat) qisqa
+// spotlight-uslubidagi tanishtiruv orqali ko'rsatadi.
+// =========================================================================
+
+const ONBOARDING_STEPS = [
+    { selector: "#quickAccessGrid", title: "👋 Xush kelibsiz!", text: "Bu — \"Tezkor kirish\" paneli. Eng ko'p ishlatiladigan bo'limlarga shu yerdan bir bosishda o'tasiz." },
+    { selector: "[data-target='scrambleBtn']", title: "🔤 Yangi o'yinlar", text: "Harflarni tartiblash, Tezkor yozish, Bo'sh joyni to'ldirish kabi yangi o'yin-mashqlar qo'shildi." },
+    { navTarget: "pomodoroBtn", title: "🍅 Fokus rejimi", text: "25 daqiqa to'liq diqqat bilan mashq qiling — bu usul xotirani mustahkamlashga yordam beradi." },
+    { navTarget: "certificateBtn2", title: "🎓 Sertifikat", text: "Muvaffaqiyatlaringiz uchun shaxsiy sertifikat yarating, PDF holida yuklab oling yoki do'stlaringizga ulashing." }
+];
+
+let onboardingIndex = 0;
+
+function positionTourStep() {
+    const step = ONBOARDING_STEPS[onboardingIndex];
+    if (!step) return finishOnboarding();
+
+    let targetEl = null;
+    if (step.selector) targetEl = document.querySelector(step.selector);
+    if (step.navTarget) targetEl = document.getElementById(step.navTarget);
+
+    const spotlight = document.getElementById("tourSpotlight");
+    const tooltip = document.getElementById("tourTooltip");
+    const titleEl = document.getElementById("tourTitle");
+    const textEl = document.getElementById("tourText");
+    const progressEl = document.getElementById("tourProgress");
+
+    if (titleEl) titleEl.textContent = step.title;
+    if (textEl) textEl.textContent = step.text;
+
+    if (progressEl) {
+        progressEl.innerHTML = ONBOARDING_STEPS.map((_, i) =>
+            `<span class="${i === onboardingIndex ? "active" : ""}"></span>`).join("");
+    }
+
+    if (targetEl && spotlight && tooltip) {
+        const rect = targetEl.getBoundingClientRect();
+        const pad = 10;
+        spotlight.style.top = `${rect.top - pad}px`;
+        spotlight.style.left = `${rect.left - pad}px`;
+        spotlight.style.width = `${rect.width + pad * 2}px`;
+        spotlight.style.height = `${rect.height + pad * 2}px`;
+
+        const tooltipTop = rect.bottom + 16 < window.innerHeight - 160 ? rect.bottom + 16 : Math.max(16, rect.top - 190);
+        tooltip.style.top = `${tooltipTop}px`;
+        tooltip.style.left = `${Math.min(Math.max(16, rect.left), window.innerWidth - 316)}px`;
+    } else if (spotlight) {
+        spotlight.style.width = "0px";
+        spotlight.style.height = "0px";
+    }
+
+    const nextBtn = document.getElementById("tourNextBtn");
+    if (nextBtn) nextBtn.textContent = onboardingIndex === ONBOARDING_STEPS.length - 1 ? "Tugatish ✓" : "Keyingisi →";
+}
+
+function startOnboardingTour() {
+    onboardingIndex = 0;
+    const tourEl = document.getElementById("onboardingTour");
+    if (tourEl) tourEl.classList.add("show");
+    positionTourStep();
+}
+
+function finishOnboarding() {
+    const tourEl = document.getElementById("onboardingTour");
+    if (tourEl) tourEl.classList.remove("show");
+    localStorage.setItem("onboardingTourSeen", "1");
+}
+
+const tourNextBtn = document.getElementById("tourNextBtn");
+if (tourNextBtn) {
+    tourNextBtn.addEventListener("click", () => {
+        onboardingIndex++;
+        if (onboardingIndex >= ONBOARDING_STEPS.length) finishOnboarding();
+        else positionTourStep();
+    });
+}
+
+const tourSkipBtn = document.getElementById("tourSkipBtn");
+if (tourSkipBtn) tourSkipBtn.addEventListener("click", finishOnboarding);
+
+window.addEventListener("resize", () => {
+    const tourEl = document.getElementById("onboardingTour");
+    if (tourEl && tourEl.classList.contains("show")) positionTourStep();
+});
+
+// Faqat birinchi marta (yoki hali ko'rmagan foydalanuvchiga) ko'rsatamiz,
+// va u yangi funksiyalarni ko'rishi uchun asosiy sahifa (bosh sahifa)da
+// bo'lganda ishga tushiramiz.
+if (!localStorage.getItem("onboardingTourSeen")) {
+    window.addEventListener("load", () => setTimeout(startOnboardingTour, 1800));
+}
+
+// =========================================================================
 // INTERFEYS TILI (UI i18n) — asosiy menyu, "Tezkor kirish" grid va
 // "Boshlash" tugmasi uchun real tarjima. ESLATMA: bu ilova ichidagi
 // KONTENT (so'zlar, misollar) allaqachon uch tilda (uz/ru/en) — bu yerdagi
@@ -3628,7 +3785,17 @@ const UI_TRANSLATIONS = {
     qa_ai: { uz: "AI Teacher", en: "AI Teacher", ru: "AI Учитель", tr: "AI Öğretmen" },
     qa_cert: { uz: "Sertifikat", en: "Certificate", ru: "Сертификат", tr: "Sertifika" },
     qa_stats: { uz: "Statistika", en: "Stats", ru: "Статистика", tr: "İstatistik" },
-    qa_settings: { uz: "Sozlama", en: "Settings", ru: "Настройки", tr: "Ayarlar" }
+    qa_settings: { uz: "Sozlama", en: "Settings", ru: "Настройки", tr: "Ayarlar" },
+    hdr_match: { uz: "🎮 So'zlarni moslashtirish", en: "🎮 Match the Words", ru: "🎮 Сопоставь слова", tr: "🎮 Kelimeleri Eşleştir" },
+    hdr_scramble: { uz: "🔤 Harflarni tartiblash", en: "🔤 Word Scramble", ru: "🔤 Собери слово", tr: "🔤 Harfleri Sırala" },
+    hdr_typing: { uz: "⌨️ Tezkor yozish (Typing Race)", en: "⌨️ Typing Race", ru: "⌨️ Скоростной набор", tr: "⌨️ Hızlı Yazma" },
+    hdr_fillblank: { uz: "✏️ Bo'sh joyni to'ldirish", en: "✏️ Fill in the Blank", ru: "✏️ Заполни пропуск", tr: "✏️ Boşluk Doldurma" },
+    hdr_boss: { uz: "👹 Haftalik Boss", en: "👹 Weekly Boss", ru: "👹 Недельный босс", tr: "👹 Haftalık Boss" },
+    hdr_pomodoro: { uz: "🍅 Fokus rejimi (Pomodoro)", en: "🍅 Focus Mode (Pomodoro)", ru: "🍅 Режим фокуса (Помодоро)", tr: "🍅 Odak Modu (Pomodoro)" },
+    hdr_speed: { uz: "⚡ Tezkor test", en: "⚡ Speed Quiz", ru: "⚡ Быстрый тест", tr: "⚡ Hızlı Test" },
+    hdr_stats: { uz: "📊 Statistika", en: "📊 Statistics", ru: "📊 Статистика", tr: "📊 İstatistik" },
+    hdr_cert: { uz: "🎓 Sertifikat", en: "🎓 Certificate", ru: "🎓 Сертификат", tr: "🎓 Sertifika" },
+    hdr_achievements: { uz: "🏆 Yutuqlar", en: "🏆 Achievements", ru: "🏆 Достижения", tr: "🏆 Başarılar" }
 };
 
 function applyUILanguage(lang) {

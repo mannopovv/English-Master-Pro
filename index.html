@@ -90,6 +90,35 @@
         <div class="loader"></div>
         <p>Loading English Master...</p>
     </div>
+
+    <div id="rateUsModal" class="rate-us-modal">
+        <div class="rate-us-card">
+            <div class="rate-us-icon">🌟</div>
+            <h3>Ilova sizga yoqdimi?</h3>
+            <p class="ai-settings-hint">Fikringiz biz uchun muhim — bir necha soniya vaqt ajratib, Play Store'da baholab qo'ysangiz, boshqa foydalanuvchilarga ham yordam bergan bo'lasiz!</p>
+            <div class="rate-us-stars" id="rateUsStars">
+                <span data-star="1">★</span><span data-star="2">★</span><span data-star="3">★</span><span data-star="4">★</span><span data-star="5">★</span>
+            </div>
+            <div class="rate-us-actions">
+                <button id="rateUsLaterBtn" class="rate-us-later">Keyinroq</button>
+                <button id="rateUsGoBtn" class="rate-us-go" style="display:none;">Play Store'ga o'tish</button>
+            </div>
+            <button id="rateUsNeverBtn" class="rate-us-never">Boshqa so'ralmasin</button>
+        </div>
+    </div>
+
+    <div id="onboardingTour" class="onboarding-tour">
+        <div class="tour-spotlight" id="tourSpotlight"></div>
+        <div class="tour-tooltip" id="tourTooltip">
+            <div class="tour-tooltip-title" id="tourTitle">—</div>
+            <div class="tour-tooltip-text" id="tourText">—</div>
+            <div class="tour-tooltip-actions">
+                <button id="tourSkipBtn" class="tour-skip">O'tkazib yuborish</button>
+                <button id="tourNextBtn" class="tour-next">Keyingisi →</button>
+            </div>
+            <div class="tour-progress" id="tourProgress"></div>
+        </div>
+    </div>
  
     <header>
         <div class="logo">
@@ -292,7 +321,7 @@
         </section>
 
         <section id="matchPage" class="page tool-page">
-            <h2>🎮 So'zlarni moslashtirish</h2>
+            <h2 data-i18n="hdr_match">🎮 So'zlarni moslashtirish</h2>
             <p class="ai-settings-hint">Chap tomondagi so'zga mos tarjimani toping. Har to'g'ri juftlik uchun XP olasiz!</p>
             <div class="match-toolbar">
                 <div id="matchStatus" class="match-status">Juftliklar: 0 / 6</div>
@@ -302,7 +331,7 @@
         </section>
 
         <section id="scramblePage" class="page tool-page">
-            <h2>🔤 Harflarni tartiblash</h2>
+            <h2 data-i18n="hdr_scramble">🔤 Harflarni tartiblash</h2>
             <p class="ai-settings-hint">Aralashtirilgan harflardan to'g'ri ingliz so'zini yig'ing. Har to'g'ri javob uchun XP va tanga olasiz!</p>
             <div class="scramble-toolbar">
                 <span id="scrambleScore" class="scramble-score">✅ 0 / ⏭ 0</span>
@@ -319,7 +348,7 @@
         </section>
 
         <section id="typingRacePage" class="page tool-page">
-            <h2>⌨️ Tezkor yozish (Typing Race)</h2>
+            <h2 data-i18n="hdr_typing">⌨️ Tezkor yozish (Typing Race)</h2>
             <p class="ai-settings-hint">Ekranda chiqqan ingliz so'zini imkon qadar tez va xatosiz yozing. 30 soniyada nechta so'z yoza olasiz?</p>
             <div class="typing-hud">
                 <span id="typingTimer" class="typing-timer">⏱ 30s</span>
@@ -333,7 +362,7 @@
         </section>
 
         <section id="fillBlankPage" class="page tool-page">
-            <h2>✏️ Bo'sh joyni to'ldirish</h2>
+            <h2 data-i18n="hdr_fillblank">✏️ Bo'sh joyni to'ldirish</h2>
             <p class="ai-settings-hint">Gapdagi bo'sh joyga mos so'zni tanlang yoki yozing.</p>
             <div class="fillblank-card">
                 <div id="fillBlankSentence" class="fillblank-sentence">—</div>
@@ -344,7 +373,7 @@
         </section>
 
         <section id="bossBattlePage" class="page tool-page">
-            <h2>👹 Haftalik Boss</h2>
+            <h2 data-i18n="hdr_boss">👹 Haftalik Boss</h2>
             <p class="ai-settings-hint">Bu haftaning eng qiyin so'zlaridan yasalgan "Boss" bilan jang qiling — har to'g'ri javob unga zarba beradi!</p>
             <div class="boss-hud">
                 <div class="boss-side">
@@ -366,7 +395,7 @@
         </section>
 
         <section id="pomodoroPage" class="page tool-page">
-            <h2>🍅 Fokus rejimi (Pomodoro)</h2>
+            <h2 data-i18n="hdr_pomodoro">🍅 Fokus rejimi (Pomodoro)</h2>
             <p class="ai-settings-hint">25 daqiqa to'liq e'tibor bilan mashq qiling, keyin 5 daqiqa dam oling — bu usul diqqatni uzoqroq saqlashga yordam beradi.</p>
             <div class="pomodoro-card">
                 <div class="pomodoro-ring-wrap">
@@ -389,7 +418,7 @@
         </section>
 
         <section id="speedPage" class="page tool-page">
-            <h2>⚡ Tezkor test</h2>
+            <h2 data-i18n="hdr_speed">⚡ Tezkor test</h2>
             <p class="ai-settings-hint">60 soniyada so'z va tarjima to'g'ri mos kelayotganini tezda ayting — imkon qadar ko'proq to'g'ri javob bering!</p>
             <div class="speed-hud">
                 <div class="speed-hud-item">⏱ <span id="speedTimeLeft">60</span>s</div>
@@ -585,7 +614,7 @@
  
         
         <section id="statsPage" class="page">
-            <h2>📊 Statistika</h2>
+            <h2 data-i18n="hdr_stats">📊 Statistika</h2>
 
             <div class="cefr-badge-card" id="cefrBadgeCard">
                 <div class="cefr-badge" id="cefrBadge">A1</div>
@@ -641,7 +670,7 @@
         </section>
 
         <section id="certificatePage" class="page tool-page">
-            <h2>🎓 Sertifikat</h2>
+            <h2 data-i18n="hdr_cert">🎓 Sertifikat</h2>
             <p class="ai-settings-hint">O'z ismingizni kiriting va hozirgi darajangizga mos shaxsiy sertifikatingizni yarating — rasm sifatida yuklab olishingiz mumkin.</p>
             <input type="text" id="certificateName" placeholder="To'liq ismingiz (masalan: Aliyev Vali)">
             <button id="generateCertBtn">🎓 Sertifikat yaratish</button>
@@ -995,7 +1024,7 @@ Generate 10 Words
 </section>
 <section id="achievementPage" class="page tool-page">
  
-<h2>🏆 Achievements</h2>
+<h2 data-i18n="hdr_achievements">🏆 Achievements</h2>
  
 <div id="achievementList"></div>
  
