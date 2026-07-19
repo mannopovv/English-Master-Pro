@@ -10,6 +10,15 @@ html {
     width: 100%;
 }
 
+/* Arab tilidagi matnlar (o'ngdan-chapga) uchun: to'g'ri yo'nalish va
+   arab yozuviga mos shrift (Noto Naskh Arabic) ishlatiladi. */
+.arabic-text {
+    direction: rtl;
+    font-family: 'Noto Naskh Arabic', 'Traditional Arabic', 'Poppins', sans-serif;
+    unicode-bidi: isolate;
+    line-height: 1.9;
+}
+
 button {
     -webkit-tap-highlight-color: transparent;
     position: relative;

@@ -395,199 +395,199 @@ syncBottomNav("homePage");
 
 const words = [
     
-    { en: "Family", uz: "Oila", example: "I love my family.", ru: "Семья", ruExample: "Я люблю свою семью.", category: "Oila" },
-    { en: "Mother", uz: "Ona", example: "My mother is a doctor.", ru: "Мать", ruExample: "Моя мать врач.", category: "Oila" },
-    { en: "Father", uz: "Ota", example: "My father works hard.", ru: "Отец", ruExample: "Мой отец много работает.", category: "Oila" },
-    { en: "Sister", uz: "Opa/Singil", example: "My sister is younger.", ru: "Сестра", ruExample: "Моя сестра младше меня.", category: "Oila" },
-    { en: "Brother", uz: "Aka/Uka", example: "My brother is tall.", ru: "Брат", ruExample: "Мой брат высокий.", category: "Oila" },
-    { en: "Grandmother", uz: "Buvi", example: "My grandmother cooks well.", ru: "Бабушка", ruExample: "Моя бабушка хорошо готовит.", category: "Oila" },
-    { en: "Grandfather", uz: "Bobo", example: "My grandfather tells stories.", ru: "Дедушка", ruExample: "Мой дедушка рассказывает истории.", category: "Oila" },
-    { en: "Son", uz: "O'g'il", example: "Their son is smart.", ru: "Сын", ruExample: "Их сын умный.", category: "Oila" },
-    { en: "Daughter", uz: "Qiz", example: "Her daughter sings well.", ru: "Дочь", ruExample: "Её дочь хорошо поёт.", category: "Oila" },
-    { en: "Wife", uz: "Xotin", example: "His wife is a teacher.", ru: "Жена", ruExample: "Его жена учительница.", category: "Oila" },
-    { en: "Husband", uz: "Er", example: "Her husband is an engineer.", ru: "Муж", ruExample: "Её муж инженер.", category: "Oila" },
-    { en: "Friend", uz: "Do'st", example: "He is my best friend.", ru: "Друг", ruExample: "Он мой лучший друг.", category: "Oila" },
+    { en: "Family", uz: "Oila", example: "I love my family.", ru: "Семья", ruExample: "Я люблю свою семью.", ar: "عائلة", arExample: "أحب عائلتي.", category: "Oila" },
+    { en: "Mother", uz: "Ona", example: "My mother is a doctor.", ru: "Мать", ruExample: "Моя мать врач.", ar: "أم", arExample: "أمي طبيبة.", category: "Oila" },
+    { en: "Father", uz: "Ota", example: "My father works hard.", ru: "Отец", ruExample: "Мой отец много работает.", ar: "أب", arExample: "أبي يعمل بجد.", category: "Oila" },
+    { en: "Sister", uz: "Opa/Singil", example: "My sister is younger.", ru: "Сестра", ruExample: "Моя сестра младше меня.", ar: "أخت", arExample: "أختي أصغر مني.", category: "Oila" },
+    { en: "Brother", uz: "Aka/Uka", example: "My brother is tall.", ru: "Брат", ruExample: "Мой брат высокий.", ar: "أخ", arExample: "أخي طويل القامة.", category: "Oila" },
+    { en: "Grandmother", uz: "Buvi", example: "My grandmother cooks well.", ru: "Бабушка", ruExample: "Моя бабушка хорошо готовит.", ar: "جدة", arExample: "جدتي تطبخ جيدا.", category: "Oila" },
+    { en: "Grandfather", uz: "Bobo", example: "My grandfather tells stories.", ru: "Дедушка", ruExample: "Мой дедушка рассказывает истории.", ar: "جد", arExample: "جدي يحكي القصص.", category: "Oila" },
+    { en: "Son", uz: "O'g'il", example: "Their son is smart.", ru: "Сын", ruExample: "Их сын умный.", ar: "ابن", arExample: "ابنهما ذكي.", category: "Oila" },
+    { en: "Daughter", uz: "Qiz", example: "Her daughter sings well.", ru: "Дочь", ruExample: "Её дочь хорошо поёт.", ar: "ابنة", arExample: "ابنتها تغني جيدا.", category: "Oila" },
+    { en: "Wife", uz: "Xotin", example: "His wife is a teacher.", ru: "Жена", ruExample: "Его жена учительница.", ar: "زوجة", arExample: "زوجته معلمة.", category: "Oila" },
+    { en: "Husband", uz: "Er", example: "Her husband is an engineer.", ru: "Муж", ruExample: "Её муж инженер.", ar: "زوج", arExample: "زوجها مهندس.", category: "Oila" },
+    { en: "Friend", uz: "Do'st", example: "He is my best friend.", ru: "Друг", ruExample: "Он мой лучший друг.", ar: "صديق", arExample: "هو أفضل صديق لي.", category: "Oila" },
     
-    { en: "Apple", uz: "Olma", example: "I eat an apple.", ru: "Яблоко", ruExample: "Я ем яблоко.", category: "Ovqat" },
-    { en: "Bread", uz: "Non", example: "We buy fresh bread.", ru: "Хлеб", ruExample: "Мы покупаем свежий хлеб.", category: "Ovqat" },
-    { en: "Water", uz: "Suv", example: "Drink water every day.", ru: "Вода", ruExample: "Пей воду каждый день.", category: "Ovqat" },
-    { en: "Milk", uz: "Sut", example: "Children drink milk.", ru: "Молоко", ruExample: "Дети пьют молоко.", category: "Ovqat" },
-    { en: "Rice", uz: "Guruch", example: "We cook rice for dinner.", ru: "Рис", ruExample: "Мы готовим рис на ужин.", category: "Ovqat" },
-    { en: "Meat", uz: "Go'sht", example: "He doesn't eat meat.", ru: "Мясо", ruExample: "Он не ест мясо.", category: "Ovqat" },
-    { en: "Egg", uz: "Tuxum", example: "I eat an egg for breakfast.", ru: "Яйцо", ruExample: "Я ем яйцо на завтрак.", category: "Ovqat" },
-    { en: "Tea", uz: "Choy", example: "We drink tea every morning.", ru: "Чай", ruExample: "Мы пьём чай каждое утро.", category: "Ovqat" },
-    { en: "Coffee", uz: "Qahva", example: "She likes strong coffee.", ru: "Кофе", ruExample: "Она любит крепкий кофе.", category: "Ovqat" },
-    { en: "Sugar", uz: "Shakar", example: "Add sugar to the tea.", ru: "Сахар", ruExample: "Добавь сахар в чай.", category: "Ovqat" },
-    { en: "Salt", uz: "Tuz", example: "Add some salt to the soup.", ru: "Соль", ruExample: "Добавь немного соли в суп.", category: "Ovqat" },
-    { en: "Fruit", uz: "Meva", example: "Fruit is good for health.", ru: "Фрукты", ruExample: "Фрукты полезны для здоровья.", category: "Ovqat" },
-    { en: "Vegetable", uz: "Sabzavot", example: "I eat vegetables daily.", ru: "Овощи", ruExample: "Я ем овощи каждый день.", category: "Ovqat" },
-    { en: "Soup", uz: "Sho'rva", example: "This soup is delicious.", ru: "Суп", ruExample: "Этот суп вкусный.", category: "Ovqat" },
+    { en: "Apple", uz: "Olma", example: "I eat an apple.", ru: "Яблоко", ruExample: "Я ем яблоко.", ar: "تفاحة", arExample: "آكل تفاحة.", category: "Ovqat" },
+    { en: "Bread", uz: "Non", example: "We buy fresh bread.", ru: "Хлеб", ruExample: "Мы покупаем свежий хлеб.", ar: "خبز", arExample: "نشتري خبزا طازجا.", category: "Ovqat" },
+    { en: "Water", uz: "Suv", example: "Drink water every day.", ru: "Вода", ruExample: "Пей воду каждый день.", ar: "ماء", arExample: "اشرب الماء كل يوم.", category: "Ovqat" },
+    { en: "Milk", uz: "Sut", example: "Children drink milk.", ru: "Молоко", ruExample: "Дети пьют молоко.", ar: "حليب", arExample: "الأطفال يشربون الحليب.", category: "Ovqat" },
+    { en: "Rice", uz: "Guruch", example: "We cook rice for dinner.", ru: "Рис", ruExample: "Мы готовим рис на ужин.", ar: "أرز", arExample: "نطبخ الأرز للعشاء.", category: "Ovqat" },
+    { en: "Meat", uz: "Go'sht", example: "He doesn't eat meat.", ru: "Мясо", ruExample: "Он не ест мясо.", ar: "لحم", arExample: "هو لا يأكل اللحم.", category: "Ovqat" },
+    { en: "Egg", uz: "Tuxum", example: "I eat an egg for breakfast.", ru: "Яйцо", ruExample: "Я ем яйцо на завтрак.", ar: "بيضة", arExample: "آكل بيضة في الفطور.", category: "Ovqat" },
+    { en: "Tea", uz: "Choy", example: "We drink tea every morning.", ru: "Чай", ruExample: "Мы пьём чай каждое утро.", ar: "شاي", arExample: "نشرب الشاي كل صباح.", category: "Ovqat" },
+    { en: "Coffee", uz: "Qahva", example: "She likes strong coffee.", ru: "Кофе", ruExample: "Она любит крепкий кофе.", ar: "قهوة", arExample: "هي تحب القهوة القوية.", category: "Ovqat" },
+    { en: "Sugar", uz: "Shakar", example: "Add sugar to the tea.", ru: "Сахар", ruExample: "Добавь сахар в чай.", ar: "سكر", arExample: "أضف السكر إلى الشاي.", category: "Ovqat" },
+    { en: "Salt", uz: "Tuz", example: "Add some salt to the soup.", ru: "Соль", ruExample: "Добавь немного соли в суп.", ar: "ملح", arExample: "أضف قليلا من الملح إلى الحساء.", category: "Ovqat" },
+    { en: "Fruit", uz: "Meva", example: "Fruit is good for health.", ru: "Фрукты", ruExample: "Фрукты полезны для здоровья.", ar: "فاكهة", arExample: "الفاكهة مفيدة للصحة.", category: "Ovqat" },
+    { en: "Vegetable", uz: "Sabzavot", example: "I eat vegetables daily.", ru: "Овощи", ruExample: "Я ем овощи каждый день.", ar: "خضار", arExample: "آكل الخضار يوميا.", category: "Ovqat" },
+    { en: "Soup", uz: "Sho'rva", example: "This soup is delicious.", ru: "Суп", ruExample: "Этот суп вкусный.", ar: "حساء", arExample: "هذا الحساء لذيذ.", category: "Ovqat" },
     
-    { en: "House", uz: "Uy", example: "This is our new house.", ru: "Дом", ruExample: "Это наш новый дом.", category: "Uy" },
-    { en: "Room", uz: "Xona", example: "My room is clean.", ru: "Комната", ruExample: "Моя комната чистая.", category: "Uy" },
-    { en: "Door", uz: "Eshik", example: "Please close the door.", ru: "Дверь", ruExample: "Пожалуйста, закрой дверь.", category: "Uy" },
-    { en: "Window", uz: "Deraza", example: "Open the window, please.", ru: "Окно", ruExample: "Открой окно, пожалуйста.", category: "Uy" },
-    { en: "Table", uz: "Stol", example: "The book is on the table.", ru: "Стол", ruExample: "Книга на столе.", category: "Uy" },
-    { en: "Chair", uz: "Stul", example: "Sit on the chair.", ru: "Стул", ruExample: "Сядь на стул.", category: "Uy" },
-    { en: "Bed", uz: "Karavot", example: "I sleep on my bed.", ru: "Кровать", ruExample: "Я сплю на своей кровати.", category: "Uy" },
-    { en: "Kitchen", uz: "Oshxona", example: "Mother is in the kitchen.", ru: "Кухня", ruExample: "Мама на кухне.", category: "Uy" },
-    { en: "Shirt", uz: "Ko'ylak", example: "He is wearing a blue shirt.", ru: "Рубашка", ruExample: "Он носит синюю рубашку.", category: "Kiyim" },
-    { en: "Shoes", uz: "Poyabzal", example: "These shoes are new.", ru: "Обувь", ruExample: "Эта обувь новая.", category: "Kiyim" },
-    { en: "Hat", uz: "Shlyapa", example: "She wears a hat in summer.", ru: "Шляпа", ruExample: "Она носит шляпу летом.", category: "Kiyim" },
-    { en: "Jacket", uz: "Kurtka", example: "Wear your jacket, it's cold.", ru: "Куртка", ruExample: "Надень куртку, холодно.", category: "Kiyim" },
+    { en: "House", uz: "Uy", example: "This is our new house.", ru: "Дом", ruExample: "Это наш новый дом.", ar: "بيت", arExample: "هذا بيتنا الجديد.", category: "Uy" },
+    { en: "Room", uz: "Xona", example: "My room is clean.", ru: "Комната", ruExample: "Моя комната чистая.", ar: "غرفة", arExample: "غرفتي نظيفة.", category: "Uy" },
+    { en: "Door", uz: "Eshik", example: "Please close the door.", ru: "Дверь", ruExample: "Пожалуйста, закрой дверь.", ar: "باب", arExample: "أغلق الباب من فضلك.", category: "Uy" },
+    { en: "Window", uz: "Deraza", example: "Open the window, please.", ru: "Окно", ruExample: "Открой окно, пожалуйста.", ar: "نافذة", arExample: "افتح النافذة من فضلك.", category: "Uy" },
+    { en: "Table", uz: "Stol", example: "The book is on the table.", ru: "Стол", ruExample: "Книга на столе.", ar: "طاولة", arExample: "الكتاب على الطاولة.", category: "Uy" },
+    { en: "Chair", uz: "Stul", example: "Sit on the chair.", ru: "Стул", ruExample: "Сядь на стул.", ar: "كرسي", arExample: "اجلس على الكرسي.", category: "Uy" },
+    { en: "Bed", uz: "Karavot", example: "I sleep on my bed.", ru: "Кровать", ruExample: "Я сплю на своей кровати.", ar: "سرير", arExample: "أنام على سريري.", category: "Uy" },
+    { en: "Kitchen", uz: "Oshxona", example: "Mother is in the kitchen.", ru: "Кухня", ruExample: "Мама на кухне.", ar: "مطبخ", arExample: "أمي في المطبخ.", category: "Uy" },
+    { en: "Shirt", uz: "Ko'ylak", example: "He is wearing a blue shirt.", ru: "Рубашка", ruExample: "Он носит синюю рубашку.", ar: "قميص", arExample: "هو يرتدي قميصا أزرق.", category: "Kiyim" },
+    { en: "Shoes", uz: "Poyabzal", example: "These shoes are new.", ru: "Обувь", ruExample: "Эта обувь новая.", ar: "حذاء", arExample: "هذا الحذاء جديد.", category: "Kiyim" },
+    { en: "Hat", uz: "Shlyapa", example: "She wears a hat in summer.", ru: "Шляпа", ruExample: "Она носит шляпу летом.", ar: "قبعة", arExample: "هي ترتدي قبعة في الصيف.", category: "Kiyim" },
+    { en: "Jacket", uz: "Kurtka", example: "Wear your jacket, it's cold.", ru: "Куртка", ruExample: "Надень куртку, холодно.", ar: "سترة", arExample: "البس سترتك، الجو بارد.", category: "Kiyim" },
   
-    { en: "School", uz: "Maktab", example: "I go to school.", ru: "Школа", ruExample: "Я хожу в школу.", category: "Maktab" },
-    { en: "Teacher", uz: "O'qituvchi", example: "My teacher is kind.", ru: "Учитель", ruExample: "Мой учитель добрый.", category: "Maktab" },
-    { en: "Student", uz: "O'quvchi", example: "She is a good student.", ru: "Ученик", ruExample: "Она хорошая ученица.", category: "Maktab" },
-    { en: "Book", uz: "Kitob", example: "This is my book.", ru: "Книга", ruExample: "Это моя книга.", category: "Maktab" },
-    { en: "Pen", uz: "Ruchka", example: "I write with a pen.", ru: "Ручка", ruExample: "Я пишу ручкой.", category: "Maktab" },
-    { en: "Pencil", uz: "Qalam", example: "Draw with a pencil.", ru: "Карандаш", ruExample: "Рисуй карандашом.", category: "Maktab" },
-    { en: "Notebook", uz: "Daftar", example: "Write it in your notebook.", ru: "Тетрадь", ruExample: "Запиши это в тетрадь.", category: "Maktab" },
-    { en: "Lesson", uz: "Dars", example: "Today's lesson is interesting.", ru: "Урок", ruExample: "Сегодняшний урок интересный.", category: "Maktab" },
-    { en: "Exam", uz: "Imtihon", example: "The exam is tomorrow.", ru: "Экзамен", ruExample: "Экзамен завтра.", category: "Maktab" },
-    { en: "Homework", uz: "Uyga vazifa", example: "I finished my homework.", ru: "Домашнее задание", ruExample: "Я закончил домашнее задание.", category: "Maktab" },
-    { en: "Work", uz: "Ish", example: "He goes to work every day.", ru: "Работа", ruExample: "Он ходит на работу каждый день.", category: "Ish" },
-    { en: "Job", uz: "Kasb", example: "She has a good job.", ru: "Профессия", ruExample: "У неё хорошая работа.", category: "Ish" },
-    { en: "Office", uz: "Ofis", example: "I work in an office.", ru: "Офис", ruExample: "Я работаю в офисе.", category: "Ish" },
-    { en: "Money", uz: "Pul", example: "He saves his money.", ru: "Деньги", ruExample: "Он копит деньги.", category: "Ish" },
-    { en: "Manager", uz: "Menejer", example: "The manager is busy today.", ru: "Менеджер", ruExample: "Менеджер сегодня занят.", category: "Ish" },
+    { en: "School", uz: "Maktab", example: "I go to school.", ru: "Школа", ruExample: "Я хожу в школу.", ar: "مدرسة", arExample: "أذهب إلى المدرسة.", category: "Maktab" },
+    { en: "Teacher", uz: "O'qituvchi", example: "My teacher is kind.", ru: "Учитель", ruExample: "Мой учитель добрый.", ar: "معلم", arExample: "معلمي لطيف.", category: "Maktab" },
+    { en: "Student", uz: "O'quvchi", example: "She is a good student.", ru: "Ученик", ruExample: "Она хорошая ученица.", ar: "طالب", arExample: "هي طالبة مجتهدة.", category: "Maktab" },
+    { en: "Book", uz: "Kitob", example: "This is my book.", ru: "Книга", ruExample: "Это моя книга.", ar: "كتاب", arExample: "هذا كتابي.", category: "Maktab" },
+    { en: "Pen", uz: "Ruchka", example: "I write with a pen.", ru: "Ручка", ruExample: "Я пишу ручкой.", ar: "قلم حبر", arExample: "أكتب بقلم.", category: "Maktab" },
+    { en: "Pencil", uz: "Qalam", example: "Draw with a pencil.", ru: "Карандаш", ruExample: "Рисуй карандашом.", ar: "قلم رصاص", arExample: "ارسم بقلم رصاص.", category: "Maktab" },
+    { en: "Notebook", uz: "Daftar", example: "Write it in your notebook.", ru: "Тетрадь", ruExample: "Запиши это в тетрадь.", ar: "دفتر", arExample: "اكتبه في دفترك.", category: "Maktab" },
+    { en: "Lesson", uz: "Dars", example: "Today's lesson is interesting.", ru: "Урок", ruExample: "Сегодняшний урок интересный.", ar: "درس", arExample: "درس اليوم ممتع.", category: "Maktab" },
+    { en: "Exam", uz: "Imtihon", example: "The exam is tomorrow.", ru: "Экзамен", ruExample: "Экзамен завтра.", ar: "امتحان", arExample: "الامتحان غدا.", category: "Maktab" },
+    { en: "Homework", uz: "Uyga vazifa", example: "I finished my homework.", ru: "Домашнее задание", ruExample: "Я закончил домашнее задание.", ar: "واجب منزلي", arExample: "أنهيت واجبي المنزلي.", category: "Maktab" },
+    { en: "Work", uz: "Ish", example: "He goes to work every day.", ru: "Работа", ruExample: "Он ходит на работу каждый день.", ar: "عمل", arExample: "يذهب إلى العمل كل يوم.", category: "Ish" },
+    { en: "Job", uz: "Kasb", example: "She has a good job.", ru: "Профессия", ruExample: "У неё хорошая работа.", ar: "وظيفة", arExample: "لديها وظيفة جيدة.", category: "Ish" },
+    { en: "Office", uz: "Ofis", example: "I work in an office.", ru: "Офис", ruExample: "Я работаю в офисе.", ar: "مكتب", arExample: "أعمل في مكتب.", category: "Ish" },
+    { en: "Money", uz: "Pul", example: "He saves his money.", ru: "Деньги", ruExample: "Он копит деньги.", ar: "مال", arExample: "يوفر ماله.", category: "Ish" },
+    { en: "Manager", uz: "Menejer", example: "The manager is busy today.", ru: "Менеджер", ruExample: "Менеджер сегодня занят.", ar: "مدير", arExample: "المدير مشغول اليوم.", category: "Ish" },
    
-    { en: "Car", uz: "Mashina", example: "My car is blue.", ru: "Машина", ruExample: "Моя машина синяя.", category: "Sayohat" },
-    { en: "Bus", uz: "Avtobus", example: "We took the bus to school.", ru: "Автобус", ruExample: "Мы ехали в школу на автобусе.", category: "Sayohat" },
-    { en: "Train", uz: "Poyezd", example: "The train is fast.", ru: "Поезд", ruExample: "Поезд быстрый.", category: "Sayohat" },
-    { en: "Airport", uz: "Aeroport", example: "We arrived at the airport.", ru: "Аэропорт", ruExample: "Мы прибыли в аэропорт.", category: "Sayohat" },
-    { en: "Ticket", uz: "Chipta", example: "I bought two tickets.", ru: "Билет", ruExample: "Я купил два билета.", category: "Sayohat" },
-    { en: "City", uz: "Shahar", example: "Tashkent is a big city.", ru: "Город", ruExample: "Ташкент большой город.", category: "Sayohat" },
-    { en: "Country", uz: "Mamlakat", example: "Uzbekistan is my country.", ru: "Страна", ruExample: "Узбекистан моя страна.", category: "Sayohat" },
-    { en: "Street", uz: "Ko'cha", example: "This street is busy.", ru: "Улица", ruExample: "Эта улица оживлённая.", category: "Sayohat" },
-    { en: "Map", uz: "Xarita", example: "Look at the map.", ru: "Карта", ruExample: "Посмотри на карту.", category: "Sayohat" },
-    { en: "Hotel", uz: "Mehmonxona", example: "We stayed at a hotel.", ru: "Гостиница", ruExample: "Мы остановились в гостинице.", category: "Sayohat" },
+    { en: "Car", uz: "Mashina", example: "My car is blue.", ru: "Машина", ruExample: "Моя машина синяя.", ar: "سيارة", arExample: "سيارتي زرقاء.", category: "Sayohat" },
+    { en: "Bus", uz: "Avtobus", example: "We took the bus to school.", ru: "Автобус", ruExample: "Мы ехали в школу на автобусе.", ar: "حافلة", arExample: "ركبنا الحافلة إلى المدرسة.", category: "Sayohat" },
+    { en: "Train", uz: "Poyezd", example: "The train is fast.", ru: "Поезд", ruExample: "Поезд быстрый.", ar: "قطار", arExample: "القطار سريع.", category: "Sayohat" },
+    { en: "Airport", uz: "Aeroport", example: "We arrived at the airport.", ru: "Аэропорт", ruExample: "Мы прибыли в аэропорт.", ar: "مطار", arExample: "وصلنا إلى المطار.", category: "Sayohat" },
+    { en: "Ticket", uz: "Chipta", example: "I bought two tickets.", ru: "Билет", ruExample: "Я купил два билета.", ar: "تذكرة", arExample: "اشتريت تذكرتين.", category: "Sayohat" },
+    { en: "City", uz: "Shahar", example: "Tashkent is a big city.", ru: "Город", ruExample: "Ташкент большой город.", ar: "مدينة", arExample: "طشقند مدينة كبيرة.", category: "Sayohat" },
+    { en: "Country", uz: "Mamlakat", example: "Uzbekistan is my country.", ru: "Страна", ruExample: "Узбекистан моя страна.", ar: "بلد", arExample: "أوزبكستان بلدي.", category: "Sayohat" },
+    { en: "Street", uz: "Ko'cha", example: "This street is busy.", ru: "Улица", ruExample: "Эта улица оживлённая.", ar: "شارع", arExample: "هذا الشارع مزدحم.", category: "Sayohat" },
+    { en: "Map", uz: "Xarita", example: "Look at the map.", ru: "Карта", ruExample: "Посмотри на карту.", ar: "خريطة", arExample: "انظر إلى الخريطة.", category: "Sayohat" },
+    { en: "Hotel", uz: "Mehmonxona", example: "We stayed at a hotel.", ru: "Гостиница", ruExample: "Мы остановились в гостинице.", ar: "فندق", arExample: "أقمنا في فندق.", category: "Sayohat" },
    
-    { en: "Dog", uz: "It", example: "The dog is running.", ru: "Собака", ruExample: "Собака бежит.", category: "Tabiat" },
-    { en: "Cat", uz: "Mushuk", example: "The cat is sleeping.", ru: "Кошка", ruExample: "Кошка спит.", category: "Tabiat" },
-    { en: "Bird", uz: "Qush", example: "The bird can fly.", ru: "Птица", ruExample: "Птица умеет летать.", category: "Tabiat" },
-    { en: "Tree", uz: "Daraxt", example: "There is a tree in the yard.", ru: "Дерево", ruExample: "Во дворе есть дерево.", category: "Tabiat" },
-    { en: "Flower", uz: "Gul", example: "She gave me a flower.", ru: "Цветок", ruExample: "Она подарила мне цветок.", category: "Tabiat" },
-    { en: "Sun", uz: "Quyosh", example: "The sun is bright today.", ru: "Солнце", ruExample: "Сегодня солнце яркое.", category: "Tabiat" },
-    { en: "Moon", uz: "Oy", example: "The moon is beautiful tonight.", ru: "Луна", ruExample: "Луна сегодня красивая.", category: "Tabiat" },
-    { en: "Rain", uz: "Yomg'ir", example: "It is raining outside.", ru: "Дождь", ruExample: "На улице идёт дождь.", category: "Ob-havo" },
-    { en: "Snow", uz: "Qor", example: "Snow is falling in winter.", ru: "Снег", ruExample: "Зимой идёт снег.", category: "Ob-havo" },
-    { en: "Wind", uz: "Shamol", example: "The wind is strong today.", ru: "Ветер", ruExample: "Сегодня сильный ветер.", category: "Ob-havo" },
-    { en: "Cold", uz: "Sovuq", example: "It is cold in winter.", ru: "Холодно", ruExample: "Зимой холодно.", category: "Ob-havo" },
-    { en: "Hot", uz: "Issiq", example: "It is hot in summer.", ru: "Жарко", ruExample: "Летом жарко.", category: "Ob-havo" },
+    { en: "Dog", uz: "It", example: "The dog is running.", ru: "Собака", ruExample: "Собака бежит.", ar: "كلب", arExample: "الكلب يجري.", category: "Tabiat" },
+    { en: "Cat", uz: "Mushuk", example: "The cat is sleeping.", ru: "Кошка", ruExample: "Кошка спит.", ar: "قطة", arExample: "القطة نائمة.", category: "Tabiat" },
+    { en: "Bird", uz: "Qush", example: "The bird can fly.", ru: "Птица", ruExample: "Птица умеет летать.", ar: "طائر", arExample: "الطائر يستطيع الطيران.", category: "Tabiat" },
+    { en: "Tree", uz: "Daraxt", example: "There is a tree in the yard.", ru: "Дерево", ruExample: "Во дворе есть дерево.", ar: "شجرة", arExample: "هناك شجرة في الحديقة.", category: "Tabiat" },
+    { en: "Flower", uz: "Gul", example: "She gave me a flower.", ru: "Цветок", ruExample: "Она подарила мне цветок.", ar: "زهرة", arExample: "أعطتني زهرة.", category: "Tabiat" },
+    { en: "Sun", uz: "Quyosh", example: "The sun is bright today.", ru: "Солнце", ruExample: "Сегодня солнце яркое.", ar: "شمس", arExample: "الشمس مشرقة اليوم.", category: "Tabiat" },
+    { en: "Moon", uz: "Oy", example: "The moon is beautiful tonight.", ru: "Луна", ruExample: "Луна сегодня красивая.", ar: "قمر", arExample: "القمر جميل الليلة.", category: "Tabiat" },
+    { en: "Rain", uz: "Yomg'ir", example: "It is raining outside.", ru: "Дождь", ruExample: "На улице идёт дождь.", ar: "مطر", arExample: "إنها تمطر في الخارج.", category: "Ob-havo" },
+    { en: "Snow", uz: "Qor", example: "Snow is falling in winter.", ru: "Снег", ruExample: "Зимой идёт снег.", ar: "ثلج", arExample: "الثلج يتساقط في الشتاء.", category: "Ob-havo" },
+    { en: "Wind", uz: "Shamol", example: "The wind is strong today.", ru: "Ветер", ruExample: "Сегодня сильный ветер.", ar: "رياح", arExample: "الرياح قوية اليوم.", category: "Ob-havo" },
+    { en: "Cold", uz: "Sovuq", example: "It is cold in winter.", ru: "Холодно", ruExample: "Зимой холодно.", ar: "بارد", arExample: "الجو بارد في الشتاء.", category: "Ob-havo" },
+    { en: "Hot", uz: "Issiq", example: "It is hot in summer.", ru: "Жарко", ruExample: "Летом жарко.", ar: "حار", arExample: "الجو حار في الصيف.", category: "Ob-havo" },
     
-    { en: "Today", uz: "Bugun", example: "Today is a good day.", ru: "Сегодня", ruExample: "Сегодня хороший день.", category: "Vaqt" },
-    { en: "Tomorrow", uz: "Ertaga", example: "See you tomorrow.", ru: "Завтра", ruExample: "До завтра.", category: "Vaqt" },
-    { en: "Yesterday", uz: "Kecha", example: "I saw him yesterday.", ru: "Вчера", ruExample: "Я видел его вчера.", category: "Vaqt" },
-    { en: "Morning", uz: "Ertalab", example: "I wake up in the morning.", ru: "Утро", ruExample: "Я просыпаюсь утром.", category: "Vaqt" },
-    { en: "Night", uz: "Kecha (tun)", example: "I sleep at night.", ru: "Ночь", ruExample: "Я сплю ночью.", category: "Vaqt" },
-    { en: "Week", uz: "Hafta", example: "There are seven days in a week.", ru: "Неделя", ruExample: "В неделе семь дней.", category: "Vaqt" },
-    { en: "Month", uz: "Oy (kalendar)", example: "This month is busy.", ru: "Месяц", ruExample: "Этот месяц занятой.", category: "Vaqt" },
-    { en: "Year", uz: "Yil", example: "Next year will be great.", ru: "Год", ruExample: "Следующий год будет отличным.", category: "Vaqt" },
-    { en: "One", uz: "Bir", example: "I have one book.", ru: "Один", ruExample: "У меня одна книга.", category: "Sonlar" },
-    { en: "Two", uz: "Ikki", example: "She has two sisters.", ru: "Два", ruExample: "У неё две сестры.", category: "Sonlar" },
-    { en: "Three", uz: "Uch", example: "There are three chairs.", ru: "Три", ruExample: "Здесь три стула.", category: "Sonlar" },
-    { en: "Ten", uz: "O'n", example: "He counted to ten.", ru: "Десять", ruExample: "Он посчитал до десяти.", category: "Sonlar" },
+    { en: "Today", uz: "Bugun", example: "Today is a good day.", ru: "Сегодня", ruExample: "Сегодня хороший день.", ar: "اليوم", arExample: "اليوم يوم جميل.", category: "Vaqt" },
+    { en: "Tomorrow", uz: "Ertaga", example: "See you tomorrow.", ru: "Завтра", ruExample: "До завтра.", ar: "غدا", arExample: "أراك غدا.", category: "Vaqt" },
+    { en: "Yesterday", uz: "Kecha", example: "I saw him yesterday.", ru: "Вчера", ruExample: "Я видел его вчера.", ar: "أمس", arExample: "رأيته أمس.", category: "Vaqt" },
+    { en: "Morning", uz: "Ertalab", example: "I wake up in the morning.", ru: "Утро", ruExample: "Я просыпаюсь утром.", ar: "صباح", arExample: "أستيقظ في الصباح.", category: "Vaqt" },
+    { en: "Night", uz: "Kecha (tun)", example: "I sleep at night.", ru: "Ночь", ruExample: "Я сплю ночью.", ar: "ليل", arExample: "أنام في الليل.", category: "Vaqt" },
+    { en: "Week", uz: "Hafta", example: "There are seven days in a week.", ru: "Неделя", ruExample: "В неделе семь дней.", ar: "أسبوع", arExample: "هناك سبعة أيام في الأسبوع.", category: "Vaqt" },
+    { en: "Month", uz: "Oy (kalendar)", example: "This month is busy.", ru: "Месяц", ruExample: "Этот месяц занятой.", ar: "شهر", arExample: "هذا الشهر مزدحم.", category: "Vaqt" },
+    { en: "Year", uz: "Yil", example: "Next year will be great.", ru: "Год", ruExample: "Следующий год будет отличным.", ar: "سنة", arExample: "السنة القادمة ستكون رائعة.", category: "Vaqt" },
+    { en: "One", uz: "Bir", example: "I have one book.", ru: "Один", ruExample: "У меня одна книга.", ar: "واحد", arExample: "لدي كتاب واحد.", category: "Sonlar" },
+    { en: "Two", uz: "Ikki", example: "She has two sisters.", ru: "Два", ruExample: "У неё две сестры.", ar: "اثنان", arExample: "لديها أختان.", category: "Sonlar" },
+    { en: "Three", uz: "Uch", example: "There are three chairs.", ru: "Три", ruExample: "Здесь три стула.", ar: "ثلاثة", arExample: "هناك ثلاثة كراسي.", category: "Sonlar" },
+    { en: "Ten", uz: "O'n", example: "He counted to ten.", ru: "Десять", ruExample: "Он посчитал до десяти.", ar: "عشرة", arExample: "عد إلى عشرة.", category: "Sonlar" },
    
-    { en: "Happy", uz: "Baxtli", example: "She is very happy today.", ru: "Счастливый", ruExample: "Она сегодня очень счастлива.", category: "His-tuyg'u" },
-    { en: "Sad", uz: "Xafa", example: "He looks sad.", ru: "Грустный", ruExample: "Он выглядит грустным.", category: "His-tuyg'u" },
-    { en: "Angry", uz: "Jahldor", example: "Don't be angry with me.", ru: "Злой", ruExample: "Не злись на меня.", category: "His-tuyg'u" },
-    { en: "Tired", uz: "Charchagan", example: "I am very tired.", ru: "Уставший", ruExample: "Я очень устал.", category: "His-tuyg'u" },
-    { en: "Beautiful", uz: "Chiroyli", example: "What a beautiful garden!", ru: "Красивый", ruExample: "Какой красивый сад!", category: "Sifat" },
-    { en: "Big", uz: "Katta", example: "This is a big house.", ru: "Большой", ruExample: "Это большой дом.", category: "Sifat" },
-    { en: "Small", uz: "Kichik", example: "The kitten is small.", ru: "Маленький", ruExample: "Котёнок маленький.", category: "Sifat" },
-    { en: "Fast", uz: "Tez", example: "He runs very fast.", ru: "Быстрый", ruExample: "Он бегает очень быстро.", category: "Sifat" },
-    { en: "Slow", uz: "Sekin", example: "The turtle is slow.", ru: "Медленный", ruExample: "Черепаха медленная.", category: "Sifat" },
-    { en: "Strong", uz: "Kuchli", example: "He is very strong.", ru: "Сильный", ruExample: "Он очень сильный.", category: "Sifat" },
-    { en: "Smart", uz: "Aqlli", example: "She is a smart student.", ru: "Умный", ruExample: "Она умная ученица.", category: "Sifat" },
-    { en: "Kind", uz: "Mehribon", example: "My teacher is kind.", ru: "Добрый", ruExample: "Мой учитель добрый.", category: "Sifat" },
+    { en: "Happy", uz: "Baxtli", example: "She is very happy today.", ru: "Счастливый", ruExample: "Она сегодня очень счастлива.", ar: "سعيد", arExample: "هي سعيدة جدا اليوم.", category: "His-tuyg'u" },
+    { en: "Sad", uz: "Xafa", example: "He looks sad.", ru: "Грустный", ruExample: "Он выглядит грустным.", ar: "حزين", arExample: "يبدو حزينا.", category: "His-tuyg'u" },
+    { en: "Angry", uz: "Jahldor", example: "Don't be angry with me.", ru: "Злой", ruExample: "Не злись на меня.", ar: "غاضب", arExample: "لا تغضب مني.", category: "His-tuyg'u" },
+    { en: "Tired", uz: "Charchagan", example: "I am very tired.", ru: "Уставший", ruExample: "Я очень устал.", ar: "متعب", arExample: "أنا متعب جدا.", category: "His-tuyg'u" },
+    { en: "Beautiful", uz: "Chiroyli", example: "What a beautiful garden!", ru: "Красивый", ruExample: "Какой красивый сад!", ar: "جميل", arExample: "يا له من حديقة جميلة!", category: "Sifat" },
+    { en: "Big", uz: "Katta", example: "This is a big house.", ru: "Большой", ruExample: "Это большой дом.", ar: "كبير", arExample: "هذا بيت كبير.", category: "Sifat" },
+    { en: "Small", uz: "Kichik", example: "The kitten is small.", ru: "Маленький", ruExample: "Котёнок маленький.", ar: "صغير", arExample: "القطيط صغير الحجم.", category: "Sifat" },
+    { en: "Fast", uz: "Tez", example: "He runs very fast.", ru: "Быстрый", ruExample: "Он бегает очень быстро.", ar: "سريع", arExample: "هو يجري بسرعة كبيرة.", category: "Sifat" },
+    { en: "Slow", uz: "Sekin", example: "The turtle is slow.", ru: "Медленный", ruExample: "Черепаха медленная.", ar: "بطيء", arExample: "السلحفاة بطيئة.", category: "Sifat" },
+    { en: "Strong", uz: "Kuchli", example: "He is very strong.", ru: "Сильный", ruExample: "Он очень сильный.", ar: "قوي", arExample: "هو قوي جدا.", category: "Sifat" },
+    { en: "Smart", uz: "Aqlli", example: "She is a smart student.", ru: "Умный", ruExample: "Она умная ученица.", ar: "ذكي", arExample: "هي طالبة ذكية.", category: "Sifat" },
+    { en: "Kind", uz: "Mehribon", example: "My teacher is kind.", ru: "Добрый", ruExample: "Мой учитель добрый.", ar: "لطيف", arExample: "معلمي لطيف.", category: "Sifat" },
    
-    { en: "Run", uz: "Yugurmoq", example: "Children love to run.", ru: "Бегать", ruExample: "Дети любят бегать.", category: "Fe'l" },
-    { en: "Eat", uz: "Yemoq", example: "We eat lunch at noon.", ru: "Есть", ruExample: "Мы обедаем в полдень.", category: "Fe'l" },
-    { en: "Drink", uz: "Ichmoq", example: "Drink water every day.", ru: "Пить", ruExample: "Пей воду каждый день.", category: "Fe'l" },
-    { en: "Sleep", uz: "Uxlamoq", example: "I sleep eight hours.", ru: "Спать", ruExample: "Я сплю восемь часов.", category: "Fe'l" },
-    { en: "Study", uz: "O'qimoq (o'rganmoq)", example: "I study English every day.", ru: "Учиться", ruExample: "Я учу английский каждый день.", category: "Fe'l" },
-    { en: "Write", uz: "Yozmoq", example: "She writes a letter.", ru: "Писать", ruExample: "Она пишет письмо.", category: "Fe'l" },
-    { en: "Read", uz: "O'qimoq (kitob)", example: "He reads a book every night.", ru: "Читать", ruExample: "Он читает книгу каждый вечер.", category: "Fe'l" },
-    { en: "Speak", uz: "Gapirmoq", example: "She speaks English well.", ru: "Говорить", ruExample: "Она хорошо говорит по-английски.", category: "Fe'l" },
-    { en: "Listen", uz: "Tinglamoq", example: "Listen to the teacher.", ru: "Слушать", ruExample: "Слушай учителя.", category: "Fe'l" },
-    { en: "Watch", uz: "Tomosha qilmoq", example: "We watch movies together.", ru: "Смотреть", ruExample: "Мы смотрим фильмы вместе.", category: "Fe'l" },
-    { en: "Play", uz: "O'ynamoq", example: "Children play in the park.", ru: "Играть", ruExample: "Дети играют в парке.", category: "Fe'l" },
-    { en: "Buy", uz: "Sotib olmoq", example: "I want to buy a new phone.", ru: "Покупать", ruExample: "Я хочу купить новый телефон.", category: "Fe'l" },
-    { en: "Sell", uz: "Sotmoq", example: "He sells fruit at the market.", ru: "Продавать", ruExample: "Он продаёт фрукты на рынке.", category: "Fe'l" },
-    { en: "Help", uz: "Yordam bermoq", example: "Can you help me, please?", ru: "Помогать", ruExample: "Ты можешь мне помочь?", category: "Fe'l" },
-    { en: "Learn", uz: "O'rganmoq", example: "I want to learn English.", ru: "Учить", ruExample: "Я хочу выучить английский.", category: "Fe'l" },
-    { en: "Teach", uz: "O'qitmoq", example: "She teaches math.", ru: "Преподавать", ruExample: "Она преподаёт математику.", category: "Fe'l" },
-    { en: "Travel", uz: "Sayohat qilmoq", example: "They love to travel.", ru: "Путешествовать", ruExample: "Они любят путешествовать.", category: "Fe'l" },
-    { en: "Cook", uz: "Ovqat pishirmoq", example: "My mother cooks well.", ru: "Готовить", ruExample: "Моя мама хорошо готовит.", category: "Fe'l" },
-    { en: "Clean", uz: "Tozalamoq", example: "I clean my room every week.", ru: "Убирать", ruExample: "Я убираю свою комнату каждую неделю.", category: "Fe'l" },
-    { en: "Open", uz: "Ochmoq", example: "Please open the window.", ru: "Открывать", ruExample: "Пожалуйста, открой окно.", category: "Fe'l" },
-    { en: "Close", uz: "Yopmoq", example: "Close the door, please.", ru: "Закрывать", ruExample: "Закрой дверь, пожалуйста.", category: "Fe'l" },
+    { en: "Run", uz: "Yugurmoq", example: "Children love to run.", ru: "Бегать", ruExample: "Дети любят бегать.", ar: "يجري", arExample: "الأطفال يحبون الجري.", category: "Fe'l" },
+    { en: "Eat", uz: "Yemoq", example: "We eat lunch at noon.", ru: "Есть", ruExample: "Мы обедаем в полдень.", ar: "يأكل", arExample: "نأكل الغداء عند الظهر.", category: "Fe'l" },
+    { en: "Drink", uz: "Ichmoq", example: "Drink water every day.", ru: "Пить", ruExample: "Пей воду каждый день.", ar: "يشرب", arExample: "اشرب الماء كل يوم.", category: "Fe'l" },
+    { en: "Sleep", uz: "Uxlamoq", example: "I sleep eight hours.", ru: "Спать", ruExample: "Я сплю восемь часов.", ar: "ينام", arExample: "أنام ثماني ساعات.", category: "Fe'l" },
+    { en: "Study", uz: "O'qimoq (o'rganmoq)", example: "I study English every day.", ru: "Учиться", ruExample: "Я учу английский каждый день.", ar: "يدرس", arExample: "أدرس الإنجليزية كل يوم.", category: "Fe'l" },
+    { en: "Write", uz: "Yozmoq", example: "She writes a letter.", ru: "Писать", ruExample: "Она пишет письмо.", ar: "يكتب", arExample: "هي تكتب رسالة.", category: "Fe'l" },
+    { en: "Read", uz: "O'qimoq (kitob)", example: "He reads a book every night.", ru: "Читать", ruExample: "Он читает книгу каждый вечер.", ar: "يقرأ", arExample: "هو يقرأ كتابا كل ليلة.", category: "Fe'l" },
+    { en: "Speak", uz: "Gapirmoq", example: "She speaks English well.", ru: "Говорить", ruExample: "Она хорошо говорит по-английски.", ar: "يتكلم", arExample: "هي تتكلم الإنجليزية جيدا.", category: "Fe'l" },
+    { en: "Listen", uz: "Tinglamoq", example: "Listen to the teacher.", ru: "Слушать", ruExample: "Слушай учителя.", ar: "يستمع", arExample: "استمع إلى المعلم.", category: "Fe'l" },
+    { en: "Watch", uz: "Tomosha qilmoq", example: "We watch movies together.", ru: "Смотреть", ruExample: "Мы смотрим фильмы вместе.", ar: "يشاهد", arExample: "نشاهد الأفلام معا.", category: "Fe'l" },
+    { en: "Play", uz: "O'ynamoq", example: "Children play in the park.", ru: "Играть", ruExample: "Дети играют в парке.", ar: "يلعب", arExample: "الأطفال يلعبون في الحديقة.", category: "Fe'l" },
+    { en: "Buy", uz: "Sotib olmoq", example: "I want to buy a new phone.", ru: "Покупать", ruExample: "Я хочу купить новый телефон.", ar: "يشتري", arExample: "أريد أن أشتري هاتفا جديدا.", category: "Fe'l" },
+    { en: "Sell", uz: "Sotmoq", example: "He sells fruit at the market.", ru: "Продавать", ruExample: "Он продаёт фрукты на рынке.", ar: "يبيع", arExample: "يبيع الفاكهة في السوق.", category: "Fe'l" },
+    { en: "Help", uz: "Yordam bermoq", example: "Can you help me, please?", ru: "Помогать", ruExample: "Ты можешь мне помочь?", ar: "يساعد", arExample: "هل يمكنك مساعدتي من فضلك؟", category: "Fe'l" },
+    { en: "Learn", uz: "O'rganmoq", example: "I want to learn English.", ru: "Учить", ruExample: "Я хочу выучить английский.", ar: "يتعلم", arExample: "أريد أن أتعلم الإنجليزية.", category: "Fe'l" },
+    { en: "Teach", uz: "O'qitmoq", example: "She teaches math.", ru: "Преподавать", ruExample: "Она преподаёт математику.", ar: "يعلّم", arExample: "هي تعلّم الرياضيات.", category: "Fe'l" },
+    { en: "Travel", uz: "Sayohat qilmoq", example: "They love to travel.", ru: "Путешествовать", ruExample: "Они любят путешествовать.", ar: "يسافر", arExample: "يحبون السفر.", category: "Fe'l" },
+    { en: "Cook", uz: "Ovqat pishirmoq", example: "My mother cooks well.", ru: "Готовить", ruExample: "Моя мама хорошо готовит.", ar: "يطبخ", arExample: "أمي تطبخ جيدا.", category: "Fe'l" },
+    { en: "Clean", uz: "Tozalamoq", example: "I clean my room every week.", ru: "Убирать", ruExample: "Я убираю свою комнату каждую неделю.", ar: "ينظف", arExample: "أنظف غرفتي كل أسبوع.", category: "Fe'l" },
+    { en: "Open", uz: "Ochmoq", example: "Please open the window.", ru: "Открывать", ruExample: "Пожалуйста, открой окно.", ar: "يفتح", arExample: "افتح النافذة من فضلك.", category: "Fe'l" },
+    { en: "Close", uz: "Yopmoq", example: "Close the door, please.", ru: "Закрывать", ruExample: "Закрой дверь, пожалуйста.", ar: "يغلق", arExample: "أغلق الباب من فضلك.", category: "Fe'l" },
     
-    { en: "Computer", uz: "Kompyuter", example: "I use a computer for work.", ru: "Компьютер", ruExample: "Я использую компьютер для работы.", category: "Texnologiya" },
-    { en: "Phone", uz: "Telefon", example: "My phone is new.", ru: "Телефон", ruExample: "Мой телефон новый.", category: "Texnologiya" },
-    { en: "Internet", uz: "Internet", example: "I use the internet every day.", ru: "Интернет", ruExample: "Я пользуюсь интернетом каждый день.", category: "Texnologiya" },
-    { en: "Camera", uz: "Kamera", example: "She has a good camera.", ru: "Камера", ruExample: "У неё хорошая камера.", category: "Texnologiya" },
-    { en: "Language", uz: "Til", example: "English is a global language.", ru: "Язык", ruExample: "Английский - это международный язык.", category: "Texnologiya" },
-    { en: "Success", uz: "Muvaffaqiyat", example: "Hard work leads to success.", ru: "Успех", ruExample: "Усердный труд приводит к успеху.", category: "Texnologiya" },
-    { en: "Knowledge", uz: "Bilim", example: "Knowledge is power.", ru: "Знание", ruExample: "Знание - сила.", category: "Texnologiya" },
-    { en: "Hello", uz: "Salom", example: "Hello my friend.", ru: "Привет", ruExample: "Привет, мой друг.", category: "Umumiy" },
+    { en: "Computer", uz: "Kompyuter", example: "I use a computer for work.", ru: "Компьютер", ruExample: "Я использую компьютер для работы.", ar: "حاسوب", arExample: "أستخدم الحاسوب للعمل.", category: "Texnologiya" },
+    { en: "Phone", uz: "Telefon", example: "My phone is new.", ru: "Телефон", ruExample: "Мой телефон новый.", ar: "هاتف", arExample: "هاتفي جديد.", category: "Texnologiya" },
+    { en: "Internet", uz: "Internet", example: "I use the internet every day.", ru: "Интернет", ruExample: "Я пользуюсь интернетом каждый день.", ar: "إنترنت", arExample: "أستخدم الإنترنت كل يوم.", category: "Texnologiya" },
+    { en: "Camera", uz: "Kamera", example: "She has a good camera.", ru: "Камера", ruExample: "У неё хорошая камера.", ar: "كاميرا", arExample: "لديها كاميرا جيدة.", category: "Texnologiya" },
+    { en: "Language", uz: "Til", example: "English is a global language.", ru: "Язык", ruExample: "Английский - это международный язык.", ar: "لغة", arExample: "الإنجليزية لغة عالمية.", category: "Texnologiya" },
+    { en: "Success", uz: "Muvaffaqiyat", example: "Hard work leads to success.", ru: "Успех", ruExample: "Усердный труд приводит к успеху.", ar: "نجاح", arExample: "العمل الجاد يؤدي إلى النجاح.", category: "Texnologiya" },
+    { en: "Knowledge", uz: "Bilim", example: "Knowledge is power.", ru: "Знание", ruExample: "Знание - сила.", ar: "معرفة", arExample: "المعرفة قوة.", category: "Texnologiya" },
+    { en: "Hello", uz: "Salom", example: "Hello my friend.", ru: "Привет", ruExample: "Привет, мой друг.", ar: "مرحبا", arExample: "مرحبا يا صديقي.", category: "Umumiy" },
 
-    { en: "Red", uz: "Qizil", example: "The apple is red.", ru: "Красный", ruExample: "Яблоко красное.", category: "Ranglar" },
-    { en: "Blue", uz: "Ko'k", example: "The sky is blue.", ru: "Синий", ruExample: "Небо синее.", category: "Ranglar" },
-    { en: "Green", uz: "Yashil", example: "The grass is green.", ru: "Зелёный", ruExample: "Трава зелёная.", category: "Ranglar" },
-    { en: "Yellow", uz: "Sariq", example: "The sun looks yellow.", ru: "Жёлтый", ruExample: "Солнце выглядит жёлтым.", category: "Ranglar" },
-    { en: "Black", uz: "Qora", example: "I have a black cat.", ru: "Чёрный", ruExample: "У меня чёрная кошка.", category: "Ranglar" },
-    { en: "White", uz: "Oq", example: "Snow is white.", ru: "Белый", ruExample: "Снег белый.", category: "Ranglar" },
-    { en: "Orange", uz: "To'q sariq", example: "I like the color orange.", ru: "Оранжевый", ruExample: "Мне нравится оранжевый цвет.", category: "Ranglar" },
-    { en: "Purple", uz: "Binafsha", example: "She wore a purple dress.", ru: "Фиолетовый", ruExample: "Она была в фиолетовом платье.", category: "Ranglar" },
+    { en: "Red", uz: "Qizil", example: "The apple is red.", ru: "Красный", ruExample: "Яблоко красное.", ar: "أحمر", arExample: "التفاحة حمراء.", category: "Ranglar" },
+    { en: "Blue", uz: "Ko'k", example: "The sky is blue.", ru: "Синий", ruExample: "Небо синее.", ar: "أزرق", arExample: "السماء زرقاء.", category: "Ranglar" },
+    { en: "Green", uz: "Yashil", example: "The grass is green.", ru: "Зелёный", ruExample: "Трава зелёная.", ar: "أخضر", arExample: "العشب أخضر.", category: "Ranglar" },
+    { en: "Yellow", uz: "Sariq", example: "The sun looks yellow.", ru: "Жёлтый", ruExample: "Солнце выглядит жёлтым.", ar: "أصفر", arExample: "تبدو الشمس صفراء.", category: "Ranglar" },
+    { en: "Black", uz: "Qora", example: "I have a black cat.", ru: "Чёрный", ruExample: "У меня чёрная кошка.", ar: "أسود", arExample: "لدي قطة سوداء.", category: "Ranglar" },
+    { en: "White", uz: "Oq", example: "Snow is white.", ru: "Белый", ruExample: "Снег белый.", ar: "أبيض", arExample: "الثلج أبيض.", category: "Ranglar" },
+    { en: "Orange", uz: "To'q sariq", example: "I like the color orange.", ru: "Оранжевый", ruExample: "Мне нравится оранжевый цвет.", ar: "برتقالي", arExample: "أحب اللون البرتقالي.", category: "Ranglar" },
+    { en: "Purple", uz: "Binafsha", example: "She wore a purple dress.", ru: "Фиолетовый", ruExample: "Она была в фиолетовом платье.", ar: "بنفسجي", arExample: "ارتدت فستانا بنفسجيا.", category: "Ranglar" },
 
-    { en: "Dog", uz: "It", example: "The dog is running.", ru: "Собака", ruExample: "Собака бежит.", category: "Hayvonlar" },
-    { en: "Cat", uz: "Mushuk", example: "The cat is sleeping.", ru: "Кошка", ruExample: "Кошка спит.", category: "Hayvonlar" },
-    { en: "Horse", uz: "Ot", example: "The horse runs fast.", ru: "Лошадь", ruExample: "Лошадь бежит быстро.", category: "Hayvonlar" },
-    { en: "Cow", uz: "Sigir", example: "The cow gives milk.", ru: "Корова", ruExample: "Корова даёт молоко.", category: "Hayvonlar" },
-    { en: "Bird", uz: "Qush", example: "The bird can fly.", ru: "Птица", ruExample: "Птица умеет летать.", category: "Hayvonlar" },
-    { en: "Fish", uz: "Baliq", example: "Fish live in water.", ru: "Рыба", ruExample: "Рыбы живут в воде.", category: "Hayvonlar" },
-    { en: "Elephant", uz: "Fil", example: "The elephant is very big.", ru: "Слон", ruExample: "Слон очень большой.", category: "Hayvonlar" },
-    { en: "Lion", uz: "Sher", example: "The lion is the king of animals.", ru: "Лев", ruExample: "Лев - царь зверей.", category: "Hayvonlar" },
-    { en: "Bear", uz: "Ayiq", example: "The bear sleeps in winter.", ru: "Медведь", ruExample: "Медведь спит зимой.", category: "Hayvonlar" },
-    { en: "Rabbit", uz: "Quyon", example: "The rabbit is very fast.", ru: "Кролик", ruExample: "Кролик очень быстрый.", category: "Hayvonlar" },
+    { en: "Dog", uz: "It", example: "The dog is running.", ru: "Собака", ruExample: "Собака бежит.", ar: "كلب", arExample: "الكلب يجري.", category: "Hayvonlar" },
+    { en: "Cat", uz: "Mushuk", example: "The cat is sleeping.", ru: "Кошка", ruExample: "Кошка спит.", ar: "قطة", arExample: "القطة نائمة.", category: "Hayvonlar" },
+    { en: "Horse", uz: "Ot", example: "The horse runs fast.", ru: "Лошадь", ruExample: "Лошадь бежит быстро.", ar: "حصان", arExample: "الحصان يجري بسرعة.", category: "Hayvonlar" },
+    { en: "Cow", uz: "Sigir", example: "The cow gives milk.", ru: "Корова", ruExample: "Корова даёт молоко.", ar: "بقرة", arExample: "البقرة تعطي الحليب.", category: "Hayvonlar" },
+    { en: "Bird", uz: "Qush", example: "The bird can fly.", ru: "Птица", ruExample: "Птица умеет летать.", ar: "طائر", arExample: "الطائر يستطيع الطيران.", category: "Hayvonlar" },
+    { en: "Fish", uz: "Baliq", example: "Fish live in water.", ru: "Рыба", ruExample: "Рыбы живут в воде.", ar: "سمكة", arExample: "الأسماك تعيش في الماء.", category: "Hayvonlar" },
+    { en: "Elephant", uz: "Fil", example: "The elephant is very big.", ru: "Слон", ruExample: "Слон очень большой.", ar: "فيل", arExample: "الفيل كبير جدا.", category: "Hayvonlar" },
+    { en: "Lion", uz: "Sher", example: "The lion is the king of animals.", ru: "Лев", ruExample: "Лев - царь зверей.", ar: "أسد", arExample: "الأسد ملك الحيوانات.", category: "Hayvonlar" },
+    { en: "Bear", uz: "Ayiq", example: "The bear sleeps in winter.", ru: "Медведь", ruExample: "Медведь спит зимой.", ar: "دب", arExample: "الدب ينام في الشتاء.", category: "Hayvonlar" },
+    { en: "Rabbit", uz: "Quyon", example: "The rabbit is very fast.", ru: "Кролик", ruExample: "Кролик очень быстрый.", ar: "أرنب", arExample: "الأرنب سريع جدا.", category: "Hayvonlar" },
 
-    { en: "Head", uz: "Bosh", example: "My head hurts.", ru: "Голова", ruExample: "У меня болит голова.", category: "Tana a'zolari" },
-    { en: "Eye", uz: "Ko'z", example: "She has blue eyes.", ru: "Глаз", ruExample: "У неё голубые глаза.", category: "Tana a'zolari" },
-    { en: "Ear", uz: "Quloq", example: "I can hear with my ears.", ru: "Ухо", ruExample: "Я слышу ушами.", category: "Tana a'zolari" },
-    { en: "Nose", uz: "Burun", example: "My nose is cold.", ru: "Нос", ruExample: "У меня холодный нос.", category: "Tana a'zolari" },
-    { en: "Mouth", uz: "Og'iz", example: "Open your mouth, please.", ru: "Рот", ruExample: "Открой рот, пожалуйста.", category: "Tana a'zolari" },
-    { en: "Hand", uz: "Qo'l", example: "Wash your hands.", ru: "Рука", ruExample: "Помой руки.", category: "Tana a'zolari" },
-    { en: "Leg", uz: "Oyoq", example: "He hurt his leg.", ru: "Нога", ruExample: "Он повредил ногу.", category: "Tana a'zolari" },
-    { en: "Heart", uz: "Yurak", example: "The heart pumps blood.", ru: "Сердце", ruExample: "Сердце качает кровь.", category: "Tana a'zolari" },
-    { en: "Hair", uz: "Soch", example: "She has long hair.", ru: "Волосы", ruExample: "У неё длинные волосы.", category: "Tana a'zolari" },
-    { en: "Tooth", uz: "Tish", example: "Brush your teeth every day.", ru: "Зуб", ruExample: "Чисти зубы каждый день.", category: "Tana a'zolari" },
+    { en: "Head", uz: "Bosh", example: "My head hurts.", ru: "Голова", ruExample: "У меня болит голова.", ar: "رأس", arExample: "رأسي يؤلمني.", category: "Tana a'zolari" },
+    { en: "Eye", uz: "Ko'z", example: "She has blue eyes.", ru: "Глаз", ruExample: "У неё голубые глаза.", ar: "عين", arExample: "لديها عينان زرقاوان.", category: "Tana a'zolari" },
+    { en: "Ear", uz: "Quloq", example: "I can hear with my ears.", ru: "Ухо", ruExample: "Я слышу ушами.", ar: "أذن", arExample: "أستطيع أن أسمع بأذني.", category: "Tana a'zolari" },
+    { en: "Nose", uz: "Burun", example: "My nose is cold.", ru: "Нос", ruExample: "У меня холодный нос.", ar: "أنف", arExample: "أنفي بارد.", category: "Tana a'zolari" },
+    { en: "Mouth", uz: "Og'iz", example: "Open your mouth, please.", ru: "Рот", ruExample: "Открой рот, пожалуйста.", ar: "فم", arExample: "افتح فمك من فضلك.", category: "Tana a'zolari" },
+    { en: "Hand", uz: "Qo'l", example: "Wash your hands.", ru: "Рука", ruExample: "Помой руки.", ar: "يد", arExample: "اغسل يديك.", category: "Tana a'zolari" },
+    { en: "Leg", uz: "Oyoq", example: "He hurt his leg.", ru: "Нога", ruExample: "Он повредил ногу.", ar: "رجل", arExample: "آذى رجله.", category: "Tana a'zolari" },
+    { en: "Heart", uz: "Yurak", example: "The heart pumps blood.", ru: "Сердце", ruExample: "Сердце качает кровь.", ar: "قلب", arExample: "القلب يضخ الدم.", category: "Tana a'zolari" },
+    { en: "Hair", uz: "Soch", example: "She has long hair.", ru: "Волосы", ruExample: "У неё длинные волосы.", ar: "شعر", arExample: "لديها شعر طويل.", category: "Tana a'zolari" },
+    { en: "Tooth", uz: "Tish", example: "Brush your teeth every day.", ru: "Зуб", ruExample: "Чисти зубы каждый день.", ar: "سن", arExample: "نظف أسنانك كل يوم.", category: "Tana a'zolari" },
 
-    { en: "Teacher", uz: "O'qituvchi", example: "My teacher is very kind.", ru: "Учитель", ruExample: "Мой учитель очень добрый.", category: "Kasblar" },
-    { en: "Doctor", uz: "Shifokor", example: "The doctor helps sick people.", ru: "Врач", ruExample: "Врач помогает больным людям.", category: "Kasblar" },
-    { en: "Engineer", uz: "Muhandis", example: "He works as an engineer.", ru: "Инженер", ruExample: "Он работает инженером.", category: "Kasblar" },
-    { en: "Driver", uz: "Haydovchi", example: "The driver knows the city well.", ru: "Водитель", ruExample: "Водитель хорошо знает город.", category: "Kasblar" },
-    { en: "Farmer", uz: "Dehqon", example: "The farmer grows vegetables.", ru: "Фермер", ruExample: "Фермер выращивает овощи.", category: "Kasblar" },
-    { en: "Police officer", uz: "Militsioner", example: "The police officer keeps us safe.", ru: "Полицейский", ruExample: "Полицейский обеспечивает нашу безопасность.", category: "Kasblar" },
-    { en: "Lawyer", uz: "Advokat", example: "The lawyer works in court.", ru: "Адвокат", ruExample: "Адвокат работает в суде.", category: "Kasblar" },
-    { en: "Cook", uz: "Oshpaz", example: "The cook prepares tasty food.", ru: "Повар", ruExample: "Повар готовит вкусную еду.", category: "Kasblar" },
-    { en: "Nurse", uz: "Hamshira", example: "The nurse takes care of patients.", ru: "Медсестра", ruExample: "Медсестра заботится о пациентах.", category: "Kasblar" },
-    { en: "Pilot", uz: "Uchuvchi", example: "The pilot flies the airplane.", ru: "Пилот", ruExample: "Пилот управляет самолётом.", category: "Kasblar" },
+    { en: "Teacher", uz: "O'qituvchi", example: "My teacher is very kind.", ru: "Учитель", ruExample: "Мой учитель очень добрый.", ar: "معلم", arExample: "معلمي لطيف جدا.", category: "Kasblar" },
+    { en: "Doctor", uz: "Shifokor", example: "The doctor helps sick people.", ru: "Врач", ruExample: "Врач помогает больным людям.", ar: "طبيب", arExample: "الطبيب يساعد المرضى.", category: "Kasblar" },
+    { en: "Engineer", uz: "Muhandis", example: "He works as an engineer.", ru: "Инженер", ruExample: "Он работает инженером.", ar: "مهندس", arExample: "يعمل مهندسا.", category: "Kasblar" },
+    { en: "Driver", uz: "Haydovchi", example: "The driver knows the city well.", ru: "Водитель", ruExample: "Водитель хорошо знает город.", ar: "سائق", arExample: "السائق يعرف المدينة جيدا.", category: "Kasblar" },
+    { en: "Farmer", uz: "Dehqon", example: "The farmer grows vegetables.", ru: "Фермер", ruExample: "Фермер выращивает овощи.", ar: "فلاح", arExample: "الفلاح يزرع الخضروات.", category: "Kasblar" },
+    { en: "Police officer", uz: "Militsioner", example: "The police officer keeps us safe.", ru: "Полицейский", ruExample: "Полицейский обеспечивает нашу безопасность.", ar: "شرطي", arExample: "الشرطي يحافظ على أماننا.", category: "Kasblar" },
+    { en: "Lawyer", uz: "Advokat", example: "The lawyer works in court.", ru: "Адвокат", ruExample: "Адвокат работает в суде.", ar: "محام", arExample: "المحامي يعمل في المحكمة.", category: "Kasblar" },
+    { en: "Cook", uz: "Oshpaz", example: "The cook prepares tasty food.", ru: "Повар", ruExample: "Повар готовит вкусную еду.", ar: "طاهٍ", arExample: "الطاهي يحضر طعاما لذيذا.", category: "Kasblar" },
+    { en: "Nurse", uz: "Hamshira", example: "The nurse takes care of patients.", ru: "Медсестра", ruExample: "Медсестра заботится о пациентах.", ar: "ممرضة", arExample: "الممرضة تعتني بالمرضى.", category: "Kasblar" },
+    { en: "Pilot", uz: "Uchuvchi", example: "The pilot flies the airplane.", ru: "Пилот", ruExample: "Пилот управляет самолётом.", ar: "طيار", arExample: "الطيار يقود الطائرة.", category: "Kasblar" },
 
-    { en: "Car", uz: "Mashina", example: "I drive my car to work.", ru: "Машина", ruExample: "Я езжу на машине на работу.", category: "Transport" },
-    { en: "Bus", uz: "Avtobus", example: "We go to school by bus.", ru: "Автобус", ruExample: "Мы едем в школу на автобусе.", category: "Transport" },
-    { en: "Train", uz: "Poyezd", example: "The train arrives at noon.", ru: "Поезд", ruExample: "Поезд прибывает в полдень.", category: "Transport" },
-    { en: "Airplane", uz: "Samolyot", example: "The airplane flies very high.", ru: "Самолёт", ruExample: "Самолёт летит очень высоко.", category: "Transport" },
-    { en: "Bicycle", uz: "Velosiped", example: "She rides her bicycle every morning.", ru: "Велосипед", ruExample: "Она катается на велосипеде каждое утро.", category: "Transport" },
-    { en: "Ship", uz: "Kema", example: "The ship crosses the sea.", ru: "Корабль", ruExample: "Корабль пересекает море.", category: "Transport" },
-    { en: "Taxi", uz: "Taksi", example: "I took a taxi home.", ru: "Такси", ruExample: "Я взял такси домой.", category: "Transport" },
-    { en: "Metro", uz: "Metro", example: "The metro is fast and cheap.", ru: "Метро", ruExample: "Метро быстрое и дешёвое.", category: "Transport" },
+    { en: "Car", uz: "Mashina", example: "I drive my car to work.", ru: "Машина", ruExample: "Я езжу на машине на работу.", ar: "سيارة", arExample: "أقود سيارتي إلى العمل.", category: "Transport" },
+    { en: "Bus", uz: "Avtobus", example: "We go to school by bus.", ru: "Автобус", ruExample: "Мы едем в школу на автобусе.", ar: "حافلة", arExample: "نذهب إلى المدرسة بالحافلة.", category: "Transport" },
+    { en: "Train", uz: "Poyezd", example: "The train arrives at noon.", ru: "Поезд", ruExample: "Поезд прибывает в полдень.", ar: "قطار", arExample: "يصل القطار عند الظهر.", category: "Transport" },
+    { en: "Airplane", uz: "Samolyot", example: "The airplane flies very high.", ru: "Самолёт", ruExample: "Самолёт летит очень высоко.", ar: "طائرة", arExample: "الطائرة تطير عاليا جدا.", category: "Transport" },
+    { en: "Bicycle", uz: "Velosiped", example: "She rides her bicycle every morning.", ru: "Велосипед", ruExample: "Она катается на велосипеде каждое утро.", ar: "دراجة", arExample: "تركب دراجتها كل صباح.", category: "Transport" },
+    { en: "Ship", uz: "Kema", example: "The ship crosses the sea.", ru: "Корабль", ruExample: "Корабль пересекает море.", ar: "سفينة", arExample: "السفينة تعبر البحر.", category: "Transport" },
+    { en: "Taxi", uz: "Taksi", example: "I took a taxi home.", ru: "Такси", ruExample: "Я взял такси домой.", ar: "سيارة أجرة", arExample: "أخذت سيارة أجرة إلى المنزل.", category: "Transport" },
+    { en: "Metro", uz: "Metro", example: "The metro is fast and cheap.", ru: "Метро", ruExample: "Метро быстрое и дешёвое.", ar: "مترو", arExample: "المترو سريع ورخيص.", category: "Transport" },
 
-    { en: "Spring", uz: "Bahor", example: "Flowers bloom in spring.", ru: "Весна", ruExample: "Весной цветут цветы.", category: "Fasllar" },
-    { en: "Summer", uz: "Yoz", example: "Summer is very hot.", ru: "Лето", ruExample: "Летом очень жарко.", category: "Fasllar" },
-    { en: "Autumn", uz: "Kuz", example: "Leaves fall in autumn.", ru: "Осень", ruExample: "Осенью падают листья.", category: "Fasllar" },
-    { en: "Winter", uz: "Qish", example: "It snows in winter.", ru: "Зима", ruExample: "Зимой идёт снег.", category: "Fasllar" }
+    { en: "Spring", uz: "Bahor", example: "Flowers bloom in spring.", ru: "Весна", ruExample: "Весной цветут цветы.", ar: "ربيع", arExample: "تتفتح الزهور في الربيع.", category: "Fasllar" },
+    { en: "Summer", uz: "Yoz", example: "Summer is very hot.", ru: "Лето", ruExample: "Летом очень жарко.", ar: "صيف", arExample: "الصيف حار جدا.", category: "Fasllar" },
+    { en: "Autumn", uz: "Kuz", example: "Leaves fall in autumn.", ru: "Осень", ruExample: "Осенью падают листья.", ar: "خريف", arExample: "تتساقط الأوراق في الخريف.", category: "Fasllar" },
+    { en: "Winter", uz: "Qish", example: "It snows in winter.", ru: "Зима", ruExample: "Зимой идёт снег.", ar: "شتاء", arExample: "يتساقط الثلج في الشتاء.", category: "Fasllar" }
 ];
 
 
@@ -672,16 +672,31 @@ let learnLang = localStorage.getItem("learnLang") || "en";
 
 function getTargetWord(w) {
     if (learnLang === "ru") return w.ru || w.en;
+    if (learnLang === "ar") return w.ar || w.en;
     return w.en;
 }
 
 function getTargetExample(w) {
     if (learnLang === "ru") return w.ruExample || w.example;
+    if (learnLang === "ar") return w.arExample || w.example;
     return w.example;
 }
 
 function getVoiceLang() {
-    return learnLang === "ru" ? "ru-RU" : "en-US";
+    if (learnLang === "ru") return "ru-RU";
+    if (learnLang === "ar") return "ar-SA";
+    return "en-US";
+}
+
+// Arab tili o'ngdan-chapga (RTL) yoziladi, shuning uchun so'z va misol
+// matnlari ko'rsatilganda ularning yo'nalishini va shriftini moslashtiramiz.
+function applyTargetTextDirection(...elements) {
+    const isRtl = learnLang === "ar";
+    elements.forEach(el => {
+        if (!el) return;
+        el.dir = isRtl ? "rtl" : "ltr";
+        el.classList.toggle("arabic-text", isRtl);
+    });
 }
 
 function setLearnLang(lang) {
@@ -826,14 +841,21 @@ function updateFavButton() {
 function loadCard() {
     if (!deck[index]) return;
     if (englishWord && uzbekWord && example) {
+        // Har ikki maydonni avval LTR holatiga qaytaramiz, so'ng faqat
+        // haqiqatan arabcha matn ko'rsatilayotgan maydonga RTL beramiz.
+        englishWord.dir = "ltr"; englishWord.classList.remove("arabic-text");
+        uzbekWord.dir = "ltr"; uzbekWord.classList.remove("arabic-text");
         if (showEnglish) {
             englishWord.textContent = getTargetWord(deck[index]);
             uzbekWord.textContent = deck[index].uz;
+            applyTargetTextDirection(englishWord);
         } else {
             englishWord.textContent = deck[index].uz;
             uzbekWord.textContent = getTargetWord(deck[index]);
+            applyTargetTextDirection(uzbekWord);
         }
         example.textContent = getTargetExample(deck[index]);
+        applyTargetTextDirection(example);
     }
     if (cardCategoryEl) cardCategoryEl.textContent = deck[index].category || "";
     if (cardCounterEl) cardCounterEl.textContent = `${index + 1} / ${deck.length}`;
@@ -955,6 +977,7 @@ function loadQuiz() {
 
     const current = quizDeck[quizIndex];
     question.innerHTML = getTargetWord(current);
+    applyTargetTextDirection(question);
 
     let options = [current.uz];
     while (options.length < 4 && quizDeck.length >= 4) {
@@ -1950,12 +1973,17 @@ const lessonsRu = [
     { title: "To'liq boshlang'ich rus tili kursi (9 soat)", video: "https://www.youtube.com/embed/Q4pZnM7LeSo" }
 ];
 
+const lessonsAr = [
+    { title: "Arabic Alphabet Full Course (1 Hour) — noldan alifbo", video: "https://www.youtube.com/embed/GnHGmwqSYtg" },
+    { title: "Beginners Arabic — Lesson 01: Arabic Alphabet", video: "https://www.youtube.com/embed/C4gb2GnVoPQ" }
+];
+
 let courseLang = "en";
 
 function renderCourseList() {
     const courseList = document.getElementById("courseList");
     if (!courseList) return;
-    const list = courseLang === "ru" ? lessonsRu : lessonsEn;
+    const list = courseLang === "ru" ? lessonsRu : courseLang === "ar" ? lessonsAr : lessonsEn;
     courseList.innerHTML = list.map(item => `
         <div class="lesson">
             <h3>${item.title}</h3>
@@ -1988,25 +2016,26 @@ let listeningState = { sentence: "" };
 
 function pickListeningSentence() {
     if (typeof words === "undefined" || !words.length) return;
-    const lang = (typeof learnLang !== "undefined") ? learnLang : "en";
-    let pool = words.filter(w => (lang === "ru" ? w.ruExample : w.example));
+    let pool = words.filter(w => getTargetExample(w));
     if (!pool.length) pool = words.filter(w => w.example);
     if (!pool.length) return;
 
     const w = pool[Math.floor(Math.random() * pool.length)];
-    listeningState.sentence = ((lang === "ru" ? w.ruExample : w.example) || w.example || "").trim();
+    listeningState.sentence = (getTargetExample(w) || w.example || "").trim();
 
     const resultEl = document.getElementById("listeningResult");
     if (resultEl) { resultEl.textContent = ""; resultEl.className = "listening-result"; }
     const inputEl = document.getElementById("listeningAnswer");
-    if (inputEl) inputEl.value = "";
+    if (inputEl) {
+        inputEl.value = "";
+        applyTargetTextDirection(inputEl);
+    }
 }
 
 function playListeningSentence() {
     if (!listeningState.sentence) pickListeningSentence();
-    const lang = (typeof learnLang !== "undefined") ? learnLang : "en";
     if (typeof speakText === "function") {
-        speakText(listeningState.sentence, lang === "ru" ? "ru-RU" : "en-US");
+        speakText(listeningState.sentence, getVoiceLang());
     }
 }
 
@@ -4589,6 +4618,41 @@ const NUMBER_TR = ["Sıfır","Bir","İki","Üç","Dört","Beş","Altı","Yedi","
     "On bir","On iki","On üç","On dört","On beş","On altı","On yedi","On sekiz","On dokuz","Yirmi"];
 const NUMBER_ZH = ["零 (líng)","一 (yī)","二 (èr)","三 (sān)","四 (sì)","五 (wǔ)","六 (liù)","七 (qī)","八 (bā)","九 (jiǔ)","十 (shí)",
     "十一 (shí yī)","十二 (shí èr)","十三 (shí sān)","十四 (shí sì)","十五 (shí wǔ)","十六 (shí liù)","十七 (shí qī)","十八 (shí bā)","十九 (shí jiǔ)","二十 (èr shí)"];
+const NUMBER_AR = ["صفر (sifr)","واحد (wahid)","اثنان (ithnan)","ثلاثة (thalatha)","أربعة (arba'a)","خمسة (khamsa)","ستة (sitta)","سبعة (sab'a)","ثمانية (thamaniya)","تسعة (tis'a)","عشرة (ashara)",
+    "أحد عشر (ahada ashar)","اثنا عشر (ithna ashar)","ثلاثة عشر (thalathata ashar)","أربعة عشر (arba'ata ashar)","خمسة عشر (khamsata ashar)","ستة عشر (sittata ashar)","سبعة عشر (sab'ata ashar)","ثمانية عشر (thamaniyata ashar)","تسعة عشر (tis'ata ashar)","عشرون (ishrun)"];
+
+// Arab alifbosi — 28 harf, har biriga talaffuz ko'rsatmasi va misol so'z bilan.
+// Harflar bitta so'zning boshida turgan holatda (isolated form) berilgan.
+const ARABIC_ALPHABET = [
+    { letter: "ا", sound: "alif — cho'ziq \"a\"", word: "أسد (asad)", uz: "Sher" },
+    { letter: "ب", sound: "ba — \"b\"", word: "باب (bab)", uz: "Eshik" },
+    { letter: "ت", sound: "ta — \"t\"", word: "تفاح (tuffah)", uz: "Olma" },
+    { letter: "ث", sound: "tha — inglizcha \"think\"dagi th", word: "ثعلب (thaʻlab)", uz: "Tulki" },
+    { letter: "ج", sound: "jim — \"j\"", word: "جمل (jamal)", uz: "Tuya" },
+    { letter: "ح", sound: "ha — bo'g'iq, chuqur \"h\"", word: "حصان (hisan)", uz: "Ot" },
+    { letter: "خ", sound: "kha — tomoqdan chiquvchi \"x\"", word: "خبز (khubz)", uz: "Non" },
+    { letter: "د", sound: "dal — \"d\"", word: "دار (dar)", uz: "Uy" },
+    { letter: "ذ", sound: "dhal — inglizcha \"the\"dagi th", word: "ذهب (dhahab)", uz: "Oltin" },
+    { letter: "ر", sound: "ra — dumaloq \"r\"", word: "رجل (rajul)", uz: "Erkak" },
+    { letter: "ز", sound: "zay — \"z\"", word: "زهرة (zahra)", uz: "Gul" },
+    { letter: "س", sound: "sin — \"s\"", word: "سمك (samak)", uz: "Baliq" },
+    { letter: "ش", sound: "shin — \"sh\"", word: "شمس (shams)", uz: "Quyosh" },
+    { letter: "ص", sound: "sad — qattiq, bo'g'iq \"s\"", word: "صديق (sadiq)", uz: "Do'st" },
+    { letter: "ض", sound: "dad — qattiq, bo'g'iq \"d\"", word: "ضوء (dau')", uz: "Yorug'lik" },
+    { letter: "ط", sound: "ta — qattiq, bo'g'iq \"t\"", word: "طالب (talib)", uz: "Talaba" },
+    { letter: "ظ", sound: "za — qattiq, bo'g'iq \"z\"", word: "ظهر (zuhr)", uz: "Peshin" },
+    { letter: "ع", sound: "ayn — tomoq tovushi (o'ziga xos)", word: "عين (ayn)", uz: "Ko'z" },
+    { letter: "غ", sound: "ghayn — fransuzcha \"r\" kabi", word: "غنم (ghanam)", uz: "Qo'y" },
+    { letter: "ف", sound: "fa — \"f\"", word: "فيل (fil)", uz: "Fil" },
+    { letter: "ق", sound: "qaf — chuqur, tomoqdan \"q\"", word: "قلم (qalam)", uz: "Qalam" },
+    { letter: "ك", sound: "kaf — \"k\"", word: "كتاب (kitab)", uz: "Kitob" },
+    { letter: "ل", sound: "lam — \"l\"", word: "ليل (layl)", uz: "Tun" },
+    { letter: "م", sound: "mim — \"m\"", word: "ماء (ma')", uz: "Suv" },
+    { letter: "ن", sound: "nun — \"n\"", word: "نجم (najm)", uz: "Yulduz" },
+    { letter: "ه", sound: "ha — yumshoq \"h\"", word: "هدية (hadiya)", uz: "Sovg'a" },
+    { letter: "و", sound: "waw — \"w\" yoki cho'ziq \"u\"", word: "وردة (warda)", uz: "Atirgul" },
+    { letter: "ي", sound: "ya — \"y\" yoki cho'ziq \"i\"", word: "يد (yad)", uz: "Qo'l" }
+];
 
 const GREETINGS_TR = [
     { phrase: "Merhaba", uz: "Salom" },
@@ -4626,10 +4690,28 @@ const GREETINGS_ZH = [
     { phrase: "回头见 (Huítóu jiàn)", uz: "Ko'rishguncha" }
 ];
 
-function renderTileGrid(items, noteHtml) {
+const GREETINGS_AR = [
+    { phrase: "مرحبا (marhaban)", uz: "Salom" },
+    { phrase: "صباح الخير (sabah al-khayr)", uz: "Xayrli tong" },
+    { phrase: "نهارك سعيد (naharuka saʻid)", uz: "Xayrli kun" },
+    { phrase: "مساء الخير (masa' al-khayr)", uz: "Xayrli kech" },
+    { phrase: "تصبح على خير (tusbih ʻala khayr)", uz: "Xayrli tun" },
+    { phrase: "كيف حالك؟ (kayfa haluk?)", uz: "Qalaysiz?" },
+    { phrase: "أنا بخير، شكرا (ana bikhayr, shukran)", uz: "Yaxshiman, rahmat" },
+    { phrase: "ما اسمك؟ (ma ismuk?)", uz: "Ismingiz nima?" },
+    { phrase: "اسمي... (ismi...)", uz: "Mening ismim..." },
+    { phrase: "تشرفنا (tasharrafna)", uz: "Tanishganimdan xursandman" },
+    { phrase: "شكرا (shukran)", uz: "Rahmat" },
+    { phrase: "من فضلك (min fadlik)", uz: "Iltimos" },
+    { phrase: "آسف / عفوا (asif / afwan)", uz: "Kechirasiz" },
+    { phrase: "مع السلامة (maʻa as-salama)", uz: "Xayr" },
+    { phrase: "إلى اللقاء (ila al-liqa')", uz: "Ko'rishguncha" }
+];
+
+function renderTileGrid(items, noteHtml, rtl) {
     const note = noteHtml ? `<p class="ai-settings-hint">${noteHtml}</p>` : "";
-    return note + `<div class="tile-grid">` + items.map(it => `
-        <button class="tile alpha-tile" data-speak="${it.word.replace(/"/g, "&quot;")}">
+    return note + `<div class="tile-grid"${rtl ? ' dir="rtl"' : ''}>` + items.map(it => `
+        <button class="tile alpha-tile${rtl ? ' arabic-text' : ''}" data-speak="${it.word.replace(/"/g, "&quot;")}">
             <div class="tile-letter">${it.letter}</div>
             <div class="tile-sound">${it.sound}</div>
             <div class="tile-word">${it.word}</div>
@@ -4638,10 +4720,11 @@ function renderTileGrid(items, noteHtml) {
 }
 
 function renderNumberGrid(lang) {
-    const map = { en: NUMBER_EN, ru: NUMBER_RU, tr: NUMBER_TR, zh: NUMBER_ZH };
+    const map = { en: NUMBER_EN, ru: NUMBER_RU, tr: NUMBER_TR, zh: NUMBER_ZH, ar: NUMBER_AR };
     const words_ = map[lang] || NUMBER_EN;
-    return `<div class="tile-grid">` + words_.map((w, i) => `
-        <button class="tile num-tile" data-speak="${w.replace(/"/g, "&quot;")}">
+    const rtl = lang === "ar";
+    return `<div class="tile-grid"${rtl ? ' dir="rtl"' : ''}>` + words_.map((w, i) => `
+        <button class="tile num-tile${rtl ? ' arabic-text' : ''}" data-speak="${w.replace(/"/g, "&quot;")}">
             <div class="tile-letter">${i}</div>
             <div class="tile-word">${w}</div>
             <div class="tile-uz">${NUMBER_UZ[i]}</div>
@@ -4649,13 +4732,14 @@ function renderNumberGrid(lang) {
 }
 
 function renderGreetingList(lang) {
-    const map = { en: GREETINGS_EN, ru: GREETINGS_RU, tr: GREETINGS_TR, zh: GREETINGS_ZH };
+    const map = { en: GREETINGS_EN, ru: GREETINGS_RU, tr: GREETINGS_TR, zh: GREETINGS_ZH, ar: GREETINGS_AR };
     const list = map[lang] || GREETINGS_EN;
+    const rtl = lang === "ar";
     return `<div class="phrase-list">` + list.map(g => `
         <div class="phrase-row">
             <button class="phrase-speak" data-speak="${g.phrase.replace(/"/g, "&quot;")}">🔊</button>
-            <div class="phrase-texts">
-                <div class="phrase-main">${g.phrase}</div>
+            <div class="phrase-texts"${rtl ? ' dir="rtl"' : ''}>
+                <div class="phrase-main${rtl ? ' arabic-text' : ''}">${g.phrase}</div>
                 <div class="phrase-uz">${g.uz}</div>
             </div>
         </div>`).join("") + `</div>`;
@@ -4721,6 +4805,27 @@ function renderGrammarBasics(lang) {
         </div>`;
     }
 
+    if (lang === "ar") {
+        return `
+        <div class="grammar-box">
+            <h3 dir="rtl" class="arabic-text">الضمائر الشخصية (Kishilik olmoshlari)</h3>
+            <table class="grammar-table" dir="rtl">
+                <tr><td class="arabic-text">أنا</td><td>Men</td></tr>
+                <tr><td class="arabic-text">أنتَ / أنتِ</td><td>Sen (erkak / ayol)</td></tr>
+                <tr><td class="arabic-text">هو / هي</td><td>U (erkak / ayol)</td></tr>
+                <tr><td class="arabic-text">نحن</td><td>Biz</td></tr>
+                <tr><td class="arabic-text">أنتم</td><td>Sizlar</td></tr>
+                <tr><td class="arabic-text">هم</td><td>Ular</td></tr>
+            </table>
+            <h3>Muhim qoida: hozirgi zamonda "bo'lmoq" fe'li ishlatilmaydi</h3>
+            <p class="ai-settings-hint">Rus tilidagi kabi, arab tilida ham hozirgi zamon gaplarida "bo'lmoq" fe'li tushib qoladi: <b dir="rtl" class="arabic-text">أنا طالب</b> so'zma-so'z "Men talaba", ya'ni "Men talabaman".</p>
+            <h3>Yozuv yo'nalishi va aniqlik artikli</h3>
+            <p class="ai-settings-hint">Arab tili o'ngdan-chapga yoziladi. Otni aniq qilish uchun old qo'shimcha <b dir="rtl" class="arabic-text">الـ (al-)</b> qo'shiladi: <b dir="rtl" class="arabic-text">كتاب</b> (bir kitob) → <b dir="rtl" class="arabic-text">الكتاب</b> (o'sha kitob).</p>
+            <h3>Jins (muannas/muzakkar)</h3>
+            <p class="ai-settings-hint">Arab tilida otlar va sifatlar erkak yoki ayol jinsida bo'ladi. Ayol jinsidagi so'zlar ko'pincha oxirida <b dir="rtl" class="arabic-text">ة (ta marbuta)</b> harfi bilan tugaydi, masalan: <b dir="rtl" class="arabic-text">طالب</b> (talaba, erkak) → <b dir="rtl" class="arabic-text">طالبة</b> (talaba, ayol).</p>
+        </div>`;
+    }
+
     return `
     <div class="grammar-box">
         <h3>Personal pronouns (Kishilik olmoshlari)</h3>
@@ -4757,6 +4862,8 @@ function renderBeginnerContent() {
             container.innerHTML = renderTileGrid(RUSSIAN_ALPHABET);
         } else if (beginnerLang === "tr") {
             container.innerHTML = renderTileGrid(TURKISH_ALPHABET);
+        } else if (beginnerLang === "ar") {
+            container.innerHTML = renderTileGrid(ARABIC_ALPHABET, "Arab alifbosida 28 ta harf bor va ular o'ngdan-chapga yoziladi. Har bir harf so'z ichidagi o'rniga qarab (boshda/o'rtada/oxirida) shaklini biroz o'zgartiradi — quyida har bir harfning yakka (mustaqil) shakli berilgan.", true);
         } else if (beginnerLang === "zh") {
             container.innerHTML =
                 renderTileGrid(CHINESE_TONES, "Xitoy tilida harflar yo'q — o'rniga <b>pinyin</b> (lotincha yozuv) va <b>4 ta ohang</b> ishlatiladi. Bir xil bo'g'in har xil ohangda aytilsa, butunlay boshqa ma'noni bildiradi. Quyida klassik <b>\"ma\"</b> misolida ko'ring:") +
@@ -4773,7 +4880,7 @@ function renderBeginnerContent() {
         container.innerHTML = renderGrammarBasics(beginnerLang);
     }
 
-    const voiceLangMap = { en: "en-US", ru: "ru-RU", tr: "tr-TR", zh: "zh-CN" };
+    const voiceLangMap = { en: "en-US", ru: "ru-RU", tr: "tr-TR", zh: "zh-CN", ar: "ar-SA" };
     const voiceLang = voiceLangMap[beginnerLang] || "en-US";
     container.querySelectorAll("[data-speak]").forEach(el => {
         el.addEventListener("click", () => speakText(el.dataset.speak, voiceLang));
@@ -5438,13 +5545,12 @@ let sentenceState = { tokens: [], current: [] };
 
 function pickSentence() {
     if (typeof words === "undefined" || !words.length) return;
-    const lang = (typeof learnLang !== "undefined") ? learnLang : "en";
-    let pool = words.filter(w => (lang === "ru" ? w.ruExample : w.example));
+    let pool = words.filter(w => getTargetExample(w));
     if (!pool.length) pool = words.filter(w => w.example);
     if (!pool.length) return;
 
     const w = pool[Math.floor(Math.random() * pool.length)];
-    const raw = ((lang === "ru" ? w.ruExample : w.example) || w.example || "").trim();
+    const raw = (getTargetExample(w) || w.example || "").trim();
     const clean = raw.replace(/[.!?]+$/, "");
     const parts = clean.split(" ").filter(Boolean);
 
@@ -5460,6 +5566,7 @@ function renderSentenceBuilder() {
     const bankEl = document.getElementById("sentenceBank");
     const answerEl = document.getElementById("sentenceAnswer");
     if (!bankEl || !answerEl) return;
+    applyTargetTextDirection(bankEl, answerEl);
 
     const usedIds = new Set(sentenceState.current);
     const bankTokens = sentenceState.tokens.filter(t => !usedIds.has(t.id));
@@ -5669,6 +5776,23 @@ const GRAMMAR_QUESTIONS_RU = [
     { level: "advanced", q: "Он думает о ___ (работа).", options: ["работа", "работе", "работу"], answer: "работе" }
 ];
 
+// Arab tili grammatikasi bo'yicha boshlang'ich-o'rta-yuqori daraja savollari.
+// Arab tili o'ngdan-chapga yozilgani uchun savol matnlari RTL blokda ko'rsatiladi.
+const GRAMMAR_QUESTIONS_AR = [
+    { level: "beginner", q: "أنا ___ طالب.", options: ["هو", "أنا", "أنتَ"], answer: "أنا" },
+    { level: "beginner", q: "هذا ___ كبير.", options: ["بيت", "بيتٌ", "بيوت"], answer: "بيتٌ" },
+    { level: "beginner", q: "هي ___ معلمة.", options: ["هو", "هي", "هم"], answer: "هي" },
+    { level: "beginner", q: "___ اسمك؟", options: ["ما", "من", "أين"], answer: "ما" },
+    { level: "beginner", q: "هذا كتاب ___ .", options: ["أنا", "لي", "أنتَ"], answer: "لي" },
+    { level: "intermediate", q: "الكتاب ___ الطاولة.", options: ["في", "على", "من"], answer: "على" },
+    { level: "intermediate", q: "ذهبتُ ___ المدرسة.", options: ["إلى", "على", "عن"], answer: "إلى" },
+    { level: "intermediate", q: "هذه ___ جميلة. (بنت)", options: ["بنتٌ", "بنتاً", "بنتٍ"], answer: "بنتٌ" },
+    { level: "intermediate", q: "عندي ___ كتب. (ثلاثة)", options: ["ثلاثة", "ثلاث", "ثلاثتان"], answer: "ثلاثة" },
+    { level: "advanced", q: "___ الطلاب في الفصل. (كان)", options: ["كان", "كانوا", "كانت"], answer: "كانوا" },
+    { level: "advanced", q: "هي أطول ___ أختها.", options: ["مثل", "من", "على"], answer: "من" },
+    { level: "advanced", q: "سوف ___ الدرس غداً. (يدرس)", options: ["أدرس", "أدرسُ", "سأدرس"], answer: "سأدرس" }
+];
+
 let grammarLang = "en";
 let grammarDeck = [];
 let grammarIndex = 0;
@@ -5676,7 +5800,9 @@ let grammarScore = 0;
 
 function buildGrammarDeck() {
     const lvl = getUserLevel();
-    const bank = grammarLang === "ru" ? GRAMMAR_QUESTIONS_RU : GRAMMAR_QUESTIONS_EN;
+    const bank = grammarLang === "ru" ? GRAMMAR_QUESTIONS_RU
+        : grammarLang === "ar" ? GRAMMAR_QUESTIONS_AR
+        : GRAMMAR_QUESTIONS_EN;
     let pool = bank.filter(q => q.level === lvl);
     if (pool.length < 3) pool = bank;
 
@@ -5713,8 +5839,10 @@ function loadGrammarQuestion() {
 
     const current = grammarDeck[grammarIndex];
     qEl.textContent = current.q;
+    qEl.dir = grammarLang === "ar" ? "rtl" : "ltr";
+    qEl.classList.toggle("arabic-text", grammarLang === "ar");
     optsEl.innerHTML = current.options.map(opt =>
-        `<button class="answer" data-opt="${opt.replace(/"/g, "&quot;")}">${opt}</button>`
+        `<button class="answer${grammarLang === "ar" ? " arabic-text" : ""}" dir="${grammarLang === "ar" ? "rtl" : "ltr"}" data-opt="${opt.replace(/"/g, "&quot;")}">${opt}</button>`
     ).join("");
 
     optsEl.querySelectorAll("button").forEach(btn => {

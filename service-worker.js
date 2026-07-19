@@ -1,4 +1,4 @@
-const CACHE_NAME = "english-master-v7";
+const CACHE_NAME = "english-master-v8";
 
 // Ilovaning o'z fayllari — bular bo'lmasa ilova umuman ochilmaydi.
 const ASSETS = [
@@ -13,7 +13,7 @@ const ASSETS = [
 // bo'lganda bir marta yuklanib, keyin oflaynda ham ishlashi uchun keshga
 // olinadi. Bular ixtiyoriy: yuklanmasa ham ilovaning asosiy qismi ishlayveradi.
 const CDN_ASSETS = [
-  "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
+  "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap",
   "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css",
   "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"
 ];
