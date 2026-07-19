@@ -299,7 +299,8 @@ const menuButtons = {
     "grammarLibraryBtn": "grammarLibraryPage",
     "idiomsBtn": "idiomsPage",
     "myWordsBtn": "myWordsPage",
-    "examBtn": "examPage"
+    "examBtn": "examPage",
+    "gamesBtn": "gamesPage"
 };
 
 Object.keys(menuButtons).forEach(btnId => {
@@ -364,6 +365,9 @@ Object.keys(menuButtons).forEach(btnId => {
             }
             if (btnId === "examBtn" && typeof renderExamPage === "function") {
                 renderExamPage();
+            }
+            if (btnId === "gamesBtn" && typeof showGamesMenu === "function") {
+                showGamesMenu();
             }
             syncBottomNav(menuButtons[btnId]);
         };
@@ -587,7 +591,70 @@ const words = [
     { en: "Spring", uz: "Bahor", example: "Flowers bloom in spring.", ru: "Весна", ruExample: "Весной цветут цветы.", ar: "ربيع", arExample: "تتفتح الزهور في الربيع.", category: "Fasllar" },
     { en: "Summer", uz: "Yoz", example: "Summer is very hot.", ru: "Лето", ruExample: "Летом очень жарко.", ar: "صيف", arExample: "الصيف حار جدا.", category: "Fasllar" },
     { en: "Autumn", uz: "Kuz", example: "Leaves fall in autumn.", ru: "Осень", ruExample: "Осенью падают листья.", ar: "خريف", arExample: "تتساقط الأوراق في الخريف.", category: "Fasllar" },
-    { en: "Winter", uz: "Qish", example: "It snows in winter.", ru: "Зима", ruExample: "Зимой идёт снег.", ar: "شتاء", arExample: "يتساقط الثلج في الشتاء.", category: "Fasllar" }
+    { en: "Winter", uz: "Qish", example: "It snows in winter.", ru: "Зима", ruExample: "Зимой идёт снег.", ar: "شتاء", arExample: "يتساقط الثلج في الشتاء.", category: "Fasllar" },
+    { en: "Football", uz: "Futbol", example: "I play football on weekends.", ru: "футбол", ruExample: "Я играю в футбол по выходным.", ar: "كرة القدم", arExample: "ألعب كرة القدم في عطلة نهاية الأسبوع.", category: "Sport" },
+    { en: "Basketball", uz: "Basketbol", example: "He is good at basketball.", ru: "баскетбол", ruExample: "Он хорошо играет в баскетбол.", ar: "كرة السلة", arExample: "هو جيد في كرة السلة.", category: "Sport" },
+    { en: "Swim", uz: "Suzish", example: "We swim in the lake in summer.", ru: "плавать", ruExample: "Летом мы плаваем в озере.", ar: "يسبح", arExample: "نسبح في البحيرة في الصيف.", category: "Sport" },
+    { en: "Ball", uz: "To'p", example: "The ball is under the table.", ru: "мяч", ruExample: "Мяч под столом.", ar: "كرة", arExample: "الكرة تحت الطاولة.", category: "Sport" },
+    { en: "Team", uz: "Jamoa", example: "Our team won the match.", ru: "команда", ruExample: "Наша команда выиграла матч.", ar: "فريق", arExample: "فاز فريقنا بالمباراة.", category: "Sport" },
+    { en: "Win", uz: "Yutmoq", example: "They want to win the game.", ru: "выигрывать", ruExample: "Они хотят выиграть игру.", ar: "يفوز", arExample: "يريدون أن يفوزوا باللعبة.", category: "Sport" },
+    { en: "Lose", uz: "Yutqazmoq", example: "Nobody likes to lose.", ru: "проигрывать", ruExample: "Никто не любит проигрывать.", ar: "يخسر", arExample: "لا أحد يحب أن يخسر.", category: "Sport" },
+    { en: "Laptop", uz: "Noutbuk", example: "I bought a new laptop.", ru: "ноутбук", ruExample: "Я купил новый ноутбук.", ar: "حاسوب محمول", arExample: "اشتريت حاسوبا محمولا جديدا.", category: "Texnologiya" },
+    { en: "Application", uz: "Ilova", example: "This application is very useful.", ru: "приложение", ruExample: "Это приложение очень полезно.", ar: "تطبيق", arExample: "هذا التطبيق مفيد جدا.", category: "Texnologiya" },
+    { en: "Website", uz: "Veb-sayt", example: "Visit our website for more information.", ru: "веб-сайт", ruExample: "Посетите наш веб-сайт для получения информации.", ar: "موقع إلكتروني", arExample: "قم بزيارة موقعنا الإلكتروني لمزيد من المعلومات.", category: "Texnologiya" },
+    { en: "Password", uz: "Parol", example: "Don't forget your password.", ru: "пароль", ruExample: "Не забудьте свой пароль.", ar: "كلمة المرور", arExample: "لا تنس كلمة المرور.", category: "Texnologiya" },
+    { en: "Wifi", uz: "Vay-fay", example: "The wifi is not working today.", ru: "вай-фай", ruExample: "Сегодня вай-фай не работает.", ar: "واي فاي", arExample: "الواي فاي لا يعمل اليوم.", category: "Texnologiya" },
+    { en: "Download", uz: "Yuklab olish", example: "I need to download this file.", ru: "скачать", ruExample: "Мне нужно скачать этот файл.", ar: "تحميل", arExample: "أحتاج إلى تحميل هذا الملف.", category: "Texnologiya" },
+    { en: "Message", uz: "Xabar", example: "She sent me a message.", ru: "сообщение", ruExample: "Она отправила мне сообщение.", ar: "رسالة", arExample: "أرسلت لي رسالة.", category: "Texnologiya" },
+    { en: "Battery", uz: "Batareya", example: "My phone battery is low.", ru: "батарея", ruExample: "Батарея моего телефона садится.", ar: "بطارية", arExample: "بطارية هاتفي منخفضة.", category: "Texnologiya" },
+    { en: "Cloud", uz: "Bulut", example: "There is a big cloud in the sky.", ru: "облако", ruExample: "На небе большое облако.", ar: "غيمة", arExample: "توجد غيمة كبيرة في السماء.", category: "Ob-havo" },
+    { en: "Storm", uz: "Bo'ron", example: "A storm is coming tonight.", ru: "буря", ruExample: "Сегодня ночью будет буря.", ar: "عاصفة", arExample: "هناك عاصفة قادمة الليلة.", category: "Ob-havo" },
+    { en: "Fog", uz: "Tuman", example: "The fog made driving difficult.", ru: "туман", ruExample: "Туман затруднял вождение.", ar: "ضباب", arExample: "جعل الضباب القيادة صعبة.", category: "Ob-havo" },
+    { en: "Thunder", uz: "Momaqaldiroq", example: "I heard thunder last night.", ru: "гром", ruExample: "Прошлой ночью я слышал гром.", ar: "رعد", arExample: "سمعت الرعد الليلة الماضية.", category: "Ob-havo" },
+    { en: "Surprised", uz: "Hayron", example: "She was surprised by the gift.", ru: "удивлённый", ruExample: "Она была удивлена подарком.", ar: "متفاجئ", arExample: "كانت متفاجئة بالهدية.", category: "Hissiyotlar" },
+    { en: "Worried", uz: "Xavotirli", example: "He looks worried about the exam.", ru: "обеспокоенный", ruExample: "Он выглядит обеспокоенным экзаменом.", ar: "قلق", arExample: "يبدو قلقا بشأن الامتحان.", category: "Hissiyotlar" },
+    { en: "Excited", uz: "Hayajonlangan", example: "We are excited about the trip.", ru: "взволнованный", ruExample: "Мы взволнованы поездкой.", ar: "متحمس", arExample: "نحن متحمسون للرحلة.", category: "Hissiyotlar" },
+    { en: "Bored", uz: "Zerikkan", example: "The children are bored at home.", ru: "скучающий", ruExample: "Дети скучают дома.", ar: "مل", arExample: "الأطفال يشعرون بالملل في المنزل.", category: "Hissiyotlar" },
+    { en: "Nervous", uz: "Asabiy", example: "I feel nervous before exams.", ru: "нервный", ruExample: "Перед экзаменами я нервничаю.", ar: "متوتر", arExample: "أشعر بالتوتر قبل الامتحانات.", category: "Hissiyotlar" },
+    { en: "Proud", uz: "Faxrlanuvchi", example: "Her parents are proud of her.", ru: "гордый", ruExample: "Её родители гордятся ею.", ar: "فخور", arExample: "والداها فخوران بها.", category: "Hissiyotlar" },
+    { en: "Price", uz: "Narx", example: "What is the price of this shirt?", ru: "цена", ruExample: "Какая цена этой рубашки?", ar: "سعر", arExample: "ما سعر هذا القميص؟", category: "Xarid" },
+    { en: "Discount", uz: "Chegirma", example: "We got a big discount.", ru: "скидка", ruExample: "Мы получили большую скидку.", ar: "خصم", arExample: "حصلنا على خصم كبير.", category: "Xarid" },
+    { en: "Receipt", uz: "Chek", example: "Keep your receipt, please.", ru: "чек", ruExample: "Сохраните, пожалуйста, чек.", ar: "إيصال", arExample: "احتفظ بالإيصال من فضلك.", category: "Xarid" },
+    { en: "Cash", uz: "Naqd pul", example: "I paid in cash.", ru: "наличные", ruExample: "Я заплатил наличными.", ar: "نقد", arExample: "دفعت نقدا.", category: "Xarid" },
+    { en: "Shop", uz: "Do'kon", example: "The shop closes at nine.", ru: "магазин", ruExample: "Магазин закрывается в девять.", ar: "متجر", arExample: "المتجر يغلق الساعة التاسعة.", category: "Xarid" },
+    { en: "Market", uz: "Bozor", example: "We buy vegetables at the market.", ru: "рынок", ruExample: "Мы покупаем овощи на рынке.", ar: "سوق", arExample: "نشتري الخضروات من السوق.", category: "Xarid" },
+    { en: "Early", uz: "Erta", example: "I wake up early every day.", ru: "рано", ruExample: "Я просыпаюсь рано каждый день.", ar: "مبكرا", arExample: "أستيقظ مبكرا كل يوم.", category: "Vaqt" },
+    { en: "Late", uz: "Kech", example: "He arrived late to class.", ru: "поздно", ruExample: "Он опоздал на урок.", ar: "متأخرا", arExample: "وصل متأخرا إلى الفصل.", category: "Vaqt" },
+    { en: "Soon", uz: "Tez orada", example: "See you soon!", ru: "скоро", ruExample: "Скоро увидимся!", ar: "قريبا", arExample: "أراك قريبا!", category: "Vaqt" },
+    { en: "Always", uz: "Doim", example: "She always helps her friends.", ru: "всегда", ruExample: "Она всегда помогает друзьям.", ar: "دائما", arExample: "هي دائما تساعد أصدقاءها.", category: "Vaqt" },
+    { en: "Never", uz: "Hech qachon", example: "He never gives up.", ru: "никогда", ruExample: "Он никогда не сдаётся.", ar: "أبدا", arExample: "هو لا يستسلم أبدا.", category: "Vaqt" },
+    { en: "Sometimes", uz: "Ba'zan", example: "Sometimes I cook dinner.", ru: "иногда", ruExample: "Иногда я готовлю ужин.", ar: "أحيانا", arExample: "أحيانا أطبخ العشاء.", category: "Vaqt" },
+    { en: "Often", uz: "Tez-tez", example: "We often travel together.", ru: "часто", ruExample: "Мы часто путешествуем вместе.", ar: "غالبا", arExample: "نسافر معا غالبا.", category: "Vaqt" },
+    { en: "Left", uz: "Chap", example: "Turn left at the corner.", ru: "лево", ruExample: "Поверните налево на углу.", ar: "يسار", arExample: "انعطف يسارا عند الزاوية.", category: "Yo'nalish" },
+    { en: "Right", uz: "O'ng", example: "The store is on the right.", ru: "право", ruExample: "Магазин справа.", ar: "يمين", arExample: "المتجر على اليمين.", category: "Yo'nalish" },
+    { en: "Straight", uz: "To'g'ri", example: "Go straight for two blocks.", ru: "прямо", ruExample: "Идите прямо два квартала.", ar: "مستقيم", arExample: "اذهب مستقيما لمسافة مبنيين.", category: "Yo'nalish" },
+    { en: "Near", uz: "Yaqin", example: "The school is near my house.", ru: "близко", ruExample: "Школа рядом с моим домом.", ar: "قريب", arExample: "المدرسة قريبة من منزلي.", category: "Yo'nalish" },
+    { en: "Far", uz: "Uzoq", example: "The airport is far from here.", ru: "далеко", ruExample: "Аэропорт далеко отсюда.", ar: "بعيد", arExample: "المطار بعيد من هنا.", category: "Yo'nalish" },
+    { en: "Restaurant", uz: "Restoran", example: "We had dinner at a restaurant.", ru: "ресторан", ruExample: "Мы поужинали в ресторане.", ar: "مطعم", arExample: "تناولنا العشاء في مطعم.", category: "Restoran" },
+    { en: "Menu", uz: "Menyu", example: "Can I see the menu, please?", ru: "меню", ruExample: "Могу я увидеть меню, пожалуйста?", ar: "قائمة الطعام", arExample: "هل يمكنني رؤية قائمة الطعام من فضلك؟", category: "Restoran" },
+    { en: "Order", uz: "Buyurtma", example: "I would like to order pizza.", ru: "заказ", ruExample: "Я хотел бы заказать пиццу.", ar: "طلب", arExample: "أود أن أطلب بيتزا.", category: "Restoran" },
+    { en: "Waiter", uz: "Ofitsiant", example: "The waiter brought our food.", ru: "официант", ruExample: "Официант принёс нашу еду.", ar: "نادل", arExample: "أحضر النادل طعامنا.", category: "Restoran" },
+    { en: "Bill", uz: "Chek", example: "Can we have the bill, please?", ru: "счёт", ruExample: "Можно счёт, пожалуйста?", ar: "فاتورة", arExample: "هل يمكننا الحصول على الفاتورة من فضلك؟", category: "Restoran" },
+    { en: "Reserve", uz: "Band qilmoq", example: "I want to reserve a table for two.", ru: "забронировать", ruExample: "Я хочу забронировать столик на двоих.", ar: "يحجز", arExample: "أريد أن أحجز طاولة لشخصين.", category: "Restoran" },
+    { en: "Delicious", uz: "Mazali", example: "This soup is delicious.", ru: "вкусный", ruExample: "Этот суп вкусный.", ar: "لذيذ", arExample: "هذا الحساء لذيذ.", category: "Restoran" },
+    { en: "Spicy", uz: "Achchiq", example: "I don't like spicy food.", ru: "острый", ruExample: "Я не люблю острую еду.", ar: "حريف", arExample: "لا أحب الطعام الحريف.", category: "Restoran" },
+    { en: "Sick", uz: "Kasal", example: "He is sick today.", ru: "больной", ruExample: "Он сегодня болен.", ar: "مريض", arExample: "هو مريض اليوم.", category: "Sog'liq" },
+    { en: "Healthy", uz: "Sog'lom", example: "You look healthy.", ru: "здоровый", ruExample: "Ты выглядишь здоровым.", ar: "بصحة جيدة", arExample: "تبدو بصحة جيدة.", category: "Sog'liq" },
+    { en: "Medicine", uz: "Dori", example: "Take this medicine twice a day.", ru: "лекарство", ruExample: "Принимайте это лекарство два раза в день.", ar: "دواء", arExample: "خذ هذا الدواء مرتين في اليوم.", category: "Sog'liq" },
+    { en: "Pain", uz: "Og'riq", example: "I have pain in my back.", ru: "боль", ruExample: "У меня боль в спине.", ar: "ألم", arExample: "أشعر بألم في ظهري.", category: "Sog'liq" },
+    { en: "Fever", uz: "Isitma", example: "The child has a fever.", ru: "температура", ruExample: "У ребёнка температура.", ar: "حمى", arExample: "الطفل يعاني من الحمى.", category: "Sog'liq" },
+    { en: "Cough", uz: "Yo'tal", example: "She has a bad cough.", ru: "кашель", ruExample: "У неё сильный кашель.", ar: "سعال", arExample: "لديها سعال شديد.", category: "Sog'liq" },
+    { en: "Hospital", uz: "Kasalxona", example: "He was taken to the hospital.", ru: "больница", ruExample: "Его отвезли в больницу.", ar: "مستشفى", arExample: "تم نقله إلى المستشفى.", category: "Sog'liq" },
+    { en: "Pharmacy", uz: "Dorixona", example: "I bought medicine at the pharmacy.", ru: "аптека", ruExample: "Я купил лекарство в аптеке.", ar: "صيدلية", arExample: "اشتريت الدواء من الصيدلية.", category: "Sog'liq" },
+    { en: "Colleague", uz: "Hamkasb", example: "My colleague helped me with the report.", ru: "коллега", ruExample: "Мой коллега помог мне с отчётом.", ar: "زميل", arExample: "ساعدني زميلي في التقرير.", category: "Ish" },
+    { en: "Meeting", uz: "Yig'ilish", example: "We have a meeting at noon.", ru: "встреча", ruExample: "У нас встреча в полдень.", ar: "اجتماع", arExample: "لدينا اجتماع في الظهر.", category: "Ish" },
+    { en: "Salary", uz: "Maosh", example: "Her salary increased this year.", ru: "зарплата", ruExample: "Её зарплата выросла в этом году.", ar: "راتب", arExample: "زاد راتبها هذا العام.", category: "Ish" },
+    { en: "Deadline", uz: "Muddat", example: "The deadline is tomorrow.", ru: "дедлайн", ruExample: "Дедлайн завтра.", ar: "موعد نهائي", arExample: "الموعد النهائي غدا.", category: "Ish" },
 ];
 
 
@@ -3773,67 +3840,75 @@ if (!localStorage.getItem("onboardingTourSeen")) {
 // =========================================================================
 
 const UI_TRANSLATIONS = {
-    homeBtn: { uz: "🏠 Bosh sahifa", en: "🏠 Home", ru: "🏠 Главная", tr: "🏠 Ana Sayfa" },
-    beginnerBtn: { uz: "🆕 Noldan boshlash", en: "🆕 Start from Zero", ru: "🆕 Начать с нуля", tr: "🆕 Sıfırdan Başla" },
-    flashBtn: { uz: "📚 Kartochka", en: "📚 Flashcards", ru: "📚 Карточки", tr: "📚 Kartlar" },
-    matchBtn: { uz: "🎮 So'z o'yini", en: "🎮 Word Game", ru: "🎮 Игра слов", tr: "🎮 Kelime Oyunu" },
-    scrambleBtn: { uz: "🔤 Harflarni tartiblash", en: "🔤 Word Scramble", ru: "🔤 Собери слово", tr: "🔤 Harfleri Sırala" },
-    typingRaceBtn: { uz: "⌨️ Tezkor yozish", en: "⌨️ Typing Race", ru: "⌨️ Скоростной набор", tr: "⌨️ Hızlı Yazma" },
-    fillBlankBtn: { uz: "✏️ Bo'sh joyni to'ldirish", en: "✏️ Fill in the Blank", ru: "✏️ Заполни пропуск", tr: "✏️ Boşluk Doldurma" },
-    bossBattleBtn: { uz: "👹 Haftalik Boss", en: "👹 Weekly Boss", ru: "👹 Недельный босс", tr: "👹 Haftalık Boss" },
-    pomodoroBtn: { uz: "🍅 Fokus rejimi", en: "🍅 Focus Mode", ru: "🍅 Режим фокуса", tr: "🍅 Odak Modu" },
-    speedBtn: { uz: "⚡ Tezkor test", en: "⚡ Speed Quiz", ru: "⚡ Быстрый тест", tr: "⚡ Hızlı Test" },
-    sentenceBtn: { uz: "🧩 Gap tuzish", en: "🧩 Sentence Builder", ru: "🧩 Составь предложение", tr: "🧩 Cümle Kurma" },
-    grammarQuizBtn: { uz: "📐 Grammatika testi", en: "📐 Grammar Quiz", ru: "📐 Тест по грамматике", tr: "📐 Dilbilgisi Testi" },
-    mistakeBtn: { uz: "📖 Qiyin so'zlar", en: "📖 Difficult Words", ru: "📖 Сложные слова", tr: "📖 Zor Kelimeler" },
-    certificateBtn2: { uz: "🎓 Sertifikat", en: "🎓 Certificate", ru: "🎓 Сертификат", tr: "🎓 Sertifika" },
-    premiumBtn: { uz: "💎 Premium", en: "💎 Premium", ru: "💎 Премиум", tr: "💎 Premium" },
-    adminBtn: { uz: "🛠️ Admin panel", en: "🛠️ Admin Panel", ru: "🛠️ Админ-панель", tr: "🛠️ Yönetici Paneli" },
-    quizBtn: { uz: "📝 Test", en: "📝 Quiz", ru: "📝 Тест", tr: "📝 Test" },
-    aiBtn: { uz: "🤖 AI Teacher", en: "🤖 AI Teacher", ru: "🤖 AI Учитель", tr: "🤖 AI Öğretmen" },
-    assistantBtn: { uz: "💬 AI Assistant", en: "💬 AI Assistant", ru: "💬 AI Ассистент", tr: "💬 AI Asistan" },
-    roleplayBtn: { uz: "🎭 Rolli suhbat", en: "🎭 Roleplay", ru: "🎭 Ролевая игра", tr: "🎭 Rol Yapma" },
-    duelBtn: { uz: "🤝 Do'st bilan raqobat", en: "🤝 Compete with a Friend", ru: "🤝 Соревнование с другом", tr: "🤝 Arkadaşla Yarış" },
-    grammarLibraryBtn: { uz: "📘 Grammatika qo'llanmasi", en: "📘 Grammar Guide", ru: "📘 Справочник грамматики", tr: "📘 Dilbilgisi Rehberi" },
-    idiomsBtn: { uz: "💬 Idiomalar", en: "💬 Idioms", ru: "💬 Идиомы", tr: "💬 Deyimler" },
-    myWordsBtn: { uz: "📝 Mening so'zlarim", en: "📝 My Words", ru: "📝 Мои слова", tr: "📝 Kelimelerim" },
-    examBtn: { uz: "🎯 Imtihon rejimi", en: "🎯 Exam Mode", ru: "🎯 Режим экзамена", tr: "🎯 Sınav Modu" },
-    courseBtn: { uz: "📖 Lug'at", en: "📖 Vocabulary", ru: "📖 Словарь", tr: "📖 Kelime Bilgisi" },
-    aiToolsBtn: { uz: "🛠 Tarjima", en: "🛠 Translate", ru: "🛠 Перевод", tr: "🛠 Çeviri" },
-    speakingBtn: { uz: "🎤 Speaking", en: "🎤 Speaking", ru: "🎤 Говорение", tr: "🎤 Konuşma" },
-    grammarBtn: { uz: "✏️ Grammatika", en: "✏️ Grammar", ru: "✏️ Грамматика", tr: "✏️ Dilbilgisi" },
-    achievementBtn: { uz: "🏆 Yutuqlar", en: "🏆 Achievements", ru: "🏆 Достижения", tr: "🏆 Başarılar" },
-    avatarBtn: { uz: "🧑 Avatar", en: "🧑 Avatar", ru: "🧑 Аватар", tr: "🧑 Avatar" },
-    statsBtn: { uz: "📊 Statistika", en: "📊 Statistics", ru: "📊 Статистика", tr: "📊 İstatistik" },
-    settingsBtn: { uz: "⚙️ Sozlamalar", en: "⚙️ Settings", ru: "⚙️ Настройки", tr: "⚙️ Ayarlar" },
-    startBtn: { uz: "Boshlash", en: "Start", ru: "Начать", tr: "Başla" },
-    qa_flash: { uz: "Kartochka", en: "Flashcards", ru: "Карточки", tr: "Kartlar" },
-    qa_quiz: { uz: "Test", en: "Quiz", ru: "Тест", tr: "Test" },
-    qa_match: { uz: "O'yin", en: "Game", ru: "Игра", tr: "Oyun" },
-    qa_scramble: { uz: "Harflar", en: "Letters", ru: "Буквы", tr: "Harfler" },
-    qa_ai: { uz: "AI Teacher", en: "AI Teacher", ru: "AI Учитель", tr: "AI Öğretmen" },
-    qa_cert: { uz: "Sertifikat", en: "Certificate", ru: "Сертификат", tr: "Sertifika" },
-    qa_stats: { uz: "Statistika", en: "Stats", ru: "Статистика", tr: "İstatistik" },
-    qa_settings: { uz: "Sozlama", en: "Settings", ru: "Настройки", tr: "Ayarlar" },
-    hdr_match: { uz: "🎮 So'zlarni moslashtirish", en: "🎮 Match the Words", ru: "🎮 Сопоставь слова", tr: "🎮 Kelimeleri Eşleştir" },
-    hdr_scramble: { uz: "🔤 Harflarni tartiblash", en: "🔤 Word Scramble", ru: "🔤 Собери слово", tr: "🔤 Harfleri Sırala" },
-    hdr_typing: { uz: "⌨️ Tezkor yozish (Typing Race)", en: "⌨️ Typing Race", ru: "⌨️ Скоростной набор", tr: "⌨️ Hızlı Yazma" },
-    hdr_fillblank: { uz: "✏️ Bo'sh joyni to'ldirish", en: "✏️ Fill in the Blank", ru: "✏️ Заполни пропуск", tr: "✏️ Boşluk Doldurma" },
-    hdr_boss: { uz: "👹 Haftalik Boss", en: "👹 Weekly Boss", ru: "👹 Недельный босс", tr: "👹 Haftalık Boss" },
-    hdr_pomodoro: { uz: "🍅 Fokus rejimi (Pomodoro)", en: "🍅 Focus Mode (Pomodoro)", ru: "🍅 Режим фокуса (Помодоро)", tr: "🍅 Odak Modu (Pomodoro)" },
-    hdr_speed: { uz: "⚡ Tezkor test", en: "⚡ Speed Quiz", ru: "⚡ Быстрый тест", tr: "⚡ Hızlı Test" },
-    hdr_stats: { uz: "📊 Statistika", en: "📊 Statistics", ru: "📊 Статистика", tr: "📊 İstatistik" },
-    hdr_cert: { uz: "🎓 Sertifikat", en: "🎓 Certificate", ru: "🎓 Сертификат", tr: "🎓 Sertifika" },
-    hdr_achievements: { uz: "🏆 Yutuqlar", en: "🏆 Achievements", ru: "🏆 Достижения", tr: "🏆 Başarılar" }
+    homeBtn: { uz: "🏠 Bosh sahifa", en: "🏠 Home", ru: "🏠 Главная", tr: "🏠 Ana Sayfa", ar: "🏠 الرئيسية" },
+    beginnerBtn: { uz: "🆕 Noldan boshlash", en: "🆕 Start from Zero", ru: "🆕 Начать с нуля", tr: "🆕 Sıfırdan Başla", ar: "🆕 ابدأ من الصفر" },
+    flashBtn: { uz: "📚 Kartochka", en: "📚 Flashcards", ru: "📚 Карточки", tr: "📚 Kartlar", ar: "📚 البطاقات" },
+    matchBtn: { uz: "🎮 So'z o'yini", en: "🎮 Word Game", ru: "🎮 Игра слов", tr: "🎮 Kelime Oyunu", ar: "🎮 لعبة الكلمات" },
+    scrambleBtn: { uz: "🔤 Harflarni tartiblash", en: "🔤 Word Scramble", ru: "🔤 Собери слово", tr: "🔤 Harfleri Sırala", ar: "🔤 ترتيب الحروف" },
+    typingRaceBtn: { uz: "⌨️ Tezkor yozish", en: "⌨️ Typing Race", ru: "⌨️ Скоростной набор", tr: "⌨️ Hızlı Yazma", ar: "⌨️ الكتابة السريعة" },
+    fillBlankBtn: { uz: "✏️ Bo'sh joyni to'ldirish", en: "✏️ Fill in the Blank", ru: "✏️ Заполни пропуск", tr: "✏️ Boşluk Doldurma", ar: "✏️ املأ الفراغ" },
+    bossBattleBtn: { uz: "👹 Haftalik Boss", en: "👹 Weekly Boss", ru: "👹 Недельный босс", tr: "👹 Haftalık Boss", ar: "👹 تحدي الأسبوع" },
+    pomodoroBtn: { uz: "🍅 Fokus rejimi", en: "🍅 Focus Mode", ru: "🍅 Режим фокуса", tr: "🍅 Odak Modu", ar: "🍅 وضع التركيز" },
+    speedBtn: { uz: "⚡ Tezkor test", en: "⚡ Speed Quiz", ru: "⚡ Быстрый тест", tr: "⚡ Hızlı Test", ar: "⚡ اختبار سريع" },
+    sentenceBtn: { uz: "🧩 Gap tuzish", en: "🧩 Sentence Builder", ru: "🧩 Составь предложение", tr: "🧩 Cümle Kurma", ar: "🧩 بناء الجملة" },
+    grammarQuizBtn: { uz: "📐 Grammatika testi", en: "📐 Grammar Quiz", ru: "📐 Тест по грамматике", tr: "📐 Dilbilgisi Testi", ar: "📐 اختبار القواعد" },
+    mistakeBtn: { uz: "📖 Qiyin so'zlar", en: "📖 Difficult Words", ru: "📖 Сложные слова", tr: "📖 Zor Kelimeler", ar: "📖 كلمات صعبة" },
+    certificateBtn2: { uz: "🎓 Sertifikat", en: "🎓 Certificate", ru: "🎓 Сертификат", tr: "🎓 Sertifika", ar: "🎓 الشهادة" },
+    premiumBtn: { uz: "💎 Premium", en: "💎 Premium", ru: "💎 Премиум", tr: "💎 Premium", ar: "💎 بريميوم" },
+    adminBtn: { uz: "🛠️ Admin panel", en: "🛠️ Admin Panel", ru: "🛠️ Админ-панель", tr: "🛠️ Yönetici Paneli", ar: "🛠️ لوحة التحكم" },
+    quizBtn: { uz: "📝 Test", en: "📝 Quiz", ru: "📝 Тест", tr: "📝 Test", ar: "📝 اختبار" },
+    aiBtn: { uz: "🤖 AI Teacher", en: "🤖 AI Teacher", ru: "🤖 AI Учитель", tr: "🤖 AI Öğretmen", ar: "🤖 المعلم الذكي" },
+    assistantBtn: { uz: "💬 AI Assistant", en: "💬 AI Assistant", ru: "💬 AI Ассистент", tr: "💬 AI Asistan", ar: "💬 المساعد الذكي" },
+    roleplayBtn: { uz: "🎭 Rolli suhbat", en: "🎭 Roleplay", ru: "🎭 Ролевая игра", tr: "🎭 Rol Yapma", ar: "🎭 محادثة تمثيلية" },
+    duelBtn: { uz: "🤝 Do'st bilan raqobat", en: "🤝 Compete with a Friend", ru: "🤝 Соревнование с другом", tr: "🤝 Arkadaşla Yarış", ar: "🤝 تحدي مع صديق" },
+    grammarLibraryBtn: { uz: "📘 Grammatika qo'llanmasi", en: "📘 Grammar Guide", ru: "📘 Справочник грамматики", tr: "📘 Dilbilgisi Rehberi", ar: "📘 دليل القواعد" },
+    idiomsBtn: { uz: "💬 Idiomalar", en: "💬 Idioms", ru: "💬 Идиомы", tr: "💬 Deyimler", ar: "💬 التعابير الاصطلاحية" },
+    myWordsBtn: { uz: "📝 Mening so'zlarim", en: "📝 My Words", ru: "📝 Мои слова", tr: "📝 Kelimelerim", ar: "📝 كلماتي" },
+    examBtn: { uz: "🎯 Imtihon rejimi", en: "🎯 Exam Mode", ru: "🎯 Режим экзамена", tr: "🎯 Sınav Modu", ar: "🎯 وضع الامتحان" },
+    courseBtn: { uz: "📖 Lug'at", en: "📖 Vocabulary", ru: "📖 Словарь", tr: "📖 Kelime Bilgisi", ar: "📖 المفردات" },
+    aiToolsBtn: { uz: "🛠 Tarjima", en: "🛠 Translate", ru: "🛠 Перевод", tr: "🛠 Çeviri", ar: "🛠 الترجمة" },
+    speakingBtn: { uz: "🎤 Speaking", en: "🎤 Speaking", ru: "🎤 Говорение", tr: "🎤 Konuşma", ar: "🎤 المحادثة" },
+    grammarBtn: { uz: "✏️ Grammatika", en: "✏️ Grammar", ru: "✏️ Грамматика", tr: "✏️ Dilbilgisi", ar: "✏️ القواعد" },
+    achievementBtn: { uz: "🏆 Yutuqlar", en: "🏆 Achievements", ru: "🏆 Достижения", tr: "🏆 Başarılar", ar: "🏆 الإنجازات" },
+    avatarBtn: { uz: "🧑 Avatar", en: "🧑 Avatar", ru: "🧑 Аватар", tr: "🧑 Avatar", ar: "🧑 الصورة الرمزية" },
+    statsBtn: { uz: "📊 Statistika", en: "📊 Statistics", ru: "📊 Статистика", tr: "📊 İstatistik", ar: "📊 الإحصائيات" },
+    settingsBtn: { uz: "⚙️ Sozlamalar", en: "⚙️ Settings", ru: "⚙️ Настройки", tr: "⚙️ Ayarlar", ar: "⚙️ الإعدادات" },
+    startBtn: { uz: "Boshlash", en: "Start", ru: "Начать", tr: "Başla", ar: "ابدأ" },
+    qa_flash: { uz: "Kartochka", en: "Flashcards", ru: "Карточки", tr: "Kartlar", ar: "بطاقات" },
+    qa_quiz: { uz: "Test", en: "Quiz", ru: "Тест", tr: "Test", ar: "اختبار" },
+    qa_match: { uz: "O'yin", en: "Game", ru: "Игра", tr: "Oyun", ar: "لعبة" },
+    qa_scramble: { uz: "Harflar", en: "Letters", ru: "Буквы", tr: "Harfler", ar: "حروف" },
+    qa_ai: { uz: "AI Teacher", en: "AI Teacher", ru: "AI Учитель", tr: "AI Öğretmen", ar: "المعلم الذكي" },
+    qa_cert: { uz: "Sertifikat", en: "Certificate", ru: "Сертификат", tr: "Sertifika", ar: "شهادة" },
+    qa_stats: { uz: "Statistika", en: "Stats", ru: "Статистика", tr: "İstatistik", ar: "إحصائيات" },
+    qa_settings: { uz: "Sozlama", en: "Settings", ru: "Настройки", tr: "Ayarlar", ar: "إعدادات" },
+    hdr_match: { uz: "🎮 So'zlarni moslashtirish", en: "🎮 Match the Words", ru: "🎮 Сопоставь слова", tr: "🎮 Kelimeleri Eşleştir", ar: "🎮 طابق الكلمات" },
+    hdr_scramble: { uz: "🔤 Harflarni tartiblash", en: "🔤 Word Scramble", ru: "🔤 Собери слово", tr: "🔤 Harfleri Sırala", ar: "🔤 ترتيب الحروف" },
+    hdr_typing: { uz: "⌨️ Tezkor yozish (Typing Race)", en: "⌨️ Typing Race", ru: "⌨️ Скоростной набор", tr: "⌨️ Hızlı Yazma", ar: "⌨️ الكتابة السريعة" },
+    hdr_fillblank: { uz: "✏️ Bo'sh joyni to'ldirish", en: "✏️ Fill in the Blank", ru: "✏️ Заполни пропуск", tr: "✏️ Boşluk Doldurma", ar: "✏️ املأ الفراغ" },
+    hdr_boss: { uz: "👹 Haftalik Boss", en: "👹 Weekly Boss", ru: "👹 Недельный босс", tr: "👹 Haftalık Boss", ar: "👹 تحدي الأسبوع" },
+    hdr_pomodoro: { uz: "🍅 Fokus rejimi (Pomodoro)", en: "🍅 Focus Mode (Pomodoro)", ru: "🍅 Режим фокуса (Помодоро)", tr: "🍅 Odak Modu (Pomodoro)", ar: "🍅 وضع التركيز (بومودورو)" },
+    hdr_speed: { uz: "⚡ Tezkor test", en: "⚡ Speed Quiz", ru: "⚡ Быстрый тест", tr: "⚡ Hızlı Test", ar: "⚡ اختبار سريع" },
+    hdr_stats: { uz: "📊 Statistika", en: "📊 Statistics", ru: "📊 Статистика", tr: "📊 İstatistik", ar: "📊 الإحصائيات" },
+    hdr_cert: { uz: "🎓 Sertifikat", en: "🎓 Certificate", ru: "🎓 Сертификат", tr: "🎓 Sertifika", ar: "🎓 الشهادة" },
+    hdr_achievements: { uz: "🏆 Yutuqlar", en: "🏆 Achievements", ru: "🏆 Достижения", tr: "🏆 Başarılar", ar: "🏆 الإنجازات" }
 };
 
 function applyUILanguage(lang) {
-    if (!["uz", "en", "ru", "tr"].includes(lang)) lang = "uz";
+    if (!["uz", "en", "ru", "tr", "ar"].includes(lang)) lang = "uz";
     document.querySelectorAll("[data-i18n]").forEach((el) => {
         const key = el.dataset.i18n;
         const dict = UI_TRANSLATIONS[key];
-        if (dict) el.textContent = dict[lang] || dict.uz;
+        if (dict) {
+            el.textContent = dict[lang] || dict.uz;
+            el.dir = lang === "ar" ? "rtl" : "ltr";
+            el.classList.toggle("arabic-text", lang === "ar");
+        }
     });
+    // Interfeys arab tiliga o'tganda butun sahifa yo'nalishini ham
+    // o'ngdan-chapga (RTL) o'zgartiramiz.
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("ui-rtl", lang === "ar");
     localStorage.setItem("uiLang", lang);
     if (languageSelectEl) languageSelectEl.value = lang;
 }
@@ -3991,68 +4066,162 @@ if (generatePlanBtn) {
 console.log("AI Coach Loaded");
 
 // =====================
-// MINI GAMES
+// MINI GAMES (haqiqiy, to'liq ishlaydigan versiyalar)
 // =====================
-const memoryGameBtn = document.getElementById("memoryGameBtn");
 const gameContainerEl = document.getElementById("gameContainer");
-if (memoryGameBtn) {
-    memoryGameBtn.onclick = () => {
-        if (gameContainerEl) gameContainerEl.innerHTML = `<h3>🧠 Memory Match</h3><p>Find matching cards.</p><button onclick="finishMemory()">Finish</button>`;
-    };
+
+function showGamesMenu() {
+    if (!gameContainerEl) return;
+    gameContainerEl.innerHTML = `
+        <div class="game-picker">
+            <button class="game-pick-card" id="pickMemoryGame">
+                <div class="game-pick-icon">🧠</div>
+                <div class="game-pick-title">Memory Match</div>
+                <div class="game-pick-desc">Kartalarni juftlab, so'z va tarjimasini toping</div>
+            </button>
+            <button class="game-pick-card" id="pickHangmanGame">
+                <div class="game-pick-icon">🔠</div>
+                <div class="game-pick-title">Hangman</div>
+                <div class="game-pick-desc">Harflarni topib, yashiringan so'zni aniqlang</div>
+            </button>
+        </div>
+    `;
+    const memBtn = document.getElementById("pickMemoryGame");
+    const hangBtn = document.getElementById("pickHangmanGame");
+    if (memBtn) memBtn.onclick = startMemoryGame;
+    if (hangBtn) hangBtn.onclick = startHangmanGame;
 }
+
+// ---- 1) MEMORY MATCH — kartalarni EN/UZ juftlab topish ----
+let memoryState = { cards: [], flipped: [], matched: [], lock: false, moves: 0 };
+
+function startMemoryGame() {
+    if (!gameContainerEl || typeof words === "undefined" || !words.length) return;
+    const pool = [...words].sort(() => Math.random() - 0.5).slice(0, 8);
+    const cards = [];
+    pool.forEach((w, i) => {
+        cards.push({ pairId: i, text: getTargetWord(w), side: "target" });
+        cards.push({ pairId: i, text: w.uz, side: "uz" });
+    });
+    cards.sort(() => Math.random() - 0.5);
+    memoryState = { cards, flipped: [], matched: [], lock: false, moves: 0 };
+    renderMemoryGame();
+}
+
+function renderMemoryGame() {
+    const isRtl = learnLang === "ar";
+    gameContainerEl.innerHTML = `
+        <h3>🧠 Memory Match</h3>
+        <p class="ai-settings-hint">Bir xil juftlikni (so'z va tarjimasi) toping. Harakatlar: <b id="memoryMoves">${memoryState.moves}</b></p>
+        <div class="memory-grid">
+            ${memoryState.cards.map((c, i) => {
+                const isMatched = memoryState.matched.includes(i);
+                const isFlipped = memoryState.flipped.includes(i) || isMatched;
+                return `<button class="memory-card${isFlipped ? " flipped" : ""}${isMatched ? " matched" : ""}" data-idx="${i}">
+                    <span class="memory-card-inner${c.side === 'target' && isRtl ? ' arabic-text' : ''}">${isFlipped ? c.text : "❓"}</span>
+                </button>`;
+            }).join("")}
+        </div>
+    `;
+    gameContainerEl.querySelectorAll(".memory-card").forEach(btn => {
+        btn.onclick = () => flipMemoryCard(parseInt(btn.dataset.idx, 10));
+    });
+}
+
+function flipMemoryCard(idx) {
+    if (memoryState.lock) return;
+    if (memoryState.flipped.includes(idx) || memoryState.matched.includes(idx)) return;
+    memoryState.flipped.push(idx);
+    renderMemoryGame();
+    if (memoryState.flipped.length === 2) {
+        memoryState.moves++;
+        memoryState.lock = true;
+        const [a, b] = memoryState.flipped;
+        const cardA = memoryState.cards[a], cardB = memoryState.cards[b];
+        if (cardA.pairId === cardB.pairId) {
+            memoryState.matched.push(a, b);
+            memoryState.flipped = [];
+            memoryState.lock = false;
+            renderMemoryGame();
+            if (memoryState.matched.length === memoryState.cards.length) {
+                setTimeout(() => finishMemory(), 300);
+            }
+        } else {
+            setTimeout(() => {
+                memoryState.flipped = [];
+                memoryState.lock = false;
+                renderMemoryGame();
+            }, 800);
+        }
+    }
+}
+
 function finishMemory() {
-    coins += 100;
-    xp += 50;
+    const reward = Math.max(20, 100 - memoryState.moves * 3);
+    coins += reward;
+    xp += Math.round(reward / 2);
     saveGame();
-    alert("🧠 Memory Game Completed!");
+    if (typeof celebrate === "function") celebrate();
+    if (gameContainerEl) gameContainerEl.innerHTML += `<p class="listening-result correct">🎉 Tabriklaymiz! ${memoryState.moves} harakatda tugatdingiz. +${reward} tanga, +${Math.round(reward/2)} XP</p>`;
 }
 
-const typingGameBtn = document.getElementById("typingGameBtn");
-if (typingGameBtn) {
-    typingGameBtn.onclick = () => {
-        if (gameContainerEl) gameContainerEl.innerHTML = `
-            <h3>⌨️ Typing Test</h3><p>Type:</p><b>English Master Pro</b>
-            <input id="typingInput"><button onclick="checkTyping()">Check</button>
-        `;
-    };
-}
-function checkTyping() {
-    const value = document.getElementById("typingInput").value;
-    alert(value === "English Master Pro" ? "Perfect!" : "Try Again");
-    coins += 100;
-    xp += 40;
-    saveGame();
+const memoryGameBtn = document.getElementById("memoryGameBtn"); // eski struktura bilan moslik uchun (ixtiyoriy)
+if (memoryGameBtn) memoryGameBtn.onclick = startMemoryGame;
+
+// ---- 2) HANGMAN — harflarni topib so'zni aniqlash ----
+let hangmanState = { word: "", uz: "", guessed: [], wrong: 0, maxWrong: 6, done: false };
+
+function startHangmanGame() {
+    if (!gameContainerEl || typeof words === "undefined" || !words.length) return;
+    const pool = words.filter(w => /^[A-Za-z]+$/.test(w.en));
+    const w = pool[Math.floor(Math.random() * pool.length)];
+    hangmanState = { word: w.en.toUpperCase(), uz: w.uz, guessed: [], wrong: 0, maxWrong: 6, done: false };
+    renderHangmanGame();
 }
 
-const wordPuzzleBtn = document.getElementById("wordPuzzleBtn");
-if (wordPuzzleBtn) {
-    wordPuzzleBtn.onclick = () => {
-        if (gameContainerEl) gameContainerEl.innerHTML = `
-            <h3>🔤 Word Puzzle</h3><p>Unscramble:</p><b>LPPAE</b>
-            <input id="wordAnswer"><button onclick="checkPuzzle()">Check</button>
-        `;
-    };
+function renderHangmanGame() {
+    const display = hangmanState.word.split("").map(ch => hangmanState.guessed.includes(ch) ? ch : "_").join(" ");
+    const stages = ["🙂","😟","😧","😨","😰","😵","💀"];
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    gameContainerEl.innerHTML = `
+        <h3>🔠 Hangman</h3>
+        <p class="ai-settings-hint">Maslahat (o'zbekcha): <b>${hangmanState.uz}</b></p>
+        <div style="font-size:52px;text-align:center;">${stages[Math.min(hangmanState.wrong, stages.length - 1)]}</div>
+        <div style="font-size:28px;letter-spacing:6px;text-align:center;font-family:monospace;margin:12px 0;">${display}</div>
+        <p style="text-align:center;">Xato: ${hangmanState.wrong}/${hangmanState.maxWrong}</p>
+        <div class="tile-grid">
+            ${alphabet.map(l => `<button class="tile hangman-letter" ${hangmanState.guessed.includes(l) ? "disabled" : ""} data-letter="${l}">${l}</button>`).join("")}
+        </div>
+        <div id="hangmanResult"></div>
+    `;
+    gameContainerEl.querySelectorAll(".hangman-letter").forEach(btn => {
+        btn.onclick = () => guessHangmanLetter(btn.dataset.letter);
+    });
 }
-function checkPuzzle() {
-    const answer = document.getElementById("wordAnswer").value.toLowerCase();
-    alert(answer === "apple" ? "Correct!" : "Wrong!");
-    coins += 80;
-    xp += 30;
-    saveGame();
+
+function guessHangmanLetter(letter) {
+    if (hangmanState.done || hangmanState.guessed.includes(letter)) return;
+    hangmanState.guessed.push(letter);
+    if (!hangmanState.word.includes(letter)) hangmanState.wrong++;
+
+    const won = hangmanState.word.split("").every(ch => hangmanState.guessed.includes(ch));
+    const lost = hangmanState.wrong >= hangmanState.maxWrong;
+
+    renderHangmanGame();
+    const resultEl = document.getElementById("hangmanResult");
+    if (won) {
+        hangmanState.done = true;
+        coins += 60; xp += 30; saveGame();
+        if (typeof celebrate === "function") celebrate();
+        if (resultEl) resultEl.innerHTML = `<p class="listening-result correct">🎉 Yutdingiz! So'z: <b>${hangmanState.word}</b>. +60 tanga, +30 XP</p>`;
+    } else if (lost) {
+        hangmanState.done = true;
+        if (resultEl) resultEl.innerHTML = `<p class="listening-result wrong">😵 Afsus! To'g'ri javob: <b>${hangmanState.word}</b></p>`;
+    }
 }
 
 const hangmanBtn = document.getElementById("hangmanBtn");
-if (hangmanBtn) {
-    hangmanBtn.onclick = () => {
-        if (gameContainerEl) gameContainerEl.innerHTML = `<h3>🔠 Hangman</h3><p>Word:</p><b>C _ T</b><button onclick="finishHangman()">Guess CAT</button>`;
-    };
-}
-function finishHangman() {
-    coins += 70;
-    xp += 20;
-    saveGame();
-    alert("You Win!");
-}
+if (hangmanBtn) hangmanBtn.onclick = startHangmanGame;
 
 const completeChallengeBtn = document.getElementById("completeChallenge");
 if (completeChallengeBtn) {
@@ -4440,11 +4609,45 @@ function getVoiceRate() {
     return isNaN(saved) ? 0.85 : saved;
 }
 
+// Brauzerda mavjud barcha ovozlarni oldindan yuklab olamiz (ba'zi
+// brauzerlarda ovozlar asinxron tarzda keladi).
+let availableVoices = [];
+function refreshVoices() {
+    if ("speechSynthesis" in window) availableVoices = speechSynthesis.getVoices();
+}
+if ("speechSynthesis" in window) {
+    refreshVoices();
+    speechSynthesis.onvoiceschanged = refreshVoices;
+}
+
+// Berilgan til kodi uchun eng mos ovozni tanlaydi: avval aniq mos kelgan
+// (masalan "ar-SA"), bo'lmasa bosh tili mos keladigan har qanday ovoz
+// (masalan "ar-EG"), tanlanadi.
+function pickBestVoice(langCode) {
+    if (!availableVoices.length) refreshVoices();
+    if (!availableVoices.length) return null;
+    const exact = availableVoices.find(v => v.lang && v.lang.toLowerCase() === langCode.toLowerCase());
+    if (exact) return exact;
+    const base = langCode.split("-")[0].toLowerCase();
+    const partial = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(base));
+    return partial || null;
+}
+
 function speakText(text, langCode) {
     if (!("speechSynthesis" in window) || !text) return;
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = langCode;
     utter.rate = getVoiceRate();
+    const voice = pickBestVoice(langCode);
+    if (voice) utter.voice = voice;
+    else if (langCode.startsWith("ar")) {
+        // Ba'zi qurilmalarda arabcha ovoz o'rnatilmagan bo'lishi mumkin —
+        // foydalanuvchini shu haqda ogohlantiramiz (faqat bir marta).
+        if (!speakText._arWarned) {
+            speakText._arWarned = true;
+            console.warn("⚠️ Bu qurilmada arabcha ovoz topilmadi, standart ovoz ishlatiladi.");
+        }
+    }
     speechSynthesis.cancel();
     speechSynthesis.speak(utter);
 }
