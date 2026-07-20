@@ -150,3 +150,189 @@ button:not(nav button):not(#startBtn):hover {
 @media (max-width: 640px) {
     .page { padding: 22px 16px !important; }
 }
+
+/* =========================================================================
+   TEMA TUZATISHI — Light/Neon endi haqiqatan ham qo'llanadi.
+   Yuqoridagi qoidalar (body, header, nav, logo, .card...) hammasi shartsiz
+   "!important" bilan qora/binafsha fonni majburlar edi, shu sabab
+   foydalanuvchi Avatar sahifasidan "Light" yoki "Neon" mavzusini tanlasa
+   ham ko'rinish o'zgarmay, doim "Dark" bo'lib qolardi. Quyidagi qoidalar
+   ular ustidan (yuqoriroq spetsifiklik bilan) qayta belgilaydi, shunda
+   data-theme="light" / data-theme="neon" holatlarida to'g'ri ko'rinadi.
+   ========================================================================= */
+
+/* ---- Light rejim ---- */
+body[data-theme="light"] {
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 55%, #e0e7ff 100%) !important;
+}
+body[data-theme="light"] header {
+    background: rgba(255,255,255,.78) !important;
+    border-bottom: 1px solid rgba(15,23,42,.08) !important;
+}
+body[data-theme="light"] nav button {
+    box-shadow: 0 4px 14px rgba(99,102,241,.18) !important;
+}
+body[data-theme="light"] #mainNav button.active {
+    color: #071019 !important;
+    box-shadow: 0 0 0 3px rgba(34,211,238,.15) !important;
+}
+body[data-theme="light"] #startBtn {
+    box-shadow: 0 10px 26px rgba(16,185,129,.25) !important;
+}
+body[data-theme="light"] .page.tool-page,
+body[data-theme="light"] .tool-page > .card,
+body[data-theme="light"] [class*="glass"],
+body[data-theme="light"] .stats-chart-card {
+    background: rgba(15,23,42,.04) !important;
+    border: 1px solid rgba(15,23,42,.08) !important;
+}
+body[data-theme="light"] #bottomNav {
+    background: rgba(255,255,255,.88) !important;
+    border-top: 1px solid rgba(15,23,42,.08) !important;
+}
+body[data-theme="light"] #bottomNav .active,
+body[data-theme="light"] #bottomNav button.active {
+    color: var(--em-primary) !important;
+}
+
+/* ---- Neon rejim ---- */
+body[data-theme="neon"] {
+    background: #000 !important;
+}
+body[data-theme="neon"] header {
+    background: rgba(0,0,0,.78) !important;
+    border-bottom: 1px solid rgba(0,255,204,.35) !important;
+}
+body[data-theme="neon"] .logo,
+body[data-theme="neon"] .logo i {
+    background: none !important;
+    -webkit-text-fill-color: #00ffcc !important;
+    color: #00ffcc !important;
+}
+body[data-theme="neon"] nav button {
+    background: #000 !important;
+    border: 1px solid #00ffcc !important;
+    box-shadow: 0 0 12px rgba(0,255,204,.4) !important;
+}
+body[data-theme="neon"] nav button:hover {
+    background: #001a14 !important;
+    box-shadow: 0 0 18px rgba(0,255,204,.6) !important;
+}
+body[data-theme="neon"] #mainNav button.active {
+    background: #00ffcc !important;
+    color: #000 !important;
+    box-shadow: 0 0 14px rgba(0,255,204,.7) !important;
+}
+body[data-theme="neon"] #homePage h1 {
+    background: none !important;
+    -webkit-text-fill-color: #00ffcc !important;
+    color: #00ffcc !important;
+}
+body[data-theme="neon"] #startBtn {
+    background: #000 !important;
+    border: 1px solid #00ffcc !important;
+    box-shadow: 0 0 16px rgba(0,255,204,.5) !important;
+}
+body[data-theme="neon"] .card {
+    background: #0a0a0a !important;
+    color: #00ffcc !important;
+    box-shadow: 0 0 0 1px rgba(0,255,204,.25) !important;
+}
+body[data-theme="neon"] .page.tool-page,
+body[data-theme="neon"] .tool-page > .card,
+body[data-theme="neon"] [class*="glass"],
+body[data-theme="neon"] .stats-chart-card {
+    background: rgba(0,255,204,.05) !important;
+    border: 1px solid rgba(0,255,204,.25) !important;
+}
+body[data-theme="neon"] #bottomNav {
+    background: rgba(0,0,0,.92) !important;
+    border-top: 1px solid rgba(0,255,204,.3) !important;
+}
+body[data-theme="neon"] #bottomNav .active,
+body[data-theme="neon"] #bottomNav button.active {
+    color: #00ffcc !important;
+}
+body[data-theme="neon"] ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #00ffcc, #059669) !important;
+}
+
+/* ---- Header'dagi tezkor tema tugmasi ---- */
+.quick-theme-btn {
+    width: 40px; height: 40px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 18px; line-height: 1;
+    border-radius: 12px;
+    border: 1px solid var(--em-glass-border);
+    background: var(--em-glass);
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease;
+    margin-left: 8px;
+}
+.quick-theme-btn:hover {
+    transform: translateY(-1px) rotate(-8deg);
+    box-shadow: 0 4px 14px rgba(99,102,241,.3);
+}
+body[data-theme="light"] .quick-theme-btn {
+    background: rgba(15,23,42,.05);
+    border-color: rgba(15,23,42,.1);
+}
+body[data-theme="neon"] .quick-theme-btn {
+    background: #000;
+    border-color: #00ffcc;
+    box-shadow: 0 0 10px rgba(0,255,204,.35);
+}
+@media (max-width: 640px) {
+    .quick-theme-btn { width: 36px; height: 36px; font-size: 16px; }
+}
+
+/* =========================================================================
+   QO'SHIMCHA POLISH — faqat CSS, JS mantiqiga tegilmagan, xavfsiz qo'shimcha
+   ========================================================================= */
+
+/* Eslatma: sahifa fade-in animatsiyasi index.css'da ("fade" keyframe)
+   allaqachon mavjud edi, shu sababli bu yerda takrorlanmadi. */
+
+/* Klaviatura bilan navigatsiya qilayotganlar uchun aniqroq fokus holati
+   (accessibility) — sichqoncha bilan bosganda halqa ko'rinmaydi, faqat
+   Tab bilan o'tganda ko'rinadi. */
+:focus { outline: none; }
+:focus-visible {
+    outline: 2px solid var(--em-accent) !important;
+    outline-offset: 2px !important;
+    border-radius: 6px;
+}
+
+/* Bosh sahifadagi kartalarga (kunlik maqsad, so'z, iqtibos va h.k.) bir xil
+   yumshoq kirish animatsiyasi va sal chuqurroq hover effekti */
+#homePage > div {
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+#homePage > div:hover {
+    transform: translateY(-2px);
+}
+
+/* Bosh tugma (startBtn)ga nafis "nafas olish" effekti — e'tiborni tortadi,
+   lekin ortiqcha ko'zga tashlanmaydi */
+#startBtn {
+    animation: emBreathe 2.6s ease-in-out infinite;
+}
+@keyframes emBreathe {
+    0%, 100% { box-shadow: 0 10px 26px rgba(16,185,129,.35); }
+    50%      { box-shadow: 0 14px 34px rgba(16,185,129,.55); }
+}
+@media (prefers-reduced-motion: reduce) {
+    #startBtn { animation: none; }
+}
+
+/* Progress-bar to'ldirilishiga yengil silliqlik */
+.daily-goal-fill, .weekly-challenge-card .daily-goal-fill, .hp-fill {
+    transition: width .5s ease !important;
+}
+
+/* Skeleton-holat (ma'lumot hali yuklanayotganda ko'rinadigan yumshoq
+   "shimmer" effekti) — hozircha .ai-settings-hint bo'sh/"⏳" holatlarda
+   allaqachon ishlatilyapti, shunga ozgina jozibadorlik qo'shamiz */
+.ai-settings-hint {
+    transition: opacity .25s ease;
+}

@@ -1798,15 +1798,61 @@ if (voiceAssistantBtn) {
 }
 
 
-let dark = localStorage.getItem("dark") !== "false";
-document.body.dataset.theme = dark ? "dark" : "light";
+// =========================================================================
+// MAVZU (Dark/Light/Neon) — BITTA manba: "appTheme" kaliti.
+// ESKI XATO: bu yerda alohida "dark" (true/false) bayrog'i asosiy manba
+// sifatida ishlatilardi, Avatar sahifasidagi Light/Neon tugmalari esa
+// faqat "appTheme" kalitini yozardi. Natijada foydalanuvchi Light yoki
+// Neon mavzusini tanlasa ham, sahifa qayta yuklanganda shu yerdagi kod
+// "dark" kalitiga qarab ishlab, mavzuni yana "Dark"ga qaytarib qo'yardi.
+// Endi hammasi "appTheme" asosida ishlaydi, "dark" esa faqat eski kod bilan
+// moslik uchun hosila qiymat sifatida saqlanadi.
+// =========================================================================
+
+function getSavedTheme() {
+    return localStorage.getItem("appTheme")
+        || (localStorage.getItem("dark") === "false" ? "light" : "dark");
+}
+
+// Tezkor tema tugmasi (header) — Dark -> Light -> Neon -> Dark aylanadi.
+// Sozlamalar/Avatar sahifasiga kirmasdan ham bir bosishda tema
+// almashtirish uchun qulay yorliq. (const'lar applyTheme() birinchi marta
+// chaqirilishidan OLDIN e'lon qilingan bo'lishi kerak.)
+const quickThemeToggleEl = document.getElementById("quickThemeToggle");
+const THEME_CYCLE = ["dark", "light", "neon"];
+const THEME_ICONS = { dark: "🌙", light: "☀️", neon: "⚡" };
+
+function updateQuickThemeIcon() {
+    if (!quickThemeToggleEl) return;
+    const current = document.body.dataset.theme || "dark";
+    quickThemeToggleEl.textContent = THEME_ICONS[current] || "🌙";
+}
+
+function applyTheme(theme) {
+    document.body.dataset.theme = theme;
+    localStorage.setItem("appTheme", theme);
+    localStorage.setItem("dark", theme === "dark" ? "true" : "false");
+    dark = (theme === "dark");
+    if (typeof updateQuickThemeIcon === "function") updateQuickThemeIcon();
+}
+
+let dark;
+applyTheme(getSavedTheme());
+
+if (quickThemeToggleEl) {
+    quickThemeToggleEl.onclick = () => {
+        const current = document.body.dataset.theme || "dark";
+        const idx = THEME_CYCLE.indexOf(current);
+        const next = THEME_CYCLE[(idx + 1) % THEME_CYCLE.length];
+        applyTheme(next);
+        setAutoThemeEnabled(false);
+    };
+}
 
 if (darkBtn) {
     darkBtn.onclick = () => {
-        dark = !dark;
-        document.body.dataset.theme = dark ? "dark" : "light";
-        localStorage.setItem("dark", dark);
-        localStorage.setItem("appTheme", dark ? "dark" : "light");
+        const next = document.body.dataset.theme === "dark" ? "light" : "dark";
+        applyTheme(next);
         setAutoThemeEnabled(false); // qo'lda tanlashni tizim tanlovi bosib qo'ymasligi uchun
     };
 }
@@ -1831,11 +1877,7 @@ function setAutoThemeEnabled(enabled) {
 function applySystemTheme() {
     if (!window.matchMedia) return;
     const isDarkSystem = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const theme = isDarkSystem ? "dark" : "light";
-    document.body.dataset.theme = theme;
-    localStorage.setItem("appTheme", theme);
-    localStorage.setItem("dark", String(isDarkSystem));
-    dark = isDarkSystem;
+    applyTheme(isDarkSystem ? "dark" : "light");
 }
 
 const autoThemeToggleEl = document.getElementById("autoThemeToggle");
@@ -1848,9 +1890,13 @@ if (autoThemeToggleEl) {
 }
 
 if (window.matchMedia) {
-    if (isAutoThemeEnabled()) applySystemTheme();
+    // Avtomatik rejim FAQAT foydalanuvchi hali hech qanday mavzu tanlamagan
+    // bo'lsa ("appTheme" saqlanmagan bo'lsa) ishga tushadi — aks holda
+    // Neon kabi qo'lda tanlangan mavzular tizim tanlovi bilan bosib
+    // qo'yilmaydi.
+    if (isAutoThemeEnabled() && !localStorage.getItem("appTheme")) applySystemTheme();
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-        if (isAutoThemeEnabled()) applySystemTheme();
+        if (isAutoThemeEnabled() && !localStorage.getItem("appTheme")) applySystemTheme();
     });
 }
 
@@ -1863,11 +1909,11 @@ if (resetBtn) {
     };
 }
 
-const hour = new Date().getHours();
-if ((hour >= 18 || hour <= 6) && localStorage.getItem("dark") === null) {
-    dark = true;
-    document.body.dataset.theme = "dark";
-}
+// Eslatma: ilgari shu yerda "kechqurun 18:00-06:00 avtomatik Dark" degan
+// alohida qoida bor edi. U yuqoridagi appTheme/auto-theme tizimi bilan
+// mos kelmay, foydalanuvchi tanlagan Light/Neon mavzusini kechqurun
+// kutilmaganda "Dark"ga qaytarib qo'yardi — shu sabab olib tashlandi.
+
 
 const rewardDate = localStorage.getItem("rewardDate");
 const todayStr = new Date().toDateString();
@@ -3602,13 +3648,13 @@ const skinsEl = document.getElementById("skins");
 if (skinsEl) skins.forEach(item => skinsEl.innerHTML += `<div class="skin">${item}</div>`);
 
 const darkThemeBtn = document.getElementById("darkTheme");
-if (darkThemeBtn) darkThemeBtn.onclick = () => { document.body.dataset.theme = "dark"; localStorage.setItem("appTheme", "dark"); if (typeof setAutoThemeEnabled === "function") setAutoThemeEnabled(false); };
+if (darkThemeBtn) darkThemeBtn.onclick = () => { applyTheme("dark"); if (typeof setAutoThemeEnabled === "function") setAutoThemeEnabled(false); };
 
 const lightThemeBtn = document.getElementById("lightTheme");
-if (lightThemeBtn) lightThemeBtn.onclick = () => { document.body.dataset.theme = "light"; localStorage.setItem("appTheme", "light"); if (typeof setAutoThemeEnabled === "function") setAutoThemeEnabled(false); };
+if (lightThemeBtn) lightThemeBtn.onclick = () => { applyTheme("light"); if (typeof setAutoThemeEnabled === "function") setAutoThemeEnabled(false); };
 
 const neonThemeBtn = document.getElementById("neonTheme");
-if (neonThemeBtn) neonThemeBtn.onclick = () => { document.body.dataset.theme = "neon"; localStorage.setItem("appTheme", "neon"); if (typeof setAutoThemeEnabled === "function") setAutoThemeEnabled(false); };
+if (neonThemeBtn) neonThemeBtn.onclick = () => { applyTheme("neon"); if (typeof setAutoThemeEnabled === "function") setAutoThemeEnabled(false); };
 
 const effects = ["✨ Glow", "🔥 Fire", "❄️ Ice", "⚡ Lightning"];
 const effectsDivEl = document.getElementById("effects");
@@ -6404,6 +6450,40 @@ renderDailyPlan();
 console.log("Mistake Notebook + Daily Study Plan Loaded");
 
 // =========================================================================
+// CEFR DARAJASI (A1-C2) — bu RASMIY sertifikat emas, faqat bilgan so'zlar
+// soni va XP asosidagi taxminiy, motivatsion o'z-o'zini baholash. Rasmiy
+// CEFR darajasi faqat aккreditatsiyalangan test markazlari (masalan, IELTS,
+// Cambridge) orqali beriladi.
+// =========================================================================
+
+const CEFR_LEVELS = [
+    { code: "A1", title: "Boshlang'ich", minWords: 0 },
+    { code: "A2", title: "Elementar", minWords: 60 },
+    { code: "B1", title: "O'rta darajadan past", minWords: 150 },
+    { code: "B2", title: "O'rta daraja", minWords: 300 },
+    { code: "C1", title: "Yuqori o'rta daraja", minWords: 500 },
+    { code: "C2", title: "Erkin daraja", minWords: 800 }
+];
+
+function computeCefrLevel() {
+    const knownCount = (typeof known !== "undefined") ? known : 0;
+    let current = CEFR_LEVELS[0];
+    for (const lvl of CEFR_LEVELS) {
+        if (knownCount >= lvl.minWords) current = lvl;
+    }
+    return current;
+}
+
+function renderCefrBadge() {
+    const badgeEl = document.getElementById("cefrBadge");
+    const titleEl = document.getElementById("cefrTitle");
+    if (!badgeEl || !titleEl) return;
+    const lvl = computeCefrLevel();
+    badgeEl.textContent = lvl.code;
+    titleEl.textContent = `${lvl.code} — ${lvl.title}`;
+}
+
+// =========================================================================
 // STATISTIKA KENGAYTIRISH — mavjud statsPage'ga qo'shimcha real ma'lumotlar
 // =========================================================================
 
@@ -6437,40 +6517,6 @@ function renderExtraStats() {
 }
 
 renderExtraStats();
-
-// =========================================================================
-// CEFR DARAJASI (A1-C2) — bu RASMIY sertifikat emas, faqat bilgan so'zlar
-// soni va XP asosidagi taxminiy, motivatsion o'z-o'zini baholash. Rasmiy
-// CEFR darajasi faqat aккreditatsiyalangan test markazlari (masalan, IELTS,
-// Cambridge) orqali beriladi.
-// =========================================================================
-
-const CEFR_LEVELS = [
-    { code: "A1", title: "Boshlang'ich", minWords: 0 },
-    { code: "A2", title: "Elementar", minWords: 60 },
-    { code: "B1", title: "O'rta darajadan past", minWords: 150 },
-    { code: "B2", title: "O'rta daraja", minWords: 300 },
-    { code: "C1", title: "Yuqori o'rta daraja", minWords: 500 },
-    { code: "C2", title: "Erkin daraja", minWords: 800 }
-];
-
-function computeCefrLevel() {
-    const knownCount = (typeof known !== "undefined") ? known : 0;
-    let current = CEFR_LEVELS[0];
-    for (const lvl of CEFR_LEVELS) {
-        if (knownCount >= lvl.minWords) current = lvl;
-    }
-    return current;
-}
-
-function renderCefrBadge() {
-    const badgeEl = document.getElementById("cefrBadge");
-    const titleEl = document.getElementById("cefrTitle");
-    if (!badgeEl || !titleEl) return;
-    const lvl = computeCefrLevel();
-    badgeEl.textContent = lvl.code;
-    titleEl.textContent = `${lvl.code} — ${lvl.title}`;
-}
 
 // =========================================================================
 // HAFTALIK HISOBOT (matnli) — xpHistory asosida "bu hafta qanday
