@@ -60,7 +60,7 @@ if (notifyBtn) {
             localStorage.setItem("dailyReminder", "true");
             localStorage.setItem("lastReminderDate", new Date().toDateString());
             if (settingsStatusEl) settingsStatusEl.innerHTML = "✅ Kunlik eslatma yoqildi";
-            new Notification("English Master Pro", { body: "Bugungi so'zlaringizni o'rganishni unutmang! 📚" });
+            new Notification("English Master AI", { body: "Bugungi so'zlaringizni o'rganishni unutmang! 📚" });
         } else {
             if (settingsStatusEl) settingsStatusEl.innerHTML = "⚠️ Ruxsat berilmadi";
         }
@@ -82,7 +82,7 @@ function checkDailyReminderOnLoad() {
 
     localStorage.setItem("lastReminderDate", today);
     const knownCount = Number(localStorage.getItem("known")) || 0;
-    new Notification("English Master Pro", {
+    new Notification("English Master AI", {
         body: knownCount > 0
             ? `Xush kelibsiz! Hozircha ${knownCount} so'z bildingiz. Davom eting! 🔥`
             : "Bugungi so'zlaringizni o'rganishni unutmang! 📚"
@@ -145,7 +145,7 @@ if (downloadReportBtn) {
 
         const html = `<!DOCTYPE html>
 <html lang="uz"><head><meta charset="UTF-8">
-<title>English Master Pro — Hisobot</title>
+<title>English Master AI — Hisobot</title>
 <style>
   body { font-family: 'Segoe UI', sans-serif; background:#0f172a; color:#e2e8f0; padding:32px; }
   h1 { color:#38bdf8; }
@@ -156,7 +156,7 @@ if (downloadReportBtn) {
   @media print { body { background:#fff; color:#111; } .stat-card { background:#eee; } }
 </style></head>
 <body>
-  <h1>📊 English Master Pro — Progress hisoboti</h1>
+  <h1>📊 English Master AI — Progress hisoboti</h1>
   <p>Sana: ${dateStr}</p>
   <div class="stat-grid">
     <div class="stat-card"><div class="num">${lvl}</div>Level</div>
@@ -2026,7 +2026,7 @@ setTimeout(() => {
     }
 }, 2000);
 
-console.log("English Master Pro v19 - To'liq barqaror versiya ishga tushdi ✔");
+console.log("English Master AI v19 - To'liq barqaror versiya ishga tushdi ✔");
 
 
 const lessonsEn = [
@@ -5719,10 +5719,10 @@ const dailyQuotes = [
     { en: "Learning another language is not only learning different words for the same things, but learning another way to think about things.", uz: "Boshqa tilni o'rganish — bir xil narsalar uchun boshqa so'zlarni emas, balki narsalar haqida boshqacha fikrlashni o'rganishdir.", author: "Flora Lewis" },
     { en: "One language sets you in a corridor for life. Two languages open every door along the way.", uz: "Bitta til sizni umr yo'lagiga qamaydi. Ikkita til esa yo'ldagi har bir eshikni ochadi.", author: "Frank Smith" },
     { en: "To have another language is to possess a second soul.", uz: "Yana bir tilga ega bo'lish — ikkinchi ruhga ega bo'lishdir.", author: "Charlemagne" },
-    { en: "Practice makes progress, not perfection — keep going.", uz: "Mashq mukammallikni emas, taraqqiyotni beradi — davom eting.", author: "English Master Pro" },
+    { en: "Practice makes progress, not perfection — keep going.", uz: "Mashq mukammallikni emas, taraqqiyotni beradi — davom eting.", author: "English Master AI" },
     { en: "A different language is a different vision of life.", uz: "Boshqa til — hayotga boshqacha nazar.", author: "Federico Fellini" },
-    { en: "Every word you learn today is a door to tomorrow.", uz: "Bugun o'rgangan har bir so'zingiz — ertangi kunga ochiladigan eshikdir.", author: "English Master Pro" },
-    { en: "Small daily steps lead to big language wins.", uz: "Kichik kundalik qadamlar katta til yutuqlariga olib boradi.", author: "English Master Pro" }
+    { en: "Every word you learn today is a door to tomorrow.", uz: "Bugun o'rgangan har bir so'zingiz — ertangi kunga ochiladigan eshikdir.", author: "English Master AI" },
+    { en: "Small daily steps lead to big language wins.", uz: "Kichik kundalik qadamlar katta til yutuqlariga olib boradi.", author: "English Master AI" }
 ];
 
 function renderDailyQuote() {
@@ -6248,7 +6248,7 @@ function checkPersonalizedReminderTime() {
     if (now < target) return;
 
     localStorage.setItem("lastReminderDate", today);
-    new Notification("English Master Pro", {
+    new Notification("English Master AI", {
         body: "⏰ Sizning shaxsiy eslatma vaqtingiz keldi — bugungi mashqni bajarib qo'ying!"
     });
 }
@@ -6517,8 +6517,8 @@ function renderWeeklyReport() {
 
 function shareApp() {
     const shareData = {
-        title: "English Master Pro",
-        text: "Men English Master Pro bilan ingliz tilini o'rganyapman — so'zlar, testlar, AI o'qituvchi va sertifikat bilan, hatto oflayn ham ishlaydi! Senga ham tavsiya qilaman 👇",
+        title: "English Master AI",
+        text: "Men English Master AI bilan ingliz tilini o'rganyapman — so'zlar, testlar, AI o'qituvchi va sertifikat bilan, hatto oflayn ham ishlaydi! Senga ham tavsiya qilaman 👇",
         url: window.location.href
     };
     if (navigator.share) {
@@ -6582,8 +6582,8 @@ if (shareReferralBtn) {
     shareReferralBtn.addEventListener("click", () => {
         const link = getReferralLink();
         const shareData = {
-            title: "English Master Pro",
-            text: "Men English Master Pro bilan ingliz tilini o'rganyapman — sen ham qo'shil, mening havolam orqali kirsang bonus bilan boshlaysan! 🎁",
+            title: "English Master AI",
+            text: "Men English Master AI bilan ingliz tilini o'rganyapman — sen ham qo'shil, mening havolam orqali kirsang bonus bilan boshlaysan! 🎁",
             url: link
         };
         if (navigator.share) {
@@ -6755,7 +6755,7 @@ function drawCertificate(name) {
 
     ctx.fillStyle = "#94a3b8";
     ctx.font = "16px Poppins, sans-serif";
-    ctx.fillText("English Master Pro — til o'rganish dasturi", w / 2, 165);
+    ctx.fillText("English Master AI — til o'rganish dasturi", w / 2, 165);
 
     ctx.fillStyle = "#e2e8f0";
     ctx.font = "18px Poppins, sans-serif";
@@ -6785,7 +6785,7 @@ function drawCertificate(name) {
     // sana) qurilmadagi skaner orqali qayta o'qish uchun mo'ljallangan,
     // ya'ni "rasmiy tasdiqlash" emas, balki qulaylik uchun.
     if (typeof QRCode !== "undefined") {
-        const verifyText = `English Master Pro Sertifikat\nIsm: ${name}\nDaraja: Level ${level} (${computeCefrLevel().code})\nXP: ${xp}\nSana: ${today}`;
+        const verifyText = `English Master AI Sertifikat\nIsm: ${name}\nDaraja: Level ${level} (${computeCefrLevel().code})\nXP: ${xp}\nSana: ${today}`;
         const qrHolder = document.createElement("div");
         qrHolder.style.display = "none";
         document.body.appendChild(qrHolder);
@@ -6892,7 +6892,7 @@ if (generateCertBtn) {
                         try {
                             await navigator.share({
                                 files: [file],
-                                title: "Mening English Master Pro sertifikatim",
+                                title: "Mening English Master AI sertifikatim",
                                 text: `Men ${name} ingliz tilini o'rganishda ${level}-levelga yetdim! 🎓`
                             });
                         } catch (err) { /* foydalanuvchi bekor qilgan bo'lishi mumkin */ }

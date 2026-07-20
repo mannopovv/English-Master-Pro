@@ -1,6 +1,6 @@
 {
-  "name": "English Master Pro — Ingliz tilini o'rganing",
-  "short_name": "English Pro",
+  "name": "English Master AI — Ingliz tilini o'rganing",
+  "short_name": "EM AI",
   "description": "Ingliz tilini so'zlar, testlar, grammatika, o'yinlar va AI o'qituvchi orqali o'rganing. Oflayn rejim, kunlik maqsad, seriya va sertifikat bilan.",
   "start_url": "./index.html?source=pwa",
   "scope": "./",

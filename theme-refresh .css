@@ -1,0 +1,152 @@
+/* =========================================================================
+   THEME REFRESH — English Master Pro
+   Bu fayl index.css ustiga qo'shimcha (additive) tarzda yuklanadi.
+   Mavjud JS mantiqiga tegilmagan — faqat vizual ko'rinish yangilanadi:
+   yangi accent ranglar (violet + emerald), yumshoqroq glass-card effekti,
+   silliqroq soyalar, tugmalarda mikro-animatsiya, header/nav polish.
+   ========================================================================= */
+
+:root {
+    --em-primary: #6366f1;      /* indigo/violet */
+    --em-primary-2: #a855f7;    /* purple */
+    --em-accent: #22d3ee;       /* cyan */
+    --em-success: #10b981;      /* emerald */
+    --em-warning: #f59e0b;
+    --em-bg-1: #0b1020;
+    --em-bg-2: #141a30;
+    --em-glass: rgba(255,255,255,.055);
+    --em-glass-border: rgba(255,255,255,.10);
+    --em-radius: 18px;
+}
+
+body {
+    background:
+        radial-gradient(circle at 12% -5%, rgba(99,102,241,.28) 0%, transparent 45%),
+        radial-gradient(circle at 90% 0%, rgba(34,211,238,.16) 0%, transparent 40%),
+        linear-gradient(180deg, var(--em-bg-1) 0%, var(--em-bg-2) 55%, #0a0e1c 100%) !important;
+}
+
+header {
+    background: rgba(15, 18, 36, .68) !important;
+    border-bottom: 1px solid var(--em-glass-border) !important;
+    backdrop-filter: blur(18px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+}
+
+.logo {
+    background: linear-gradient(90deg, var(--em-accent), var(--em-primary), var(--em-primary-2)) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+}
+.logo i { color: var(--em-accent) !important; -webkit-text-fill-color: var(--em-accent) !important; }
+
+nav button {
+    background: linear-gradient(135deg, var(--em-primary), var(--em-primary-2)) !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    box-shadow: 0 4px 14px rgba(99,102,241,.25) !important;
+}
+nav button:hover {
+    background: linear-gradient(135deg, #4f46e5, #9333ea) !important;
+    box-shadow: 0 8px 22px rgba(99,102,241,.4) !important;
+}
+#mainNav button.active {
+    background: var(--em-accent) !important;
+    color: #071019 !important;
+    box-shadow: 0 0 0 3px rgba(34,211,238,.18) !important;
+}
+
+#homePage h1 {
+    background: linear-gradient(90deg, var(--em-accent), var(--em-primary-2)) !important;
+    -webkit-background-clip: text !important;
+}
+
+#startBtn {
+    background: linear-gradient(135deg, var(--em-success), #059669) !important;
+    box-shadow: 0 10px 26px rgba(16,185,129,.35) !important;
+    border-radius: 14px !important;
+}
+#startBtn:hover { box-shadow: 0 14px 32px rgba(16,185,129,.5) !important; }
+
+.card {
+    background: linear-gradient(160deg, rgba(255,255,255,.98), rgba(241,245,249,.98)) !important;
+    border-radius: var(--em-radius) !important;
+    box-shadow: 0 24px 60px rgba(2,6,23,.5), 0 0 0 1px rgba(255,255,255,.06) !important;
+}
+
+.page.tool-page,
+.tool-page > .card,
+[class*="glass"],
+.stats-chart-card {
+    background: var(--em-glass) !important;
+    border: 1px solid var(--em-glass-border) !important;
+    border-radius: var(--em-radius) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Umumiy tugmalar (nav ichida bo'lmagan) — silliqroq gradient + hover lift */
+button:not(nav button):not(#startBtn) {
+    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+button:not(nav button):not(#startBtn):hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+/* Bottom nav (mobil) — glass + accent active state */
+#bottomNav {
+    background: rgba(12, 16, 32, .85) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-top: 1px solid var(--em-glass-border) !important;
+}
+#bottomNav .active,
+#bottomNav button.active {
+    color: var(--em-accent) !important;
+}
+
+/* Progress / daily-goal / hp bars — accent gradient */
+.daily-goal-fill,
+.hp-fill {
+    background: linear-gradient(90deg, var(--em-accent), var(--em-success)) !important;
+}
+
+/* Scrollbar polish (webkit) */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--em-primary), var(--em-primary-2));
+    border-radius: 10px;
+}
+
+/* Badge / streak chips — subtle glow */
+.badge, [class*="badge-"] {
+    box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 4px 14px rgba(0,0,0,.25);
+}
+
+/* Yangi: Cloud admin jadvali va to'lov paneli */
+.admin-cloud-table-wrap { overflow-x: auto; margin-top: 12px; }
+.admin-cloud-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.admin-cloud-table th, .admin-cloud-table td {
+    padding: 8px 10px; text-align: left;
+    border-bottom: 1px solid var(--em-glass-border);
+}
+.admin-cloud-table th { color: var(--em-accent); font-weight: 600; }
+.payment-panel { background: var(--em-glass); border: 1px solid var(--em-glass-border); border-radius: var(--em-radius); padding: 18px; margin-top: 10px; }
+.payment-btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+.payment-btn-row button {
+    padding: 10px 18px; border: none; border-radius: 10px; cursor: pointer;
+    background: linear-gradient(135deg, var(--em-primary), var(--em-primary-2)); color: #fff; font-weight: 600;
+}
+.payment-btn-row button:disabled { opacity: .4; cursor: not-allowed; }
+.confirm-payment-btn {
+    margin-top: 8px; padding: 10px 18px; border: none; border-radius: 10px;
+    background: linear-gradient(135deg, var(--em-success), #059669); color: #fff; font-weight: 600; cursor: pointer;
+}
+#firebaseConfigInput, #paymeMerchantInput, #clickMerchantInput, #clickServiceInput, #premiumPriceInput {
+    width: 100%; margin: 6px 0; padding: 10px; border-radius: 10px;
+    border: 1px solid var(--em-glass-border); background: rgba(255,255,255,.06); color: #fff;
+}
+
+@media (max-width: 640px) {
+    .page { padding: 22px 16px !important; }
+}

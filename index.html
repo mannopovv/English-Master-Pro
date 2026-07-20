@@ -4,31 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>English Master Pro — Ingliz tilini onlayn va oflayn o'rganing</title>
+    <title>English Master AI — Ingliz tilini onlayn va oflayn o'rganing</title>
 
     <!-- SEO / ASO: qidiruv tizimlari va ilova do'konlari uchun asosiy meta ma'lumotlar -->
-    <meta name="description" content="English Master Pro — ingliz tilini so'zlar, testlar, grammatika, AI o'qituvchi va o'yin shaklidagi mashqlar orqali bepul o'rganing. Oflayn ham ishlaydi, kunlik maqsad, seriya (streak) va sertifikat tizimi bilan.">
+    <meta name="description" content="English Master AI — ingliz tilini so'zlar, testlar, grammatika, AI o'qituvchi va o'yin shaklidagi mashqlar orqali bepul o'rganing. Oflayn ham ishlaydi, kunlik maqsad, seriya (streak) va sertifikat tizimi bilan.">
     <meta name="keywords" content="ingliz tili o'rganish, english master, so'z yodlash, flashcard, ingliz tili testlari, grammatika, AI teacher, til o'rganish ilovasi, oflayn ingliz tili, sertifikat">
-    <meta name="author" content="English Master Pro">
+    <meta name="author" content="English Master AI">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://english-master-pro.app/">
 
     <!-- Open Graph (Facebook, Telegram, LinkedIn ulashishlari uchun) -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="English Master Pro — Ingliz tilini zamonaviy usulda o'rganing">
+    <meta property="og:title" content="English Master AI — Ingliz tilini zamonaviy usulda o'rganing">
     <meta property="og:description" content="So'zlar, testlar, o'yinlar, AI o'qituvchi va sertifikat — barchasi bitta ilovada. Internetsiz ham ishlaydi.">
     <meta property="og:image" content="./icons/icon-512.png">
     <meta property="og:url" content="https://english-master-pro.app/">
     <meta property="og:locale" content="uz_UZ">
-    <meta property="og:site_name" content="English Master Pro">
+    <meta property="og:site_name" content="English Master AI">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="English Master Pro — Ingliz tilini o'rganing">
+    <meta name="twitter:title" content="English Master AI — Ingliz tilini o'rganing">
     <meta name="twitter:description" content="So'zlar, testlar, o'yinlar va AI o'qituvchi bilan ingliz tilini oflayn ham o'rganing.">
     <meta name="twitter:image" content="./icons/icon-512.png">
 
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="theme-refresh.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -43,16 +44,16 @@
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="English Pro">
+    <meta name="apple-mobile-web-app-title" content="EM AI">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="English Master Pro">
+    <meta name="application-name" content="English Master AI">
 
     <!-- JSON-LD: qidiruv tizimlariga ilova haqida tuzilgan ma'lumot berish (ASO/SEO) -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        "name": "English Master Pro",
+        "name": "English Master AI",
         "applicationCategory": "EducationalApplication",
         "operatingSystem": "Any (PWA)",
         "description": "Ingliz tilini so'zlar, testlar, grammatika, AI o'qituvchi va o'yinlar orqali o'rganish uchun oflayn ishlaydigan ilova.",
@@ -123,7 +124,7 @@
     <header>
         <div class="logo">
             <i class="fa-solid fa-graduation-cap"></i>
-            English Master Pro
+            English Master AI
         </div>
 
         <button id="burgerBtn" class="burger-btn" aria-label="Menyuni ochish" aria-expanded="false" aria-controls="mainNav">
@@ -172,7 +173,7 @@
     <main>
        
         <section id="homePage" class="page active">
-            <h1>English Master Pro</h1>
+            <h1>English Master AI</h1>
             <p id="homeSubtitle">Ingliz tilini zamonaviy usulda o'rganing.</p>
 
             <div class="daily-goal-card">
@@ -699,7 +700,11 @@
             <h2>💎 Premium</h2>
             <p class="ai-settings-hint">To'liq to'lov tizimi (Payme, Click va h.k.) uchun server (backend) kerak bo'ladi — bu ilova esa faqat brauzeringizda ishlaydi. Hozircha shu qurilma uchun mahalliy "Premium" rejimini yoqib ko'rishingiz mumkin (demo maqsadida, real to'lovsiz):</p>
             <div id="premiumStatusCard" class="premium-status-card"></div>
-            <button id="togglePremiumBtn">💎 Premium rejimni yoqish / o'chirish</button>
+            <button id="togglePremiumBtn">💎 Premium rejimni yoqish / o'chirish (demo, to'lovsiz)</button>
+
+            <hr>
+            <h2>💳 Haqiqiy to'lov (Payme / Click)</h2>
+            <div id="paymentPanelContainer" class="payment-panel"></div>
         </section>
 
         <section id="adminPage" class="page tool-page">
@@ -712,6 +717,12 @@
                 <button id="adminResetBtn">🗑️ Progressni tozalash</button>
             </div>
             <div id="adminActionStatus" class="ai-settings-hint"></div>
+
+            <hr>
+            <h2>☁️ Cloud Admin (barcha foydalanuvchilar)</h2>
+            <p class="ai-settings-hint">Firebase ulangach, shu yerda BARCHA foydalanuvchilarning haqiqiy statistikasi ko'rinadi (Sozlamalar bo'limida config kiriting).</p>
+            <button id="cloudAdminRefreshBtn">🔄 Cloud'ni yangilash</button>
+            <div id="cloudAdminContainer" class="admin-cloud-container"></div>
         </section>
  
         
@@ -726,6 +737,36 @@
                 <input type="text" id="aiModelInput" placeholder="Model nomi (ixtiyoriy, default: gpt-4o-mini)">
                 <button id="saveAiSettings">💾 Saqlash</button>
                 <div id="aiSettingsStatus"></div>
+            </div>
+
+            <div class="ai-settings-card">
+                <h3>☁️ Cloud admin (Firebase)</h3>
+                <p class="ai-settings-hint">Barcha foydalanuvchilarni ko'radigan haqiqiy admin panel uchun bepul Firebase loyihasi yarating (console.firebase.google.com), Firestore'ni yoqing va config JSON'ini shu yerga joylashtiring.</p>
+                <textarea id="firebaseConfigInput" rows="4" placeholder='{"apiKey":"...", "projectId":"...", ...}'></textarea>
+                <button id="saveFirebaseConfigBtn">💾 Saqlash</button>
+                <div id="firebaseConfigStatus" class="ai-settings-hint"></div>
+            </div>
+
+            <div class="ai-settings-card">
+                <h3>💳 To'lov (Payme / Click)</h3>
+                <p class="ai-settings-hint">Premium sotib olish tugmalari ishlashi uchun o'z merchant ID'ingizni kiriting. To'lov tasdig'i hozircha "sharaf tizimi" — real loyiha uchun backend tavsiya etiladi.</p>
+                <input type="text" id="paymeMerchantInput" placeholder="Payme Merchant ID">
+                <input type="text" id="clickMerchantInput" placeholder="Click Merchant ID">
+                <input type="text" id="clickServiceInput" placeholder="Click Service ID">
+                <input type="number" id="premiumPriceInput" placeholder="Premium narxi (so'm), masalan 29000">
+                <button id="savePaymentConfigBtn">💾 Saqlash</button>
+                <div id="paymentConfigStatus" class="ai-settings-hint"></div>
+            </div>
+
+            <div class="ai-settings-card">
+                <h3>📩 Telegram bot</h3>
+                <p class="ai-settings-hint">O'z Telegram botingiz orqali progress/eslatmalarni yuboring. @BotFather'dan token, @userinfobot'dan Chat ID oling.</p>
+                <input type="password" id="tgBotTokenInput" placeholder="Bot Token">
+                <input type="text" id="tgChatIdInput" placeholder="Chat ID">
+                <button id="saveTelegramConfigBtn">💾 Saqlash</button>
+                <div id="telegramConfigStatus" class="ai-settings-hint"></div>
+                <button id="sendTelegramProgressBtn">📤 Progressni Telegramga yuborish</button>
+                <div id="telegramSendStatus" class="ai-settings-hint"></div>
             </div>
 
             <div class="streak-freeze-card" id="streakFreezeCard">
@@ -1231,6 +1272,9 @@ Animations
     </nav>
 
     <script src="index.js"></script>
+    <script src="pro-admin.js"></script>
+    <script src="pro-payment.js"></script>
+    <script src="pro-messenger.js"></script>
 </body>
  
 </html>
