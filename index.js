@@ -2364,22 +2364,55 @@ console.log("AI Tools Loaded");
 const startSpeaking = document.getElementById("startSpeaking");
 const speechResult = document.getElementById("speechResult");
 const speechScoreEl = document.getElementById("speechScore");
+const speechDiffEl = document.getElementById("speechDiff");
 const speakingTargetWordEl = document.getElementById("speakingTargetWord");
 const listenTargetBtn = document.getElementById("listenTargetBtn");
 const newSpeakingWordBtn = document.getElementById("newSpeakingWordBtn");
+const speakingModeSwitcher = document.getElementById("speakingModeSwitcher");
 
 let speakingTargetWord = null;
+let speakingMode = "word"; // "word" | "sentence"
+
+// Tanlangan so'zdan, rejimga qarab, o'qib chiqiladigan matnni oladi:
+// "word" rejimida — o'sha so'zning o'zi; "sentence" rejimida — shu so'z
+// bilan tuzilgan namuna gap (agar mavjud bo'lmasa, so'zning o'ziga qaytadi).
+function getSpeakingTargetText(w) {
+    if (speakingMode === "sentence") {
+        if (learnLang === "ru" && w.ruExample) return w.ruExample;
+        if (learnLang === "ar" && w.arExample) return w.arExample;
+        if (w.example) return w.example;
+    }
+    return getTargetWord(w);
+}
 
 function pickSpeakingWord() {
     speakingTargetWord = typeof weightedRandomWord === "function" ? weightedRandomWord() : words[0];
-    if (speakingTargetWordEl) speakingTargetWordEl.innerHTML = getTargetWord(speakingTargetWord);
+    if (speakingTargetWordEl) speakingTargetWordEl.innerHTML = getSpeakingTargetText(speakingTargetWord);
     if (speechResult) speechResult.innerHTML = "";
     if (speechScoreEl) speechScoreEl.innerHTML = "";
+    if (speechDiffEl) speechDiffEl.innerHTML = "";
 }
 
 if (speakingTargetWordEl) pickSpeakingWord();
 
 if (newSpeakingWordBtn) newSpeakingWordBtn.onclick = pickSpeakingWord;
+
+// So'z / Gap rejimini almashtirish
+if (speakingModeSwitcher) {
+    speakingModeSwitcher.querySelectorAll(".speaking-mode-btn").forEach((btn) => {
+        btn.onclick = () => {
+            speakingModeSwitcher.querySelectorAll(".speaking-mode-btn").forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            speakingMode = btn.dataset.mode;
+            if (speakingTargetWord && speakingTargetWordEl) {
+                speakingTargetWordEl.innerHTML = getSpeakingTargetText(speakingTargetWord);
+            }
+            if (speechResult) speechResult.innerHTML = "";
+            if (speechScoreEl) speechScoreEl.innerHTML = "";
+            if (speechDiffEl) speechDiffEl.innerHTML = "";
+        };
+    });
+}
 
 if (listenTargetBtn) {
     listenTargetBtn.onclick = () => {
@@ -2388,11 +2421,31 @@ if (listenTargetBtn) {
             alert("Brauzeringiz ovozli o'qishni qo'llamaydi.");
             return;
         }
-        const utter = new SpeechSynthesisUtterance(getTargetWord(speakingTargetWord));
+        const utter = new SpeechSynthesisUtterance(getSpeakingTargetText(speakingTargetWord));
         utter.lang = getVoiceLang();
         speechSynthesis.cancel();
         speechSynthesis.speak(utter);
     };
+}
+
+// So'z-so'z taqqoslab, qaysi so'zlar to'g'ri/xato/tushib qolgan ekanini
+// ko'rsatadigan yordamchi funksiya (faqat "sentence" rejimida ma'noli,
+// "word" rejimida ham ishlaydi — bitta so'zni solishtiradi).
+function renderSpeechWordDiff(heardText, targetText) {
+    if (!speechDiffEl) return;
+    const norm = (s) => (s || "").toLowerCase().replace(/[.,!?;:]/g, "").trim();
+    const targetWords = norm(targetText).split(/\s+/).filter(Boolean);
+    const heardWords = norm(heardText).split(/\s+/).filter(Boolean);
+
+    const html = targetWords.map((tw) => {
+        // Aytilgan so'zlar orasida shu so'zga juda o'xshashi bormi, tekshiramiz
+        const matched = heardWords.some((hw) => similarityScore(hw, tw) >= 75);
+        return `<span class="speech-diff-word ${matched ? "ok" : "miss"}">${tw}</span>`;
+    }).join(" ");
+
+    speechDiffEl.innerHTML = targetWords.length > 1
+        ? `<div class="speech-diff-label">So'z-so'z tekshiruv:</div><div>${html}</div>`
+        : "";
 }
 
 if (startSpeaking) {
@@ -2405,15 +2458,25 @@ if (startSpeaking) {
         }
         const recognition = new SpeechRecognition();
         recognition.lang = getVoiceLang();
+
+        // XATO TUZATILDI: ilgari agar tanib olish natijasiz (masalan sukunat
+        // sabab) tugasa, "🎤 Listening..." holati abadiy osilib qolardi.
+        // Endi tugma vaqtincha o'chiriladi va "onend" orqali har doim
+        // yakuniy holatga qaytariladi.
+        startSpeaking.disabled = true;
+        let gotResult = false;
+
         recognition.start();
         if (speechResult) speechResult.innerHTML = "🎤 Listening...";
         if (speechScoreEl) speechScoreEl.innerHTML = "";
+        if (speechDiffEl) speechDiffEl.innerHTML = "";
 
         recognition.onresult = (e) => {
+            gotResult = true;
             const heard = e.results[0][0].transcript;
             if (speechResult) speechResult.innerHTML = "🗣️ Siz aytdingiz: " + heard;
 
-            const target = getTargetWord(speakingTargetWord);
+            const target = getSpeakingTargetText(speakingTargetWord);
             const scoreVal = similarityScore(heard, target);
             const isGood = scoreVal >= 70;
             const verdict = scoreVal >= 85 ? "✅ Ajoyib talaffuz!" : scoreVal >= 60 ? "🙂 Yaxshi, yana urinib ko'ring" : "🔁 Qayta urinib ko'ring";
@@ -2421,6 +2484,7 @@ if (startSpeaking) {
             if (speechScoreEl) {
                 speechScoreEl.innerHTML = `🎯 Maqsad: <b>${target}</b> — Moslik: <b>${scoreVal}/100</b><br>${verdict}`;
             }
+            renderSpeechWordDiff(heard, target);
 
             // Natijani spaced-repetition tizimiga ham yozamiz
             if (typeof bumpWordWeight === "function") {
@@ -2430,10 +2494,26 @@ if (startSpeaking) {
                 xp += 5;
                 if (typeof updateStats === "function") updateStats();
             }
+
+            // Taxminiy IELTS band hisobi uchun so'nggi natijalarni saqlaymiz
+            try {
+                const spHistory = JSON.parse(localStorage.getItem("speakingScoreHistory") || "[]");
+                spHistory.push(scoreVal);
+                localStorage.setItem("speakingScoreHistory", JSON.stringify(spHistory.slice(-20)));
+            } catch (e) { /* localStorage buzilgan bo'lsa jim o'tkazib yuboramiz */ }
+            if (typeof renderIeltsBandBadge === "function") renderIeltsBandBadge();
         };
 
         recognition.onerror = () => {
+            gotResult = true; // onend'da qo'shimcha "eshitilmadi" xabari chiqmasin
             if (speechResult) speechResult.innerHTML = "❌ Ovoz tanilmadi, qayta urinib ko'ring.";
+        };
+
+        recognition.onend = () => {
+            startSpeaking.disabled = false;
+            if (!gotResult && speechResult) {
+                speechResult.innerHTML = "🔇 Hech narsa eshitilmadi, qayta urinib ko'ring.";
+            }
         };
     };
 }
@@ -3937,7 +4017,58 @@ const UI_TRANSLATIONS = {
     hdr_speed: { uz: "⚡ Tezkor test", en: "⚡ Speed Quiz", ru: "⚡ Быстрый тест", tr: "⚡ Hızlı Test", ar: "⚡ اختبار سريع" },
     hdr_stats: { uz: "📊 Statistika", en: "📊 Statistics", ru: "📊 Статистика", tr: "📊 İstatistik", ar: "📊 الإحصائيات" },
     hdr_cert: { uz: "🎓 Sertifikat", en: "🎓 Certificate", ru: "🎓 Сертификат", tr: "🎓 Sertifika", ar: "🎓 الشهادة" },
-    hdr_achievements: { uz: "🏆 Yutuqlar", en: "🏆 Achievements", ru: "🏆 Достижения", tr: "🏆 Başarılar", ar: "🏆 الإنجازات" }
+    hdr_achievements: { uz: "🏆 Yutuqlar", en: "🏆 Achievements", ru: "🏆 Достижения", tr: "🏆 Başarılar", ar: "🏆 الإنجازات" },
+
+    hdr_welcome: { uz: "👋 Xush kelibsiz!", en: "👋 Welcome!", ru: "👋 Добро пожаловать!", tr: "👋 Hoş geldiniz!", ar: "👋 مرحبًا بك!" },
+    hdr_beginner2: { uz: "🆕 Noldan boshlash", en: "🆕 Start from Zero", ru: "🆕 Начать с нуля", tr: "🆕 Sıfırdan Başla", ar: "🆕 ابدأ من الصفر" },
+    hdr_minigames: { uz: "🎮 Mini o'yinlar", en: "🎮 Mini Games", ru: "🎮 Мини-игры", tr: "🎮 Mini Oyunlar", ar: "🎮 ألعاب مصغرة" },
+    hdr_sentence: { uz: "🧩 Gap tuzish", en: "🧩 Sentence Building", ru: "🧩 Составление предложений", tr: "🧩 Cümle Kurma", ar: "🧩 بناء الجملة" },
+    hdr_grammarquiz2: { uz: "📐 Grammatika testi", en: "📐 Grammar Quiz", ru: "📐 Тест по грамматике", tr: "📐 Dilbilgisi Testi", ar: "📐 اختبار القواعد" },
+    hdr_mistakebook: { uz: "📖 Qiyin so'zlar daftari", en: "📖 Difficult Words Notebook", ru: "📖 Тетрадь сложных слов", tr: "📖 Zor Kelimeler Defteri", ar: "📖 دفتر الكلمات الصعبة" },
+    hdr_aiteacher: { uz: "🤖 AI Teacher", en: "🤖 AI Teacher", ru: "🤖 AI Учитель", tr: "🤖 AI Öğretmen", ar: "🤖 المعلم الذكي" },
+    hdr_aiquizgen: { uz: "🧠 AI Quiz Generator", en: "🧠 AI Quiz Generator", ru: "🧠 AI Генератор тестов", tr: "🧠 AI Test Oluşturucu", ar: "🧠 مولّد الاختبارات الذكي" },
+    hdr_aiassistant: { uz: "🤖 AI Assistant", en: "🤖 AI Assistant", ru: "🤖 AI Ассистент", tr: "🤖 AI Asistan", ar: "🤖 المساعد الذكي" },
+    hdr_ocr: { uz: "📷 OCR (Rasmdan matnni aniqlash)", en: "📷 OCR (Text from Image)", ru: "📷 OCR (Текст с изображения)", tr: "📷 OCR (Görüntüden Metin)", ar: "📷 التعرف الضوئي على النص" },
+    hdr_voiceassistant: { uz: "🎤 Voice Assistant", en: "🎤 Voice Assistant", ru: "🎤 Голосовой ассистент", tr: "🎤 Sesli Asistan", ar: "🎤 المساعد الصوتي" },
+    hdr_roleplay: { uz: "🎭 Rolli suhbat", en: "🎭 Roleplay", ru: "🎭 Ролевая игра", tr: "🎭 Rol Yapma", ar: "🎭 محادثة تمثيلية" },
+    hdr_duel2: { uz: "🤝 Do'st bilan raqobat", en: "🤝 Compete with a Friend", ru: "🤝 Соревнование с другом", tr: "🤝 Arkadaşla Yarış", ar: "🤝 تحدي مع صديق" },
+    hdr_grammarlib: { uz: "📘 Grammatika qo'llanmasi", en: "📘 Grammar Guide", ru: "📘 Справочник грамматики", tr: "📘 Dilbilgisi Rehberi", ar: "📘 دليل القواعد" },
+    hdr_idioms2: { uz: "💬 Idiomalar va frazaviy fe'llar", en: "💬 Idioms and Phrasal Verbs", ru: "💬 Идиомы и фразовые глаголы", tr: "💬 Deyimler ve Öbek Fiiller", ar: "💬 التعابير الاصطلاحية والأفعال المركبة" },
+    hdr_mywords2: { uz: "📝 Mening so'zlarim", en: "📝 My Words", ru: "📝 Мои слова", tr: "📝 Kelimelerim", ar: "📝 كلماتي" },
+    hdr_exam2: { uz: "🎯 Imtihon rejimi", en: "🎯 Exam Mode", ru: "🎯 Режим экзамена", tr: "🎯 Sınav Modu", ar: "🎯 وضع الامتحان" },
+    hdr_premium: { uz: "💎 Premium", en: "💎 Premium", ru: "💎 Премиум", tr: "💎 Premium", ar: "💎 بريميوم" },
+    hdr_realpayment: { uz: "💳 Haqiqiy to'lov (Payme / Click / Stripe)", en: "💳 Real Payment (Payme / Click / Stripe)", ru: "💳 Реальная оплата (Payme / Click / Stripe)", tr: "💳 Gerçek Ödeme (Payme / Click / Stripe)", ar: "💳 دفع حقيقي (Payme / Click / Stripe)" },
+    hdr_admin: { uz: "🛠️ Admin / Debug panel", en: "🛠️ Admin / Debug Panel", ru: "🛠️ Админ / Debug панель", tr: "🛠️ Yönetici / Hata Ayıklama Paneli", ar: "🛠️ لوحة الإدارة" },
+    hdr_cloudadmin: { uz: "☁️ Cloud Admin (barcha foydalanuvchilar)", en: "☁️ Cloud Admin (all users)", ru: "☁️ Облачный админ (все пользователи)", tr: "☁️ Bulut Yönetici (tüm kullanıcılar)", ar: "☁️ إدارة سحابية (كل المستخدمين)" },
+    hdr_settings2: { uz: "Sozlamalar", en: "Settings", ru: "Настройки", tr: "Ayarlar", ar: "الإعدادات" },
+    hdr_bgmusic: { uz: "🎵 Background Music", en: "🎵 Background Music", ru: "🎵 Фоновая музыка", tr: "🎵 Arka Plan Müziği", ar: "🎵 موسيقى الخلفية" },
+    hdr_soundfx: { uz: "🔊 Sound Effects", en: "🔊 Sound Effects", ru: "🔊 Звуковые эффекты", tr: "🔊 Ses Efektleri", ar: "🔊 المؤثرات الصوتية" },
+    hdr_language: { uz: "🌍 Til", en: "🌍 Language", ru: "🌍 Язык", tr: "🌍 Dil", ar: "🌍 اللغة" },
+    hdr_othersettings: { uz: "⚙️ Boshqa sozlamalar", en: "⚙️ Other Settings", ru: "⚙️ Другие настройки", tr: "⚙️ Diğer Ayarlar", ar: "⚙️ إعدادات أخرى" },
+    hdr_videolessons: { uz: "📚 Video darslar", en: "📚 Video Lessons", ru: "📚 Видеоуроки", tr: "📚 Video Dersler", ar: "📚 دروس فيديو" },
+    hdr_listening: { uz: "🎧 Tinglab tushunish (Listening)", en: "🎧 Listening", ru: "🎧 Аудирование", tr: "🎧 Dinleme", ar: "🎧 الاستماع" },
+    hdr_dictionary: { uz: "📖 Lug'at", en: "📖 Dictionary", ru: "📖 Словарь", tr: "📖 Sözlük", ar: "📖 القاموس" },
+    hdr_ocrtranslator: { uz: "📷 OCR Tarjimon", en: "📷 OCR Translator", ru: "📷 OCR Переводчик", tr: "📷 OCR Çevirmen", ar: "📷 مترجم OCR" },
+    hdr_translate: { uz: "🌍 Tarjima", en: "🌍 Translate", ru: "🌍 Перевод", tr: "🌍 Çeviri", ar: "🌍 ترجمة" },
+    hdr_pdfreader: { uz: "📄 PDF O'quvchi", en: "📄 PDF Reader", ru: "📄 PDF Читалка", tr: "📄 PDF Okuyucu", ar: "📄 قارئ PDF" },
+    hdr_speaking2: { uz: "🎤 AI Speaking Test", en: "🎤 AI Speaking Test", ru: "🎤 AI Тест устной речи", tr: "🎤 AI Konuşma Testi", ar: "🎤 اختبار المحادثة الذكي" },
+    hdr_essaychecker: { uz: "📝 Insho tekshiruvchi", en: "📝 Essay Checker", ru: "📝 Проверка эссе", tr: "📝 Deneme Kontrolü", ar: "📝 مدقق المقالات" },
+    hdr_reading: { uz: "📖 Maqola o'qish (Reading)", en: "📖 Reading", ru: "📖 Чтение", tr: "📖 Okuma", ar: "📖 القراءة" },
+    hdr_aiteacherpro: { uz: "🤖 AI Teacher Pro", en: "🤖 AI Teacher Pro", ru: "🤖 AI Учитель Pro", tr: "🤖 AI Öğretmen Pro", ar: "🤖 المعلم الذكي Pro" },
+    hdr_grammarchecker: { uz: "📚 Grammatika tekshiruvchi", en: "📚 Grammar Checker", ru: "📚 Проверка грамматики", tr: "📚 Dilbilgisi Kontrolü", ar: "📚 مدقق القواعد" },
+    hdr_studyplan: { uz: "🎯 O'quv rejasi", en: "🎯 Study Plan", ru: "🎯 План обучения", tr: "🎯 Çalışma Planı", ar: "🎯 خطة الدراسة" },
+    hdr_vocabgen: { uz: "📖 Lug'at generatori", en: "📖 Vocabulary Generator", ru: "📖 Генератор словаря", tr: "📖 Kelime Oluşturucu", ar: "📖 مولّد المفردات" },
+    hdr_badges: { uz: "🎖️ Nishonlar", en: "🎖️ Badges", ru: "🎖️ Значки", tr: "🎖️ Rozetler", ar: "🎖️ الأوسمة" },
+    hdr_leaderboard: { uz: "🏅 Shaxsiy reyting (eng yaxshi kunlar)", en: "🏅 Personal Ranking (best days)", ru: "🏅 Личный рейтинг (лучшие дни)", tr: "🏅 Kişisel Sıralama (en iyi günler)", ar: "🏅 الترتيب الشخصي (أفضل الأيام)" },
+    hdr_calendar: { uz: "📅 O'quv taqvimi", en: "📅 Learning Calendar", ru: "📅 Учебный календарь", tr: "📅 Öğrenme Takvimi", ar: "📅 تقويم التعلم" },
+    hdr_progress: { uz: "📈 Rivojlanish", en: "📈 Progress", ru: "📈 Прогресс", tr: "📈 İlerleme", ar: "📈 التقدم" },
+    hdr_dailyreward: { uz: "🎁 Kunlik mukofot", en: "🎁 Daily Reward", ru: "🎁 Ежедневная награда", tr: "🎁 Günlük Ödül", ar: "🎁 مكافأة يومية" },
+    hdr_avatarcreator: { uz: "🎨 Avatar yaratish", en: "🎨 Avatar Creator", ru: "🎨 Создание аватара", tr: "🎨 Avatar Oluşturucu", ar: "🎨 إنشاء الصورة الرمزية" },
+    hdr_skins: { uz: "👕 Personaj kiyimlari", en: "👕 Character Skins", ru: "👕 Скины персонажа", tr: "👕 Karakter Kıyafetleri", ar: "👕 أشكال الشخصية" },
+    hdr_themes: { uz: "🌈 Mavzular", en: "🌈 Themes", ru: "🌈 Темы", tr: "🌈 Temalar", ar: "🌈 السمات" },
+    hdr_effects: { uz: "✨ Profil effektlari", en: "✨ Profile Effects", ru: "✨ Эффекты профиля", tr: "✨ Profil Efektleri", ar: "✨ تأثيرات الملف الشخصي" },
+    hdr_animbadges: { uz: "🏅 Animatsion nishonlar", en: "🏅 Animated Badges", ru: "🏅 Анимированные значки", tr: "🏅 Animasyonlu Rozetler", ar: "🏅 أوسمة متحركة" },
+    hdr_backgrounds: { uz: "🖼️ Fonlar", en: "🖼️ Backgrounds", ru: "🖼️ Фоны", tr: "🖼️ Arka Planlar", ar: "🖼️ الخلفيات" }
 };
 
 function applyUILanguage(lang) {
@@ -3965,8 +4096,12 @@ if (languageSelectEl) {
     };
 }
 
-// Ilova ochilganda avval saqlangan tanlovni qo'llaymiz (uz — standart)
-applyUILanguage(localStorage.getItem("uiLang") || "uz");
+// Ilova ochilganda til tanlovini quyidagi tartibda aniqlaymiz:
+// 1) URL'dagi ?lang= parametri (masalan qidiruv tizimidan kelgan havola)
+// 2) Oldin saqlangan tanlov (localStorage)
+// 3) Standart — o'zbek tili
+const urlLangParam = new URLSearchParams(window.location.search).get("lang");
+applyUILanguage(urlLangParam || localStorage.getItem("uiLang") || "uz");
 
 const notificationToggleEl = document.getElementById("notificationToggle");
 if (notificationToggleEl) {
@@ -6484,6 +6619,56 @@ function renderCefrBadge() {
 }
 
 // =========================================================================
+// TAXMINIY IELTS BAND — bu RASMIY IELTS bali EMAS. IELTS Britain Council,
+// IDP va Cambridge tomonidan rasmiy imtihon markazlarida beriladi. Bu
+// yerdagi son — CEFR darajasi (bilgan so'zlar soni), Imtihon rejimi va AI
+// Speaking natijalari asosidagi, faqat yo'nalish ko'rsatish uchun mo'ljallangan
+// norasmiy taxmin.
+// =========================================================================
+
+// CEFR darajasidan taxminiy IELTS band oralig'iga (keng tarqalgan,
+// norasmiy moslik jadvali asosida)
+const CEFR_TO_IELTS_BASE = { A1: 3.0, A2: 3.5, B1: 4.5, B2: 5.5, C1: 7.0, C2: 8.5 };
+
+function computeIeltsBandEstimate() {
+    const cefr = computeCefrLevel();
+    let band = CEFR_TO_IELTS_BASE[cefr.code] || 3.0;
+
+    // Imtihon rejimi natijalari bilan nozik moslashtirish (-0.5 .. +0.5)
+    try {
+        const examHistory = JSON.parse(localStorage.getItem("examHistory") || "[]");
+        if (examHistory.length) {
+            const recent = examHistory.slice(-5);
+            const avgPct = recent.reduce((s, h) => s + (h.pct || 0), 0) / recent.length;
+            if (avgPct >= 85) band += 0.5;
+            else if (avgPct < 50) band -= 0.5;
+        }
+    } catch (e) { /* ignore */ }
+
+    // AI Speaking natijalari bilan nozik moslashtirish (-0.5 .. +0.5)
+    try {
+        const spHistory = JSON.parse(localStorage.getItem("speakingScoreHistory") || "[]");
+        if (spHistory.length) {
+            const avgScore = spHistory.reduce((s, v) => s + v, 0) / spHistory.length;
+            if (avgScore >= 85) band += 0.5;
+            else if (avgScore < 50) band -= 0.5;
+        }
+    } catch (e) { /* ignore */ }
+
+    // IELTS bandlari 0.5 qadam bilan, 1-9 oralig'ida bo'ladi
+    band = Math.round(band * 2) / 2;
+    band = Math.max(1, Math.min(9, band));
+    return band;
+}
+
+function renderIeltsBandBadge() {
+    const badgeEl = document.getElementById("ieltsBandBadge");
+    if (!badgeEl) return;
+    const band = computeIeltsBandEstimate();
+    badgeEl.textContent = band.toFixed(1);
+}
+
+// =========================================================================
 // STATISTIKA KENGAYTIRISH — mavjud statsPage'ga qo'shimcha real ma'lumotlar
 // =========================================================================
 
@@ -6514,6 +6699,7 @@ function renderExtraStats() {
     if (typeof renderWordsKnownChart === "function") renderWordsKnownChart();
     if (typeof renderWeeklyReport === "function") renderWeeklyReport();
     if (typeof renderCefrBadge === "function") renderCefrBadge();
+    if (typeof renderIeltsBandBadge === "function") renderIeltsBandBadge();
 }
 
 renderExtraStats();
@@ -7801,7 +7987,8 @@ if (examStartBtn) {
             questions: chosen.map(buildDuelQuestion).filter(Boolean),
             index: 0,
             score: 0,
-            timeLeft: 180
+            timeLeft: 180,
+            level: examLevel
         };
 
         document.getElementById("examIntro").style.display = "none";
@@ -7891,6 +8078,15 @@ function finishExam() {
     if (typeof saveGame === "function") saveGame();
     if (pct >= 60 && typeof celebrate === "function") celebrate();
     document.getElementById("examIntro").style.display = "";
+
+    // Imtihon natijasini tarixga yozamiz — bu keyinchalik taxminiy IELTS
+    // band hisoblashda ishlatiladi (faqat oxirgi 20 tasi saqlanadi).
+    try {
+        const history = JSON.parse(localStorage.getItem("examHistory") || "[]");
+        history.push({ level: examState.level || "beginner", pct, date: new Date().toISOString() });
+        localStorage.setItem("examHistory", JSON.stringify(history.slice(-20)));
+    } catch (e) { /* localStorage buzilgan bo'lsa jim o'tkazib yuboramiz */ }
+    if (typeof renderIeltsBandBadge === "function") renderIeltsBandBadge();
 }
 
 
