@@ -1,4 +1,4 @@
-const CACHE_NAME = "english-master-ai-v19";
+const CACHE_NAME = "english-master-ai-v20";
 
 // Ilovaning o'z fayllari — bular bo'lmasa ilova umuman ochilmaydi.
 const ASSETS = [
@@ -128,7 +128,7 @@ self.addEventListener("fetch", (e) => {
   e.respondWith(
     fetch(e.request)
       .then((networkResponse) => {
-     
+
         if (networkResponse && networkResponse.status === 200) {
           const cacheCopy = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -138,18 +138,18 @@ self.addEventListener("fetch", (e) => {
         return networkResponse;
       })
       .catch(async () => {
-        
+
         console.log("📴 Tarmoq xatosi (Foydalanuvchi oflayn yoki server o'chiq)");
         const cachedResponse = await caches.match(e.request);
         if (cachedResponse) return cachedResponse;
 
-        
+
         if (e.request.mode === "navigate") {
           const fallbackPage = await caches.match("./index.html");
           if (fallbackPage) return fallbackPage;
         }
 
-       
+
         return new Response(
           "Siz oflaynsiz va bu fayl keshda mavjud emas.",
           { status: 503, statusText: "Offline", headers: { "Content-Type": "text/plain; charset=utf-8" } }

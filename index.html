@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="uz">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>English Master AI — Ingliz tilini onlayn va oflayn o'rganing</title>
 
     <!-- SEO / ASO: qidiruv tizimlari va ilova do'konlari uchun asosiy meta ma'lumotlar -->
-    <meta name="description" content="English Master AI — ingliz tilini so'zlar, testlar, grammatika, AI o'qituvchi va o'yin shaklidagi mashqlar orqali bepul o'rganing. Oflayn ham ishlaydi, kunlik maqsad, seriya (streak) va sertifikat tizimi bilan.">
-    <meta name="keywords" content="ingliz tili o'rganish, english master, so'z yodlash, flashcard, ingliz tili testlari, grammatika, AI teacher, til o'rganish ilovasi, oflayn ingliz tili, sertifikat">
+    <meta name="description"
+        content="English Master AI — ingliz tilini so'zlar, testlar, grammatika, AI o'qituvchi va o'yin shaklidagi mashqlar orqali bepul o'rganing. Oflayn ham ishlaydi, kunlik maqsad, seriya (streak) va sertifikat tizimi bilan.">
+    <meta name="keywords"
+        content="ingliz tili o'rganish, english master, so'z yodlash, flashcard, ingliz tili testlari, grammatika, AI teacher, til o'rganish ilovasi, oflayn ingliz tili, sertifikat">
     <meta name="author" content="English Master AI">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://english-master-pro.app/">
@@ -27,7 +29,8 @@
     <!-- Open Graph (Facebook, Telegram, LinkedIn ulashishlari uchun) -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="English Master AI — Ingliz tilini zamonaviy usulda o'rganing">
-    <meta property="og:description" content="So'zlar, testlar, o'yinlar, AI o'qituvchi va sertifikat — barchasi bitta ilovada. Internetsiz ham ishlaydi.">
+    <meta property="og:description"
+        content="So'zlar, testlar, o'yinlar, AI o'qituvchi va sertifikat — barchasi bitta ilovada. Internetsiz ham ishlaydi.">
     <meta property="og:image" content="./icons/icon-512.png">
     <meta property="og:url" content="https://english-master-pro.app/">
     <meta property="og:locale" content="uz_UZ">
@@ -36,21 +39,24 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="English Master AI — Ingliz tilini o'rganing">
-    <meta name="twitter:description" content="So'zlar, testlar, o'yinlar va AI o'qituvchi bilan ingliz tilini oflayn ham o'rganing.">
+    <meta name="twitter:description"
+        content="So'zlar, testlar, o'yinlar va AI o'qituvchi bilan ingliz tilini oflayn ham o'rganing.">
     <meta name="twitter:image" content="./icons/icon-512.png">
 
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="theme-refresh.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-    
-    
+
+
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -73,7 +79,7 @@
     }
     </script>
 </head>
- 
+
 <body>
     <script>
         // Saqlangan mavzuni darhol qo'llaymiz — aks holda har safar qayta
@@ -81,7 +87,7 @@
         try {
             const savedTheme = localStorage.getItem("appTheme");
             if (savedTheme) document.body.dataset.theme = savedTheme;
-        } catch (e) {}
+        } catch (e) { }
     </script>
 
     <div id="offlineBanner">📴 Siz oflaynsiz — ba'zi funksiyalar (AI, tarjima) internetsiz ishlamaydi</div>
@@ -114,9 +120,11 @@
         <div class="rate-us-card">
             <div class="rate-us-icon">🌟</div>
             <h3>Ilova sizga yoqdimi?</h3>
-            <p class="ai-settings-hint">Fikringiz biz uchun muhim — bir necha soniya vaqt ajratib, Play Store'da baholab qo'ysangiz, boshqa foydalanuvchilarga ham yordam bergan bo'lasiz!</p>
+            <p class="ai-settings-hint">Fikringiz biz uchun muhim — bir necha soniya vaqt ajratib, Play Store'da baholab
+                qo'ysangiz, boshqa foydalanuvchilarga ham yordam bergan bo'lasiz!</p>
             <div class="rate-us-stars" id="rateUsStars">
-                <span data-star="1">★</span><span data-star="2">★</span><span data-star="3">★</span><span data-star="4">★</span><span data-star="5">★</span>
+                <span data-star="1">★</span><span data-star="2">★</span><span data-star="3">★</span><span
+                    data-star="4">★</span><span data-star="5">★</span>
             </div>
             <div class="rate-us-actions">
                 <button id="rateUsLaterBtn" class="rate-us-later">Keyinroq</button>
@@ -138,60 +146,93 @@
             <div class="tour-progress" id="tourProgress"></div>
         </div>
     </div>
- 
+
     <header>
         <div class="logo">
             <i class="fa-solid fa-graduation-cap"></i>
             English Master AI
         </div>
 
-        <button id="quickThemeToggle" class="quick-theme-btn" aria-label="Tezkor tema almashtirish" title="Tema almashtirish">🌙</button>
+        <button id="quickThemeToggle" class="quick-theme-btn" aria-label="Tezkor tema almashtirish"
+            title="Tema almashtirish">🌙</button>
 
-        <button id="burgerBtn" class="burger-btn" aria-label="Menyuni ochish" aria-expanded="false" aria-controls="mainNav">
+        <button id="burgerBtn" class="burger-btn" aria-label="Menyuni ochish" aria-expanded="false"
+            aria-controls="mainNav">
             <span></span><span></span><span></span>
         </button>
 
         <nav id="mainNav">
-            <button id="homeBtn" data-i18n="homeBtn">🏠 Bosh sahifa</button>
-            <button id="beginnerBtn" data-i18n="beginnerBtn">🆕 Noldan boshlash</button>
-            <button id="flashBtn" data-i18n="flashBtn">📚 Kartochka</button>
-            <button id="matchBtn" data-i18n="matchBtn">🎮 So'z o'yini</button>
-            <button id="gamesBtn">🕹️ Mini o'yinlar</button>
-            <button id="scrambleBtn" data-i18n="scrambleBtn">🔤 Harflarni tartiblash</button>
-            <button id="typingRaceBtn" data-i18n="typingRaceBtn">⌨️ Tezkor yozish</button>
-            <button id="fillBlankBtn" data-i18n="fillBlankBtn">✏️ Bo'sh joyni to'ldirish</button>
-            <button id="bossBattleBtn" data-i18n="bossBattleBtn">👹 Haftalik Boss</button>
-            <button id="pomodoroBtn" data-i18n="pomodoroBtn">🍅 Fokus rejimi</button>
-            <button id="speedBtn" data-i18n="speedBtn">⚡ Tezkor test</button>
-            <button id="sentenceBtn" data-i18n="sentenceBtn">🧩 Gap tuzish</button>
-            <button id="grammarQuizBtn" data-i18n="grammarQuizBtn">📐 Grammatika testi</button>
-            <button id="mistakeBtn" data-i18n="mistakeBtn">📖 Qiyin so'zlar</button>
-            <button id="certificateBtn2" data-i18n="certificateBtn2">🎓 Sertifikat</button>
-            <button id="premiumBtn" data-i18n="premiumBtn">💎 Premium</button>
-            <button id="adminBtn" data-i18n="adminBtn">🛠️ Admin panel</button>
-            <button id="quizBtn" data-i18n="quizBtn">📝 Test</button>
-            <button id="aiBtn" data-i18n="aiBtn">🤖 AI Teacher</button>
-            <button id="assistantBtn" data-i18n="assistantBtn">💬 AI Assistant</button>
-            <button id="roleplayBtn" data-i18n="roleplayBtn">🎭 Rolli suhbat</button>
-            <button id="duelBtn" data-i18n="duelBtn">🤝 Do'st bilan raqobat</button>
-            <button id="grammarLibraryBtn" data-i18n="grammarLibraryBtn">📘 Grammatika qo'llanmasi</button>
-            <button id="idiomsBtn" data-i18n="idiomsBtn">💬 Idiomalar</button>
-            <button id="myWordsBtn" data-i18n="myWordsBtn">📝 Mening so'zlarim</button>
-            <button id="examBtn" data-i18n="examBtn">🎯 Imtihon rejimi</button>
-            <button id="courseBtn" data-i18n="courseBtn">📖 Lug'at</button>
-            <button id="aiToolsBtn" data-i18n="aiToolsBtn">🛠 Tarjima</button>
-            <button id="speakingBtn" data-i18n="speakingBtn">🎤 Speaking</button>
-            <button id="grammarBtn" data-i18n="grammarBtn">✏️ Grammatika</button>
-            <button id="achievementBtn" data-i18n="achievementBtn">🏆 Yutuqlar</button>
-            <button id="avatarBtn" data-i18n="avatarBtn">🧑 Avatar</button>
-            <button id="statsBtn" data-i18n="statsBtn">📊 Statistika</button>
-            <button id="settingsBtn" data-i18n="settingsBtn">⚙️ Sozlamalar</button>
+            <input type="text" id="navSearchInput" class="nav-search-input" placeholder="🔍 Funksiyani qidirish...">
+            <div class="nav-group" data-cat="home">
+                <div class="nav-group-label">🏠 Bosh & Profil</div>
+                <button id="homeBtn" data-i18n="homeBtn">🏠 Bosh sahifa</button>
+                <button id="statsBtn" data-i18n="statsBtn">📊 Statistika</button>
+                <button id="settingsBtn" data-i18n="settingsBtn">⚙️ Sozlamalar</button>
+                <button id="achievementBtn" data-i18n="achievementBtn">🏆 Yutuqlar</button>
+                <button id="avatarBtn" data-i18n="avatarBtn">🧑 Avatar</button>
+                <button id="premiumBtn" data-i18n="premiumBtn">💎 Premium</button>
+                <button id="adminBtn" data-i18n="adminBtn">🛠️ Admin panel</button>
+            </div>
+            <div class="nav-group" data-cat="learn">
+                <div class="nav-group-label">📚 O'rganish</div>
+                <button id="beginnerBtn" data-i18n="beginnerBtn">🆕 Noldan boshlash</button>
+                <button id="flashBtn" data-i18n="flashBtn">📚 Kartochka</button>
+                <button id="courseBtn" data-i18n="courseBtn">📖 Lug'at</button>
+                <button id="grammarLibraryBtn" data-i18n="grammarLibraryBtn">📘 Grammatika qo'llanmasi</button>
+                <button id="idiomsBtn" data-i18n="idiomsBtn">💬 Idiomalar</button>
+                <button id="myWordsBtn" data-i18n="myWordsBtn">📝 Mening so'zlarim</button>
+                <button id="mistakeBtn" data-i18n="mistakeBtn">📖 Qiyin so'zlar</button>
+                <button id="examBtn" data-i18n="examBtn">🎯 Imtihon rejimi</button>
+                <button id="quizBtn" data-i18n="quizBtn">📝 Test</button>
+                <button id="grammarQuizBtn" data-i18n="grammarQuizBtn">📐 Grammatika testi</button>
+                <button id="sentenceBtn" data-i18n="sentenceBtn">🧩 Gap tuzish</button>
+                <button id="certificateBtn2" data-i18n="certificateBtn2">🎓 Sertifikat</button>
+            </div>
+            <div class="nav-group" data-cat="games">
+                <div class="nav-group-label">🎮 O'yinlar</div>
+                <button id="matchBtn" data-i18n="matchBtn">🎮 So'z o'yini</button>
+                <button id="gamesBtn">🕹️ Mini o'yinlar</button>
+                <button id="scrambleBtn" data-i18n="scrambleBtn">🔤 Harflarni tartiblash</button>
+                <button id="typingRaceBtn" data-i18n="typingRaceBtn">⌨️ Tezkor yozish</button>
+                <button id="fillBlankBtn" data-i18n="fillBlankBtn">✏️ Bo'sh joyni to'ldirish</button>
+                <button id="bossBattleBtn" data-i18n="bossBattleBtn">👹 Haftalik Boss</button>
+                <button id="pomodoroBtn" data-i18n="pomodoroBtn">🍅 Fokus rejimi</button>
+                <button id="speedBtn" data-i18n="speedBtn">⚡ Tezkor test</button>
+                <button id="miniGamesExtraBtn">🎮 Qo'shimcha o'yinlar</button>
+                <button id="rpgWorldBtn">🗺️ O'yin Dunyosi</button>
+                <button id="battleBtn">⚔️ Jang</button>
+            </div>
+            <div class="nav-group" data-cat="ai">
+                <div class="nav-group-label">🤖 AI Vositalari</div>
+                <button id="aiBtn" data-i18n="aiBtn">🤖 AI Teacher</button>
+                <button id="assistantBtn" data-i18n="assistantBtn">💬 AI Assistant</button>
+                <button id="roleplayBtn" data-i18n="roleplayBtn">🎭 Rolli suhbat</button>
+                <button id="aiToolsBtn" data-i18n="aiToolsBtn">🛠 Tarjima</button>
+                <button id="speakingBtn" data-i18n="speakingBtn">🎤 Speaking</button>
+                <button id="grammarBtn" data-i18n="grammarBtn">✏️ Grammatika</button>
+                <button id="aiToolsExtraBtn">🛠️ AI Vositalari</button>
+                <button id="aiCoachBtn">🎓 AI Murabbiy</button>
+                <button id="ultimateAiBtn">🧠 Ultimate AI</button>
+                <button id="lessonExtraBtn">📹 Video/Mock Test</button>
+            </div>
+            <div class="nav-group" data-cat="social">
+                <div class="nav-group-label">🤝 Ijtimoiy</div>
+                <button id="duelBtn" data-i18n="duelBtn">🤝 Do'st bilan raqobat</button>
+                <button id="multiplayerBtn">🌐 Onlayn</button>
+                <button id="chatSocialBtn">💬 Chat & Do'stlar</button>
+                <button id="guildBtn">🏰 Guild</button>
+            </div>
+            <div class="nav-group" data-cat="cloud">
+                <div class="nav-group-label">☁️ Hisob & Boshqa</div>
+                <button id="cloudAccountBtn">☁️ Hisob & Zaxira</button>
+                <button id="immersiveBtn">🌍 AR/VR/Maktab</button>
+            </div>
         </nav>
     </header>
     <div id="navOverlay" class="nav-overlay"></div>
- 
+
     <main>
-       
+
         <section id="homePage" class="page active">
             <h1>English Master AI</h1>
             <p id="homeSubtitle">Ingliz tilini zamonaviy usulda o'rganing.</p>
@@ -212,14 +253,24 @@
             </div>
 
             <div class="quick-access-grid" id="quickAccessGrid">
-                <button class="qa-btn" data-target="flashBtn"><span class="qa-icon qa-icon-1"><i class="fa-solid fa-layer-group"></i></span><span data-i18n="qa_flash">Kartochka</span></button>
-                <button class="qa-btn" data-target="quizBtn"><span class="qa-icon qa-icon-2"><i class="fa-solid fa-pen"></i></span><span data-i18n="qa_quiz">Test</span></button>
-                <button class="qa-btn" data-target="matchBtn"><span class="qa-icon qa-icon-3"><i class="fa-solid fa-gamepad"></i></span><span data-i18n="qa_match">O'yin</span></button>
-                <button class="qa-btn" data-target="scrambleBtn"><span class="qa-icon qa-icon-4"><i class="fa-solid fa-shuffle"></i></span><span data-i18n="qa_scramble">Harflar</span></button>
-                <button class="qa-btn" data-target="aiBtn"><span class="qa-icon qa-icon-5"><i class="fa-solid fa-robot"></i></span><span data-i18n="qa_ai">AI Teacher</span></button>
-                <button class="qa-btn" data-target="certificateBtn2"><span class="qa-icon qa-icon-6"><i class="fa-solid fa-award"></i></span><span data-i18n="qa_cert">Sertifikat</span></button>
-                <button class="qa-btn" data-target="statsBtn"><span class="qa-icon qa-icon-7"><i class="fa-solid fa-chart-simple"></i></span><span data-i18n="qa_stats">Statistika</span></button>
-                <button class="qa-btn" data-target="settingsBtn"><span class="qa-icon qa-icon-8"><i class="fa-solid fa-gear"></i></span><span data-i18n="qa_settings">Sozlama</span></button>
+                <button class="qa-btn" data-target="flashBtn"><span class="qa-icon qa-icon-1"><i
+                            class="fa-solid fa-layer-group"></i></span><span
+                        data-i18n="qa_flash">Kartochka</span></button>
+                <button class="qa-btn" data-target="quizBtn"><span class="qa-icon qa-icon-2"><i
+                            class="fa-solid fa-pen"></i></span><span data-i18n="qa_quiz">Test</span></button>
+                <button class="qa-btn" data-target="matchBtn"><span class="qa-icon qa-icon-3"><i
+                            class="fa-solid fa-gamepad"></i></span><span data-i18n="qa_match">O'yin</span></button>
+                <button class="qa-btn" data-target="scrambleBtn"><span class="qa-icon qa-icon-4"><i
+                            class="fa-solid fa-shuffle"></i></span><span data-i18n="qa_scramble">Harflar</span></button>
+                <button class="qa-btn" data-target="aiBtn"><span class="qa-icon qa-icon-5"><i
+                            class="fa-solid fa-robot"></i></span><span data-i18n="qa_ai">AI Teacher</span></button>
+                <button class="qa-btn" data-target="certificateBtn2"><span class="qa-icon qa-icon-6"><i
+                            class="fa-solid fa-award"></i></span><span data-i18n="qa_cert">Sertifikat</span></button>
+                <button class="qa-btn" data-target="statsBtn"><span class="qa-icon qa-icon-7"><i
+                            class="fa-solid fa-chart-simple"></i></span><span
+                        data-i18n="qa_stats">Statistika</span></button>
+                <button class="qa-btn" data-target="settingsBtn"><span class="qa-icon qa-icon-8"><i
+                            class="fa-solid fa-gear"></i></span><span data-i18n="qa_settings">Sozlama</span></button>
             </div>
 
             <div class="review-due-card" id="reviewDueCard">
@@ -249,7 +300,8 @@
             <div class="daily-plan-card">
                 <div class="wotd-label">🗓️ Kunlik mashq rejasi</div>
                 <div id="dailyPlanList"></div>
-                <div id="dailyPlanBonus" class="daily-plan-bonus" style="display:none;">🎉 Barcha vazifalar bajarildi! +20 XP, +15 tanga olindi.</div>
+                <div id="dailyPlanBonus" class="daily-plan-bonus" style="display:none;">🎉 Barcha vazifalar bajarildi!
+                    +20 XP, +15 tanga olindi.</div>
             </div>
 
             <div class="wotd-card" id="wotdCard">
@@ -283,8 +335,8 @@
                 <i class="fa-solid fa-share-nodes"></i> Do'stlaringizga ulashing
             </button>
         </section>
- 
-        
+
+
         <section id="flashPage" class="page">
             <div class="lang-switcher" id="langSwitcherFlash">
                 <button data-lang="en" class="lang-btn">🇬🇧 English</button>
@@ -320,11 +372,12 @@
 
             <div id="cardCounter" class="card-counter">1 / 128</div>
         </section>
- 
-        
+
+
         <section id="beginnerPage" class="page tool-page">
             <h2 data-i18n="hdr_beginner2">🆕 Noldan boshlash</h2>
-            <p class="ai-settings-hint">Hech narsa bilmasangiz ham bo'ladi — shu yerdan boshlang: alifbo, sonlar, salomlashish va grammatika asoslari, ikkala tilda ham.</p>
+            <p class="ai-settings-hint">Hech narsa bilmasangiz ham bo'ladi — shu yerdan boshlang: alifbo, sonlar,
+                salomlashish va grammatika asoslari, ikkala tilda ham.</p>
 
             <div class="beginner-lang-tabs" id="beginnerLangTabs">
                 <button class="beginner-lang-tab active" data-blang="en">🇬🇧 Ingliz tili</button>
@@ -346,13 +399,15 @@
 
         <section id="gamesPage" class="page tool-page">
             <h2 data-i18n="hdr_minigames">🎮 Mini o'yinlar</h2>
-            <p class="ai-settings-hint">O'ynab so'z boyligingizni mustahkamlang. Har bir g'alaba uchun tanga va XP olasiz!</p>
+            <p class="ai-settings-hint">O'ynab so'z boyligingizni mustahkamlang. Har bir g'alaba uchun tanga va XP
+                olasiz!</p>
             <div id="gameContainer"></div>
         </section>
 
         <section id="matchPage" class="page tool-page">
             <h2 data-i18n="hdr_match">🎮 So'zlarni moslashtirish</h2>
-            <p class="ai-settings-hint">Chap tomondagi so'zga mos tarjimani toping. Har to'g'ri juftlik uchun XP olasiz!</p>
+            <p class="ai-settings-hint">Chap tomondagi so'zga mos tarjimani toping. Har to'g'ri juftlik uchun XP olasiz!
+            </p>
             <div class="match-toolbar">
                 <div id="matchStatus" class="match-status">Juftliklar: 0 / 6</div>
                 <button id="newMatchRound">🔀 Yangi round</button>
@@ -362,7 +417,8 @@
 
         <section id="scramblePage" class="page tool-page">
             <h2 data-i18n="hdr_scramble">🔤 Harflarni tartiblash</h2>
-            <p class="ai-settings-hint">Aralashtirilgan harflardan to'g'ri ingliz so'zini yig'ing. Har to'g'ri javob uchun XP va tanga olasiz!</p>
+            <p class="ai-settings-hint">Aralashtirilgan harflardan to'g'ri ingliz so'zini yig'ing. Har to'g'ri javob
+                uchun XP va tanga olasiz!</p>
             <div class="scramble-toolbar">
                 <span id="scrambleScore" class="scramble-score">✅ 0 / ⏭ 0</span>
                 <button id="scrambleHintBtn">💡 Maslahat</button>
@@ -371,7 +427,8 @@
             <div class="scramble-card">
                 <div id="scrambleLetters" class="scramble-letters"></div>
                 <div id="scrambleHint" class="scramble-hint"></div>
-                <input type="text" id="scrambleInput" class="scramble-input" placeholder="So'zni shu yerga yozing..." autocomplete="off">
+                <input type="text" id="scrambleInput" class="scramble-input" placeholder="So'zni shu yerga yozing..."
+                    autocomplete="off">
                 <button id="scrambleCheckBtn">✅ Tekshirish</button>
                 <div id="scrambleResult" class="scramble-result"></div>
             </div>
@@ -379,14 +436,16 @@
 
         <section id="typingRacePage" class="page tool-page">
             <h2 data-i18n="hdr_typing">⌨️ Tezkor yozish (Typing Race)</h2>
-            <p class="ai-settings-hint">Ekranda chiqqan ingliz so'zini imkon qadar tez va xatosiz yozing. 30 soniyada nechta so'z yoza olasiz?</p>
+            <p class="ai-settings-hint">Ekranda chiqqan ingliz so'zini imkon qadar tez va xatosiz yozing. 30 soniyada
+                nechta so'z yoza olasiz?</p>
             <div class="typing-hud">
                 <span id="typingTimer" class="typing-timer">⏱ 30s</span>
                 <span id="typingScore" class="typing-score">✅ 0</span>
             </div>
             <div class="typing-card">
                 <div id="typingTargetWord" class="typing-target">—</div>
-                <input type="text" id="typingInputRace" class="scramble-input" placeholder="So'zni shu yerga yozing..." autocomplete="off" disabled>
+                <input type="text" id="typingInputRace" class="scramble-input" placeholder="So'zni shu yerga yozing..."
+                    autocomplete="off" disabled>
                 <button id="typingStartBtn">▶️ Boshlash</button>
             </div>
         </section>
@@ -404,20 +463,26 @@
 
         <section id="bossBattlePage" class="page tool-page">
             <h2 data-i18n="hdr_boss">👹 Haftalik Boss</h2>
-            <p class="ai-settings-hint">Bu haftaning eng qiyin so'zlaridan yasalgan "Boss" bilan jang qiling — har to'g'ri javob unga zarba beradi!</p>
+            <p class="ai-settings-hint">Bu haftaning eng qiyin so'zlaridan yasalgan "Boss" bilan jang qiling — har
+                to'g'ri javob unga zarba beradi!</p>
             <div class="boss-hud">
                 <div class="boss-side">
                     <span>👹 Boss</span>
-                    <div class="hp-track"><div id="bossHpFill" class="hp-fill boss-hp"></div></div>
+                    <div class="hp-track">
+                        <div id="bossHpFill" class="hp-fill boss-hp"></div>
+                    </div>
                 </div>
                 <div class="boss-side">
                     <span>🧑 Siz</span>
-                    <div class="hp-track"><div id="playerHpFill" class="hp-fill player-hp"></div></div>
+                    <div class="hp-track">
+                        <div id="playerHpFill" class="hp-fill player-hp"></div>
+                    </div>
                 </div>
             </div>
             <div class="boss-card">
                 <div id="bossQuestion" class="boss-question">—</div>
-                <input type="text" id="bossAnswerInput" class="scramble-input" placeholder="Tarjimasini yozing..." autocomplete="off">
+                <input type="text" id="bossAnswerInput" class="scramble-input" placeholder="Tarjimasini yozing..."
+                    autocomplete="off">
                 <button id="bossAttackBtn">⚔️ Zarba berish</button>
                 <div id="bossResult" class="scramble-result"></div>
                 <div id="bossRewardNote" class="ai-settings-hint"></div>
@@ -426,7 +491,8 @@
 
         <section id="pomodoroPage" class="page tool-page">
             <h2 data-i18n="hdr_pomodoro">🍅 Fokus rejimi (Pomodoro)</h2>
-            <p class="ai-settings-hint">25 daqiqa to'liq e'tibor bilan mashq qiling, keyin 5 daqiqa dam oling — bu usul diqqatni uzoqroq saqlashga yordam beradi.</p>
+            <p class="ai-settings-hint">25 daqiqa to'liq e'tibor bilan mashq qiling, keyin 5 daqiqa dam oling — bu usul
+                diqqatni uzoqroq saqlashga yordam beradi.</p>
             <div class="pomodoro-card">
                 <div class="pomodoro-ring-wrap">
                     <svg class="pomodoro-ring" viewBox="0 0 120 120">
@@ -449,7 +515,8 @@
 
         <section id="speedPage" class="page tool-page">
             <h2 data-i18n="hdr_speed">⚡ Tezkor test</h2>
-            <p class="ai-settings-hint">60 soniyada so'z va tarjima to'g'ri mos kelayotganini tezda ayting — imkon qadar ko'proq to'g'ri javob bering!</p>
+            <p class="ai-settings-hint">60 soniyada so'z va tarjima to'g'ri mos kelayotganini tezda ayting — imkon qadar
+                ko'proq to'g'ri javob bering!</p>
             <div class="speed-hud">
                 <div class="speed-hud-item">⏱ <span id="speedTimeLeft">60</span>s</div>
                 <div class="speed-hud-item">✅ <span id="speedScoreVal">0</span></div>
@@ -500,7 +567,8 @@
 
         <section id="mistakePage" class="page tool-page">
             <h2 data-i18n="hdr_mistakebook">📖 Qiyin so'zlar daftari</h2>
-            <p class="ai-settings-hint">Testda xato qilingan so'zlar shu yerga avtomatik yig'iladi. Ularni qayta mashq qiling — to'g'ri javob bersangiz, ro'yxatdan asta chiqib ketadi!</p>
+            <p class="ai-settings-hint">Testda xato qilingan so'zlar shu yerga avtomatik yig'iladi. Ularni qayta mashq
+                qiling — to'g'ri javob bersangiz, ro'yxatdan asta chiqib ketadi!</p>
             <div id="mistakeList"></div>
         </section>
 
@@ -519,8 +587,8 @@
             <h2 id="question">Question</h2>
             <div id="answers"></div>
         </section>
- 
-       
+
+
         <section id="aiPage" class="page">
             <h2 data-i18n="hdr_aiteacher">🤖 AI Teacher</h2>
             <textarea id="aiQuestion" placeholder="Savolingizni yozing..."></textarea>
@@ -531,7 +599,7 @@
             <button id="generateQuiz">Test yaratish</button>
             <div id="quizResult"></div>
         </section>
- 
+
         <!-- AI ASSISTANT (OCR & VOICE) -->
         <section id="assistantPage" class="page">
             <h2 data-i18n="hdr_aiassistant">🤖 AI Assistant</h2>
@@ -552,7 +620,8 @@
         <!-- AI ROLEPLAY (Rolli suhbat) -->
         <section id="roleplayPage" class="page">
             <h2 data-i18n="hdr_roleplay">🎭 Rolli suhbat</h2>
-            <p class="ai-settings-hint">Haqiqiy hayotdagi vaziyatni tanlang va AI bilan ingliz tilida suhbatlashing — AI xatolaringizni muloyimlik bilan tuzatib boradi.</p>
+            <p class="ai-settings-hint">Haqiqiy hayotdagi vaziyatni tanlang va AI bilan ingliz tilida suhbatlashing — AI
+                xatolaringizni muloyimlik bilan tuzatib boradi.</p>
 
             <div class="roleplay-scenarios" id="roleplayScenarios"></div>
 
@@ -572,7 +641,8 @@
         <!-- FRIEND DUEL (Do'st bilan raqobat) -->
         <section id="duelPage" class="page">
             <h2 data-i18n="hdr_duel2">🤝 Do'st bilan raqobat</h2>
-            <p class="ai-settings-hint">10 ta savoldan iborat sinov yarating, kodni do'stingizga yuboring. U ham xuddi shu savollarni yechadi va natijalar taqqoslanadi — internetsiz, faqat kod orqali!</p>
+            <p class="ai-settings-hint">10 ta savoldan iborat sinov yarating, kodni do'stingizga yuboring. U ham xuddi
+                shu savollarni yechadi va natijalar taqqoslanadi — internetsiz, faqat kod orqali!</p>
 
             <div class="duel-create-card">
                 <h3>➕ Yangi sinov yaratish</h3>
@@ -597,7 +667,8 @@
         <!-- GRAMMAR LIBRARY -->
         <section id="grammarLibraryPage" class="page tool-page">
             <h2 data-i18n="hdr_grammarlib">📘 Grammatika qo'llanmasi</h2>
-            <p class="ai-settings-hint">Ingliz tili grammatikasining asosiy qoidalari — tez qarab olish uchun qisqa va aniq tushuntirishlar bilan.</p>
+            <p class="ai-settings-hint">Ingliz tili grammatikasining asosiy qoidalari — tez qarab olish uchun qisqa va
+                aniq tushuntirishlar bilan.</p>
             <div class="grammar-lib-tabs" id="grammarLibTabs"></div>
             <div id="grammarLibContent"></div>
         </section>
@@ -605,7 +676,8 @@
         <!-- IDIOMS & PHRASAL VERBS -->
         <section id="idiomsPage" class="page tool-page">
             <h2 data-i18n="hdr_idioms2">💬 Idiomalar va frazaviy fe'llar</h2>
-            <p class="ai-settings-hint">Kundalik nutqda ko'p ishlatiladigan iboralar. Har birini tinglab, misol bilan o'rganing.</p>
+            <p class="ai-settings-hint">Kundalik nutqda ko'p ishlatiladigan iboralar. Har birini tinglab, misol bilan
+                o'rganing.</p>
             <div class="idiom-tabs" id="idiomTabs">
                 <button class="idiom-tab active" data-cat="idiom">💬 Idiomalar</button>
                 <button class="idiom-tab" data-cat="phrasal">🔗 Frazaviy fe'llar</button>
@@ -616,7 +688,8 @@
         <!-- MY WORDS (custom vocabulary) -->
         <section id="myWordsPage" class="page tool-page">
             <h2 data-i18n="hdr_mywords2">📝 Mening so'zlarim</h2>
-            <p class="ai-settings-hint">O'zingizga kerakli so'zlarni qo'shing — ular avtomatik ravishda kartochka va testlarga qo'shiladi.</p>
+            <p class="ai-settings-hint">O'zingizga kerakli so'zlarni qo'shing — ular avtomatik ravishda kartochka va
+                testlarga qo'shiladi.</p>
             <div class="my-word-form">
                 <input type="text" id="myWordEn" placeholder="Inglizcha so'z (masalan: Achieve)">
                 <input type="text" id="myWordUz" placeholder="O'zbekcha tarjimasi (masalan: Erishmoq)">
@@ -630,7 +703,8 @@
         <!-- EXAM PREP MODE -->
         <section id="examPage" class="page tool-page">
             <h2 data-i18n="hdr_exam2">🎯 Imtihon rejimi</h2>
-            <p class="ai-settings-hint">Darajangizga mos, vaqt bilan cheklangan sinov — imtihonga (IELTS/CEFR uslubida) tayyorlanish uchun.</p>
+            <p class="ai-settings-hint">Darajangizga mos, vaqt bilan cheklangan sinov — imtihonga (IELTS/CEFR uslubida)
+                tayyorlanish uchun.</p>
             <div class="exam-level-tabs" id="examLevelTabs">
                 <button class="exam-level-tab active" data-lvl="beginner">🌱 A1-A2</button>
                 <button class="exam-level-tab" data-lvl="intermediate">🌿 B1-B2</button>
@@ -643,8 +717,8 @@
             <div id="examPlayArea" class="exam-play-area" style="display:none;"></div>
             <div id="examResultArea"></div>
         </section>
- 
-        
+
+
         <section id="statsPage" class="page">
             <h2 data-i18n="hdr_stats">📊 Statistika</h2>
 
@@ -652,7 +726,8 @@
                 <div class="cefr-badge" id="cefrBadge">A1</div>
                 <div class="cefr-info">
                     <div class="cefr-title" id="cefrTitle">Boshlang'ich</div>
-                    <div class="ai-settings-hint" id="cefrHint">Bu — bilgan so'zlar va XP asosidagi taxminiy daraja (rasmiy CEFR sertifikat emas).</div>
+                    <div class="ai-settings-hint" id="cefrHint">Bu — bilgan so'zlar va XP asosidagi taxminiy daraja
+                        (rasmiy CEFR sertifikat emas).</div>
                 </div>
             </div>
 
@@ -660,34 +735,47 @@
                 <div class="cefr-badge" id="ieltsBandBadge">—</div>
                 <div class="cefr-info">
                     <div class="cefr-title" id="ieltsBandTitle">Taxminiy IELTS band</div>
-                    <div class="ai-settings-hint" id="ieltsBandHint">CEFR darajangiz, Imtihon rejimi va AI Speaking natijalaringiz asosida hisoblangan norasmiy taxmin. Bu rasmiy IELTS bali emas — faqat yo'nalish uchun.</div>
+                    <div class="ai-settings-hint" id="ieltsBandHint">CEFR darajangiz, Imtihon rejimi va AI Speaking
+                        natijalaringiz asosida hisoblangan norasmiy taxmin. Bu rasmiy IELTS bali emas — faqat yo'nalish
+                        uchun.</div>
                 </div>
             </div>
 
             <div class="stats">
-                <div>Level <h1 id="level">1</h1></div>
-                <div>XP <h1 id="xp">0</h1></div>
-                <div>Bilgan so'z <h1 id="known">0</h1></div>
-                <div>Streak <h1 id="streak">0🔥</h1></div>
+                <div>Level <h1 id="level">1</h1>
+                </div>
+                <div>XP <h1 id="xp">0</h1>
+                </div>
+                <div>Bilgan so'z <h1 id="known">0</h1>
+                </div>
+                <div>Streak <h1 id="streak">0🔥</h1>
+                </div>
             </div>
 
             <div class="xp-progress-wrap">
                 <div class="xp-progress-label">Keyingi levelgacha: <span id="xpToNext">0</span>/100 XP</div>
-                <div class="xp-progress-bar"><div id="xpProgressFill" class="xp-progress-fill"></div></div>
+                <div class="xp-progress-bar">
+                    <div id="xpProgressFill" class="xp-progress-fill"></div>
+                </div>
             </div>
 
             <div class="stats stats-secondary">
-                <div>💰 Tanga <h1 id="statsCoins">0</h1></div>
-                <div>📖 Qiyin so'zlar <h1 id="statsMistakes">0</h1></div>
-                <div>⚡ Tezkor rekord <h1 id="statsSpeedHigh">0</h1></div>
-                <div>🏆 Eng yaxshi test <h1 id="statsBestScore">0</h1></div>
+                <div>💰 Tanga <h1 id="statsCoins">0</h1>
+                </div>
+                <div>📖 Qiyin so'zlar <h1 id="statsMistakes">0</h1>
+                </div>
+                <div>⚡ Tezkor rekord <h1 id="statsSpeedHigh">0</h1>
+                </div>
+                <div>🏆 Eng yaxshi test <h1 id="statsBestScore">0</h1>
+                </div>
             </div>
 
             <div id="recommendationCard" class="recommendation-card"></div>
 
             <div class="weak-areas-card">
                 <h3>🎯 Kuchsiz tomonlar tahlili</h3>
-                <p class="ai-settings-hint">Qaysi mavzularda ko'proq xato qilayotganingiz — shu joylarga ko'proq e'tibor bering.</p>
+                <p class="ai-settings-hint">Qaysi mavzularda ko'proq xato qilayotganingiz — shu joylarga ko'proq e'tibor
+                    bering.</p>
                 <div id="weakAreasList"></div>
             </div>
 
@@ -711,11 +799,13 @@
 
         <section id="certificatePage" class="page tool-page">
             <h2 data-i18n="hdr_cert">🎓 Sertifikat</h2>
-            <p class="ai-settings-hint">O'z ismingizni kiriting va hozirgi darajangizga mos shaxsiy sertifikatingizni yarating — rasm sifatida yuklab olishingiz mumkin.</p>
+            <p class="ai-settings-hint">O'z ismingizni kiriting va hozirgi darajangizga mos shaxsiy sertifikatingizni
+                yarating — rasm sifatida yuklab olishingiz mumkin.</p>
             <input type="text" id="certificateName" placeholder="To'liq ismingiz (masalan: Aliyev Vali)">
             <button id="generateCertBtn">🎓 Sertifikat yaratish</button>
             <div id="certificateNote" class="ai-settings-hint"></div>
-            <canvas id="certificateCanvas" width="900" height="640" style="display:none; max-width:100%; border-radius:16px; margin-top:16px;"></canvas>
+            <canvas id="certificateCanvas" width="900" height="640"
+                style="display:none; max-width:100%; border-radius:16px; margin-top:16px;"></canvas>
             <div class="certificate-actions">
                 <button id="certificateDownloadBtn" style="display:none;">⬇️ Rasm sifatida yuklab olish</button>
                 <button id="certificatePdfBtn" style="display:none;">📄 PDF yuklab olish</button>
@@ -726,7 +816,9 @@
 
         <section id="premiumPage" class="page tool-page">
             <h2 data-i18n="hdr_premium">💎 Premium</h2>
-            <p class="ai-settings-hint">To'liq to'lov tizimi (Payme, Click va h.k.) uchun server (backend) kerak bo'ladi — bu ilova esa faqat brauzeringizda ishlaydi. Hozircha shu qurilma uchun mahalliy "Premium" rejimini yoqib ko'rishingiz mumkin (demo maqsadida, real to'lovsiz):</p>
+            <p class="ai-settings-hint">To'liq to'lov tizimi (Payme, Click va h.k.) uchun server (backend) kerak bo'ladi
+                — bu ilova esa faqat brauzeringizda ishlaydi. Hozircha shu qurilma uchun mahalliy "Premium" rejimini
+                yoqib ko'rishingiz mumkin (demo maqsadida, real to'lovsiz):</p>
             <div id="premiumStatusCard" class="premium-status-card"></div>
             <button id="togglePremiumBtn">💎 Premium rejimni yoqish / o'chirish (demo, to'lovsiz)</button>
 
@@ -737,7 +829,8 @@
 
         <section id="adminPage" class="page tool-page">
             <h2 data-i18n="hdr_admin">🛠️ Admin / Debug panel</h2>
-            <p class="ai-settings-hint">Bu — real serverli admin panel emas (chunki ilova backend'siz), balki shu qurilmadagi haqiqiy ma'lumotlaringizni ko'rish va boshqarish uchun mahalliy panel.</p>
+            <p class="ai-settings-hint">Bu — real serverli admin panel emas (chunki ilova backend'siz), balki shu
+                qurilmadagi haqiqiy ma'lumotlaringizni ko'rish va boshqarish uchun mahalliy panel.</p>
             <div id="adminRealStats" class="admin-real-stats"></div>
             <div class="admin-actions">
                 <button id="adminRefreshBtn">🔄 Yangilash</button>
@@ -748,18 +841,21 @@
 
             <hr>
             <h2 data-i18n="hdr_cloudadmin">☁️ Cloud Admin (barcha foydalanuvchilar)</h2>
-            <p class="ai-settings-hint">Firebase ulangach, shu yerda BARCHA foydalanuvchilarning haqiqiy statistikasi ko'rinadi (Sozlamalar bo'limida config kiriting).</p>
+            <p class="ai-settings-hint">Firebase ulangach, shu yerda BARCHA foydalanuvchilarning haqiqiy statistikasi
+                ko'rinadi (Sozlamalar bo'limida config kiriting).</p>
             <button id="cloudAdminRefreshBtn">🔄 Cloud'ni yangilash</button>
             <div id="cloudAdminContainer" class="admin-cloud-container"></div>
         </section>
- 
-        
+
+
         <section id="settingsPage" class="page">
             <h2 data-i18n="hdr_settings2">Sozlamalar</h2>
 
             <div class="ai-settings-card">
                 <h3>🤖 AI ulanishi</h3>
-                <p class="ai-settings-hint">Haqiqiy AI javoblar (AI Teacher, Chat, Essay tekshiruvi, Test generatori) ishlashi uchun o'zingizning OpenAI (yoki OpenAI-mos) API kalitingizni kiriting. Kalit faqat shu qurilmada, brauzeringizda saqlanadi va hech qayerga yuborilmaydi.</p>
+                <p class="ai-settings-hint">Haqiqiy AI javoblar (AI Teacher, Chat, Essay tekshiruvi, Test generatori)
+                    ishlashi uchun o'zingizning OpenAI (yoki OpenAI-mos) API kalitingizni kiriting. Kalit faqat shu
+                    qurilmada, brauzeringizda saqlanadi va hech qayerga yuborilmaydi.</p>
                 <input type="password" id="aiApiKeyInput" placeholder="API kalitingiz (sk-...)">
                 <input type="text" id="aiEndpointInput" placeholder="Endpoint (ixtiyoriy, default: OpenAI)">
                 <input type="text" id="aiModelInput" placeholder="Model nomi (ixtiyoriy, default: gpt-4o-mini)">
@@ -769,19 +865,25 @@
 
             <div class="ai-settings-card">
                 <h3>☁️ Cloud admin (Firebase)</h3>
-                <p class="ai-settings-hint">Barcha foydalanuvchilarni ko'radigan haqiqiy admin panel uchun bepul Firebase loyihasi yarating (console.firebase.google.com), Firestore'ni yoqing va config JSON'ini shu yerga joylashtiring.</p>
-                <textarea id="firebaseConfigInput" rows="4" placeholder='{"apiKey":"...", "projectId":"...", ...}'></textarea>
+                <p class="ai-settings-hint">Barcha foydalanuvchilarni ko'radigan haqiqiy admin panel uchun bepul
+                    Firebase loyihasi yarating (console.firebase.google.com), Firestore'ni yoqing va config JSON'ini shu
+                    yerga joylashtiring.</p>
+                <textarea id="firebaseConfigInput" rows="4"
+                    placeholder='{"apiKey":"...", "projectId":"...", ...}'></textarea>
                 <button id="saveFirebaseConfigBtn">💾 Saqlash</button>
                 <div id="firebaseConfigStatus" class="ai-settings-hint"></div>
             </div>
 
             <div class="ai-settings-card">
                 <h3>💳 To'lov (Payme / Click / Stripe)</h3>
-                <p class="ai-settings-hint">Premium sotib olish tugmalari ishlashi uchun o'z merchant ID'ingiz yoki Stripe Payment Link'ingizni kiriting. To'lov tasdig'i hozircha "sharaf tizimi" — real loyiha uchun backend tavsiya etiladi.</p>
+                <p class="ai-settings-hint">Premium sotib olish tugmalari ishlashi uchun o'z merchant ID'ingiz yoki
+                    Stripe Payment Link'ingizni kiriting. To'lov tasdig'i hozircha "sharaf tizimi" — real loyiha uchun
+                    backend tavsiya etiladi.</p>
                 <input type="text" id="paymeMerchantInput" placeholder="Payme Merchant ID">
                 <input type="text" id="clickMerchantInput" placeholder="Click Merchant ID">
                 <input type="text" id="clickServiceInput" placeholder="Click Service ID">
-                <input type="text" id="stripePaymentLinkInput" placeholder="Stripe Payment Link (https://buy.stripe.com/...)">
+                <input type="text" id="stripePaymentLinkInput"
+                    placeholder="Stripe Payment Link (https://buy.stripe.com/...)">
                 <input type="number" id="premiumPriceInput" placeholder="Premium narxi (so'm), masalan 29000">
                 <button id="savePaymentConfigBtn">💾 Saqlash</button>
                 <div id="paymentConfigStatus" class="ai-settings-hint"></div>
@@ -789,7 +891,8 @@
 
             <div class="ai-settings-card">
                 <h3>📩 Telegram bot</h3>
-                <p class="ai-settings-hint">O'z Telegram botingiz orqali progress/eslatmalarni yuboring. @BotFather'dan token, @userinfobot'dan Chat ID oling.</p>
+                <p class="ai-settings-hint">O'z Telegram botingiz orqali progress/eslatmalarni yuboring. @BotFather'dan
+                    token, @userinfobot'dan Chat ID oling.</p>
                 <input type="password" id="tgBotTokenInput" placeholder="Bot Token">
                 <input type="text" id="tgChatIdInput" placeholder="Chat ID">
                 <button id="saveTelegramConfigBtn">💾 Saqlash</button>
@@ -800,7 +903,8 @@
 
             <div class="streak-freeze-card" id="streakFreezeCard">
                 <h3>🧊 Streak-Freeze himoyasi</h3>
-                <p class="ai-settings-hint">Bir kun mashq qilishni unutib qolsangiz ham, streak-freeze streak'ingizni saqlab qoladi. Har biri 50 tanga turadi.</p>
+                <p class="ai-settings-hint">Bir kun mashq qilishni unutib qolsangiz ham, streak-freeze streak'ingizni
+                    saqlab qoladi. Har biri 50 tanga turadi.</p>
                 <div class="streak-freeze-row">
                     <span>Sizda: <b id="freezeCount">0</b> ta himoya bor</span>
                     <button id="buyFreezeBtn">🧊 Sotib olish (50 tanga)</button>
@@ -809,7 +913,10 @@
 
             <div class="referral-card" id="referralCard">
                 <h3>🎁 Do'stlaringizni taklif qiling</h3>
-                <p class="ai-settings-hint">Shaxsiy havolangizni ulashing — havola orqali kirgan har bir do'stingiz +20 tanga bonus bilan boshlaydi. (Eslatma: bu qurilma ichida ishlaydigan tizim, sizga bonus faqat shu havola orqali kirgan yangi foydalanuvchi ekanini o'zi tasdiqlasa hisoblanadi — chunki ilova serversiz ishlaydi.)</p>
+                <p class="ai-settings-hint">Shaxsiy havolangizni ulashing — havola orqali kirgan har bir do'stingiz +20
+                    tanga bonus bilan boshlaydi. (Eslatma: bu qurilma ichida ishlaydigan tizim, sizga bonus faqat shu
+                    havola orqali kirgan yangi foydalanuvchi ekanini o'zi tasdiqlasa hisoblanadi — chunki ilova
+                    serversiz ishlaydi.)</p>
                 <div class="referral-row">
                     <input type="text" id="referralLinkInput" readonly>
                     <button id="copyReferralBtn">📋 Nusxalash</button>
@@ -834,7 +941,9 @@
                     <label for="reminderTimeInput">⏰ Eslatma vaqti</label>
                     <input type="time" id="reminderTimeInput" value="19:00">
                 </div>
-                <p class="ai-settings-hint" id="reminderTimeHint">Ilova shu vaqtdan keyin ochilganda, agar bugun hali eslatma ko'rsatilmagan bo'lsa, bildirishnoma beriladi. (Brauzer PWA'lari ilova yopiq holda aniq vaqtda bildirishnoma yubora olmaydi — bu eng yaqin ishlaydigan yechim.)</p>
+                <p class="ai-settings-hint" id="reminderTimeHint">Ilova shu vaqtdan keyin ochilganda, agar bugun hali
+                    eslatma ko'rsatilmagan bo'lsa, bildirishnoma beriladi. (Brauzer PWA'lari ilova yopiq holda aniq
+                    vaqtda bildirishnoma yubora olmaydi — bu eng yaqin ishlaydigan yechim.)</p>
                 <label class="fav-only-toggle">
                     <input type="checkbox" id="autoThemeToggle" checked>
                     🌗 Tizim mavzusiga avtomatik moslashish (Dark/Light)
@@ -863,7 +972,8 @@
 
             <button id="playMusic">▶️ Play</button>
             <button id="pauseMusic">⏸️ Pause</button>
-            <p id="musicMissingNote" class="audio-missing-note">🔇 Fon musiqasi fayli topilmadi (<code>assets/audio/background.mp3</code>).</p>
+            <p id="musicMissingNote" class="audio-missing-note">🔇 Fon musiqasi fayli topilmadi
+                (<code>assets/audio/background.mp3</code>).</p>
 
             <hr>
 
@@ -874,7 +984,8 @@
             <audio id="clickSound" onerror="document.getElementById('clickMissingNote').classList.add('show')">
                 <source src="assets/audio/click.mp3" type="audio/mpeg">
             </audio>
-            <p id="clickMissingNote" class="audio-missing-note">🔇 Click ovoz fayli topilmadi (<code>assets/audio/click.mp3</code>).</p>
+            <p id="clickMissingNote" class="audio-missing-note">🔇 Click ovoz fayli topilmadi
+                (<code>assets/audio/click.mp3</code>).</p>
 
             <hr>
 
@@ -905,27 +1016,27 @@
             </label>
         </section>
     </main>
- 
-    
+
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { 
-            getAuth, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            signOut, 
-            onAuthStateChanged 
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        
-        
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            getDoc 
+
+
+        import {
+            getFirestore,
+            doc,
+            setDoc,
+            getDoc
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
- 
-        
+
+
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_DOMAIN",
@@ -968,315 +1079,624 @@
         }
     </script>
     <section id="coursePage" class="page tool-page">
- 
-<h2 data-i18n="hdr_videolessons">📚 Video darslar</h2>
 
-<div class="beginner-lang-tabs" id="courseLangTabs">
-    <button class="course-lang-btn active" data-lang="en">🇬🇧 English</button>
-    <button class="course-lang-btn" data-lang="ru">🇷🇺 Русский</button>
-    <button class="course-lang-btn" data-lang="ar">🇸🇦 العربية</button>
-</div>
- 
-<div id="courseList"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_listening">🎧 Tinglab tushunish (Listening)</h2>
-<p class="ai-settings-hint">Tugmani bosing — gap ovozda o'qib beriladi. Diqqat bilan tinglang va eshitganingizni yozing.</p>
+        <h2 data-i18n="hdr_videolessons">📚 Video darslar</h2>
 
-<div class="listening-controls">
-    <button id="playListeningBtn">🔊 Gapni tinglash</button>
-    <button id="newListeningBtn">🔀 Yangi gap</button>
-</div>
- 
-<input
-type="text"
-id="listeningAnswer"
-placeholder="Eshitgan gapingizni shu yerga yozing">
- 
-<button id="checkListening">
-✅ Tekshirish
-</button>
+        <div class="beginner-lang-tabs" id="courseLangTabs">
+            <button class="course-lang-btn active" data-lang="en">🇬🇧 English</button>
+            <button class="course-lang-btn" data-lang="ru">🇷🇺 Русский</button>
+            <button class="course-lang-btn" data-lang="ar">🇸🇦 العربية</button>
+        </div>
 
-<div id="listeningResult" class="listening-result"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_dictionary">📖 Dictionary</h2>
- 
-<input
-id="dictionarySearch"
-placeholder="Word...">
- 
-<div id="dictionaryResult"></div>
- 
-</section>
-<section id="aiToolsPage" class="page tool-page">
- 
-<h2 data-i18n="hdr_ocrtranslator">📷 OCR Translator</h2>
- 
-<input
-type="file"
-id="ocrImage"
-accept="image/*">
- 
-<button id="scanImage">
-Scan Image
-</button>
- 
-<div id="ocrText"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_translate">🌍 Translate</h2>
- 
-<textarea
-id="translateInput"
-placeholder="Matn yozing">
+        <div id="courseList"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_listening">🎧 Tinglab tushunish (Listening)</h2>
+        <p class="ai-settings-hint">Tugmani bosing — gap ovozda o'qib beriladi. Diqqat bilan tinglang va eshitganingizni
+            yozing.</p>
+
+        <div class="listening-controls">
+            <button id="playListeningBtn">🔊 Gapni tinglash</button>
+            <button id="newListeningBtn">🔀 Yangi gap</button>
+        </div>
+
+        <input type="text" id="listeningAnswer" placeholder="Eshitgan gapingizni shu yerga yozing">
+
+        <button id="checkListening">
+            ✅ Tekshirish
+        </button>
+
+        <div id="listeningResult" class="listening-result"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_dictionary">📖 Dictionary</h2>
+
+        <input id="dictionarySearch" placeholder="Word...">
+
+        <div id="dictionaryResult"></div>
+
+    </section>
+    <section id="aiToolsPage" class="page tool-page">
+
+        <h2 data-i18n="hdr_ocrtranslator">📷 OCR Translator</h2>
+
+        <input type="file" id="ocrImage" accept="image/*">
+
+        <button id="scanImage">
+            Scan Image
+        </button>
+
+        <div id="ocrText"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_translate">🌍 Translate</h2>
+
+        <textarea id="translateInput" placeholder="Matn yozing">
 </textarea>
- 
-<button id="translateBtn">
-Translate
-</button>
- 
-<div id="translateResult"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_pdfreader">📄 PDF Reader</h2>
- 
-<input
-type="file"
-id="pdfFile"
-accept=".pdf">
- 
-<div id="pdfStatus"></div>
- 
-</section>
-<section id="speakingPage" class="page tool-page">
- 
-<h2 data-i18n="hdr_speaking2">🎤 AI Speaking Test</h2>
-<p>Ko'rsatilgan so'z yoki gapni ovoz chiqarib talaffuz qiling — tizim aytganingizni matnga o'giradi va haqiqiy matn bilan solishtirib aniqlik foizini chiqaradi, so'z-so'z farqini ko'rsatadi.</p>
 
-<div class="speaking-mode-switcher" id="speakingModeSwitcher">
-    <button class="speaking-mode-btn active" data-mode="word">🔤 So'z</button>
-    <button class="speaking-mode-btn" data-mode="sentence">📝 Gap</button>
-</div>
+        <button id="translateBtn">
+            Translate
+        </button>
 
-<div id="speakingTargetWord" class="speaking-target">—</div>
-<button id="listenTargetBtn">🔊 Eshitish</button>
-<button id="newSpeakingWordBtn">🔀 Yangi so'z</button>
- 
-<button id="startSpeaking">
-🎤 Start Speaking
-</button>
- 
-<div id="speechResult"></div>
-<div id="speechScore"></div>
-<div id="speechDiff" class="speech-diff"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_essaychecker">📝 Essay Checker</h2>
- 
-<textarea
-id="essayInput"
-placeholder="Write your essay here...">
+        <div id="translateResult"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_pdfreader">📄 PDF Reader</h2>
+
+        <input type="file" id="pdfFile" accept=".pdf">
+
+        <div id="pdfStatus"></div>
+
+    </section>
+    <section id="speakingPage" class="page tool-page">
+
+        <h2 data-i18n="hdr_speaking2">🎤 AI Speaking Test</h2>
+        <p>Ko'rsatilgan so'z yoki gapni ovoz chiqarib talaffuz qiling — tizim aytganingizni matnga o'giradi va haqiqiy
+            matn bilan solishtirib aniqlik foizini chiqaradi, so'z-so'z farqini ko'rsatadi.</p>
+
+        <div class="speaking-mode-switcher" id="speakingModeSwitcher">
+            <button class="speaking-mode-btn active" data-mode="word">🔤 So'z</button>
+            <button class="speaking-mode-btn" data-mode="sentence">📝 Gap</button>
+        </div>
+
+        <div id="speakingTargetWord" class="speaking-target">—</div>
+        <button id="listenTargetBtn">🔊 Eshitish</button>
+        <button id="newSpeakingWordBtn">🔀 Yangi so'z</button>
+
+        <button id="startSpeaking">
+            🎤 Start Speaking
+        </button>
+
+        <div id="speechResult"></div>
+        <div id="speechScore"></div>
+        <div id="speechDiff" class="speech-diff"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_essaychecker">📝 Essay Checker</h2>
+
+        <textarea id="essayInput" placeholder="Write your essay here...">
 </textarea>
- 
-<button id="checkEssay">
-Check Essay
-</button>
 
- 
-<div id="essayResult"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_reading">📖 Maqola o'qish (Reading)</h2>
-<p class="ai-settings-hint">Har qanday so'zga bosing — tarjimasi shu yerda chiqadi. Oxirida tushunganingizni tekshiruvchi savolga javob bering.</p>
+        <button id="checkEssay">
+            Check Essay
+        </button>
 
-<div class="reading-passage-tabs" id="readingPassageTabs"></div>
 
-<div id="readingText" class="reading-passage-text"></div>
-<div id="readingWordTranslation" class="reading-word-translation"></div>
+        <div id="essayResult"></div>
 
-<input
-id="readingAnswer"
-placeholder="Savolga javob yozing">
+        <hr>
 
-<button id="checkReading">
-Check
-</button>
- 
-<div id="readingResult"></div>
- 
-</section>
-<section id="aiTeacherPage" class="page tool-page">
- 
-<h2 data-i18n="hdr_aiteacherpro">🤖 AI Teacher Pro</h2>
- 
-<textarea
-id="teacherQuestion"
-placeholder="Savolingizni yozing..."></textarea>
- 
-<button id="askTeacher">
-AI Teacher
-</button>
- 
-<div id="teacherAnswer"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_grammarchecker">📚 Grammar Checker</h2>
- 
-<textarea
-id="grammarInput"
-placeholder="Write a sentence..."></textarea>
- 
-<button id="checkGrammar">
-Check Grammar
-</button>
- 
-<div id="grammarResult"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_studyplan">🎯 Study Plan</h2>
- 
-<button id="createPlan">
-Generate Study Plan
-</button>
- 
-<div id="studyPlan"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_vocabgen">📖 Vocabulary Generator</h2>
- 
-<button id="generateWords">
-Generate 10 Words
-</button>
- 
-<div id="generatedWords"></div>
- 
-</section>
-<section id="achievementPage" class="page tool-page">
- 
-<h2 data-i18n="hdr_achievements">🏆 Achievements</h2>
- 
-<div id="achievementList"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_badges">🎖️ Badges</h2>
- 
-<div id="badgeList"></div>
- 
-<hr>
+        <h2 data-i18n="hdr_reading">📖 Maqola o'qish (Reading)</h2>
+        <p class="ai-settings-hint">Har qanday so'zga bosing — tarjimasi shu yerda chiqadi. Oxirida tushunganingizni
+            tekshiruvchi savolga javob bering.</p>
 
-<h2 data-i18n="hdr_leaderboard">🏅 Shaxsiy reyting (eng yaxshi kunlar)</h2>
-<p class="ai-settings-hint">So'nggi 14 kunlik XP natijalaringiz taqqoslanadi — o'zingizning eng yaxshi natijangizdan oshishga harakat qiling.</p>
-<ul id="leaderboardList" class="leaderboard-list"></ul>
+        <div class="reading-passage-tabs" id="readingPassageTabs"></div>
 
-<hr>
- 
-<h2 data-i18n="hdr_calendar">📅 Learning Calendar</h2>
- 
-<div id="calendar"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_progress">📈 Progress</h2>
- 
-<canvas id="progressChart"></canvas>
- 
-<hr>
- 
-<h2 data-i18n="hdr_dailyreward">🎁 Daily Reward</h2>
- 
-<button id="dailyReward">
- 
-Claim Reward
- 
-</button>
- 
-<div id="rewardStatus"></div>
- 
-</section>
-<section id="avatarPage" class="page tool-page">
- 
-<h2 data-i18n="hdr_avatarcreator">🎨 Avatar Creator</h2>
- 
-<div id="avatarPreview">
- 
-😀
- 
-</div>
- 
-<select id="avatarSelect">
- 
-<option>😀 Smile</option>
-<option>😎 Cool</option>
-<option>🤖 Robot</option>
-<option>🦸 Hero</option>
-<option>🧙 Wizard</option>
- 
-</select>
- 
-<button id="saveAvatar">
- 
-Save Avatar
- 
-</button>
- 
-<hr>
- 
-<h2 data-i18n="hdr_skins">👕 Character Skins</h2>
- 
-<div id="skins"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_themes">🌈 Themes</h2>
- 
-<button id="darkTheme">
- 
-Dark
- 
-</button>
- 
-<button id="lightTheme">
- 
-Light
- 
-</button>
- 
-<button id="neonTheme">
- 
-Neon
- 
-</button>
- 
-<hr>
- 
-<h2 data-i18n="hdr_effects">✨ Profile Effects</h2>
- 
-<div id="effects"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_animbadges">🏅 Animated Badges</h2>
- 
-<div id="animatedBadges"></div>
- 
-<hr>
- 
-<h2 data-i18n="hdr_backgrounds">🖼️ Backgrounds</h2>
- 
-<div id="backgrounds"></div>
- 
-</section>
+        <div id="readingText" class="reading-passage-text"></div>
+        <div id="readingWordTranslation" class="reading-word-translation"></div>
+
+        <input id="readingAnswer" placeholder="Savolga javob yozing">
+
+        <button id="checkReading">
+            Check
+        </button>
+
+        <div id="readingResult"></div>
+
+    </section>
+    <section id="aiTeacherPage" class="page tool-page">
+
+        <h2 data-i18n="hdr_aiteacherpro">🤖 AI Teacher Pro</h2>
+
+        <textarea id="teacherQuestion" placeholder="Savolingizni yozing..."></textarea>
+
+        <button id="askTeacher">
+            AI Teacher
+        </button>
+
+        <div id="teacherAnswer"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_grammarchecker">📚 Grammar Checker</h2>
+
+        <textarea id="grammarInput" placeholder="Write a sentence..."></textarea>
+
+        <button id="checkGrammar">
+            Check Grammar
+        </button>
+
+        <div id="grammarResult"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_studyplan">🎯 Study Plan</h2>
+
+        <button id="createPlan">
+            Generate Study Plan
+        </button>
+
+        <div id="studyPlan"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_vocabgen">📖 Vocabulary Generator</h2>
+
+        <button id="generateWords">
+            Generate 10 Words
+        </button>
+
+        <div id="generatedWords"></div>
+
+    </section>
+    <section id="achievementPage" class="page tool-page">
+
+        <h2 data-i18n="hdr_achievements">🏆 Achievements</h2>
+
+        <div id="achievementList"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_badges">🎖️ Badges</h2>
+
+        <div id="badgeList"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_leaderboard">🏅 Shaxsiy reyting (eng yaxshi kunlar)</h2>
+        <p class="ai-settings-hint">So'nggi 14 kunlik XP natijalaringiz taqqoslanadi — o'zingizning eng yaxshi
+            natijangizdan oshishga harakat qiling.</p>
+        <ul id="leaderboardList" class="leaderboard-list"></ul>
+
+        <hr>
+
+        <h2 data-i18n="hdr_calendar">📅 Learning Calendar</h2>
+
+        <div id="calendar"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_progress">📈 Progress</h2>
+
+        <canvas id="progressChart"></canvas>
+
+        <hr>
+
+        <h2 data-i18n="hdr_dailyreward">🎁 Daily Reward</h2>
+
+        <button id="dailyReward">
+
+            Claim Reward
+
+        </button>
+
+        <div id="rewardStatus"></div>
+
+    </section>
+    <section id="avatarPage" class="page tool-page">
+
+        <h2 data-i18n="hdr_avatarcreator">🎨 Avatar Creator</h2>
+
+        <div id="avatarPreview">
+
+            😀
+
+        </div>
+
+        <select id="avatarSelect">
+
+            <option>😀 Smile</option>
+            <option>😎 Cool</option>
+            <option>🤖 Robot</option>
+            <option>🦸 Hero</option>
+            <option>🧙 Wizard</option>
+
+        </select>
+
+        <button id="saveAvatar">
+
+            Save Avatar
+
+        </button>
+
+        <hr>
+
+        <h2 data-i18n="hdr_skins">👕 Character Skins</h2>
+
+        <div id="skins"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_themes">🌈 Themes</h2>
+
+        <button id="darkTheme">
+
+            Dark
+
+        </button>
+
+        <button id="lightTheme">
+
+            Light
+
+        </button>
+
+        <button id="neonTheme">
+
+            Neon
+
+        </button>
+
+        <hr>
+
+        <h2 data-i18n="hdr_effects">✨ Profile Effects</h2>
+
+        <div id="effects"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_animbadges">🏅 Animated Badges</h2>
+
+        <div id="animatedBadges"></div>
+
+        <hr>
+
+        <h2 data-i18n="hdr_backgrounds">🖼️ Backgrounds</h2>
+
+        <div id="backgrounds"></div>
+
+    </section>
+
+    <section id="multiplayerPage" class="page tool-page">
+        <h2>🌐 Onlayn / Multiplayer</h2>
+        <p class="ai-settings-hint">Xona ochish, raqib topish, reyting va turnirlar — barchasi shu yerda.</p>
+        <h3>Xona (Room)</h3>
+        <input id="roomCode" placeholder="Xona kodi">
+        <button id="createRoom">🆕 Xona yaratish</button>
+        <button id="joinRoom">➡️ Xonaga qo'shilish</button>
+        <div id="roomStatus" class="ai-settings-hint"></div>
+        <h3>Server / Matchmaking</h3>
+        <button id="connectServer">🔌 Serverga ulanish</button>
+        <div id="serverStatus" class="ai-settings-hint"></div>
+        <button id="findMatch">🔍 Raqib qidirish</button>
+        <button id="findOpponent">🎯 Tez raqib topish</button>
+        <h3>PvP jang</h3>
+        <button id="startPvP">⚔️ PvP boshlash</button>
+        <div id="pvpStatus" class="ai-settings-hint"></div>
+        <h3>Turnir</h3>
+        <button id="startTournament">🏁 Turnir boshlash</button>
+        <button id="joinTournament">➕ Turnirga qo'shilish</button>
+        <div id="tournamentStatus" class="ai-settings-hint"></div>
+        <div id="tournamentStatus2" class="ai-settings-hint"></div>
+        <h3>Reyting</h3>
+        <div id="leaderboard" class="ai-settings-hint"></div>
+        <div id="worldRanking" class="ai-settings-hint"></div>
+        <div id="weeklyRank" class="ai-settings-hint"></div>
+        <div id="seasonPass" class="ai-settings-hint"></div>
+        <button id="claimWeekly">🎁 Haftalik mukofot olish</button>
+        <div id="weeklyRewardStatus" class="ai-settings-hint"></div>
+    </section>
+    <section id="chatSocialPage" class="page tool-page">
+        <h2>💬 Chat & Do'stlar</h2>
+        <p class="ai-settings-hint">Global chat, do'stlar ro'yxati va do'st bilan raqobat shu yerda.</p>
+        <h3>Global chat</h3>
+        <div id="globalChat" class="ai-settings-hint"></div>
+        <input id="globalMessage" placeholder="Xabar yozing">
+        <button id="sendGlobal">➤ Yuborish</button>
+        <h3>Shaxsiy chat</h3>
+        <div id="chatMessages" class="ai-settings-hint"></div>
+        <input id="chatMessage" placeholder="Xabar yozing">
+        <button id="sendChat">➤ Yuborish</button>
+        <h3>Do'stlar</h3>
+        <input id="friendInput" placeholder="Do'st ismi / ID">
+        <button id="addFriendBtn">➕ Do'st qo'shish</button>
+        <button id="sendFriend">➤ Xabar yuborish</button>
+        <div id="friendMessages" class="ai-settings-hint"></div>
+        <div id="friendProfile" class="ai-settings-hint"></div>
+        <h3>Do'st bilan raqobat (Duel)</h3>
+        <button id="duelCopyBtn">🔗 Duel havolasini nusxalash</button>
+    </section>
+    <section id="guildPage" class="page tool-page">
+        <h2>🏰 Guild (Jamoa)</h2>
+        <p class="ai-settings-hint">Guild yarating, unga qo'shiling, guild ichida suhbatlashing va topshiriqlarni
+            bajaring.</p>
+        <input id="guildName" placeholder="Guild nomi">
+        <button id="createGuild">🏗️ Guild yaratish</button>
+        <button id="joinGuild">➡️ Guildga qo'shilish</button>
+        <div id="guildStatus" class="ai-settings-hint"></div>
+        <h3>Guild chat</h3>
+        <div id="guildMessages" class="ai-settings-hint"></div>
+        <input id="guildMessage" placeholder="Xabar yozing">
+        <button id="sendGuild">➤ Yuborish</button>
+        <h3>Guild topshiriqlari</h3>
+        <div id="guildMission" class="ai-settings-hint"></div>
+        <button id="completeGuildMission">✅ Topshiriqni bajarish</button>
+        <div id="guildRanking" class="ai-settings-hint"></div>
+    </section>
+    <section id="battlePage" class="page tool-page">
+        <h2>⚔️ Jang (Battle)</h2>
+        <p class="ai-settings-hint">Boss bilan yoki boshqa o'yinchi bilan janglashing, ko'nikmalardan foydalaning.</p>
+        <div id="myHP" class="ai-settings-hint"></div>
+        <div id="enemyHP" class="ai-settings-hint"></div>
+        <div id="bossHP" class="ai-settings-hint"></div>
+        <button id="startBattle">▶️ Jangni boshlash</button>
+        <button id="attackBoss">🗡️ Hujum</button>
+        <button id="magicAttack">🔮 Sehrli hujum</button>
+        <button id="healSkill">💚 Davolash</button>
+        <button id="shieldSkill">🛡️ Himoya</button>
+        <button id="healPotion">🧪 Iksir ichish</button>
+        <button id="doubleXP">⭐ 2x XP faollashtirish</button>
+        <div id="battleStatus" class="ai-settings-hint"></div>
+        <div id="battleInfo" class="ai-settings-hint"></div>
+        <div id="battleHistory" class="ai-settings-hint"></div>
+    </section>
+    <section id="rpgWorldPage" class="page tool-page">
+        <h2>🗺️ O'yin Dunyosi (Bozor, Uy-hayvon, Bank)</h2>
+        <p class="ai-settings-hint">Bozor, bank, ferma, uy-hayvon, qasr va kazino — barcha RPG imkoniyatlari shu yerda.
+        </p>
+        <h3>Bank</h3>
+        <div id="bankCoins" class="ai-settings-hint"></div>
+        <div id="diamondCount" class="ai-settings-hint"></div>
+        <button id="depositCoins">💰 Pul qo'yish</button>
+        <button id="withdrawCoins">💸 Pul yechish</button>
+        <h3>Bozor / Auksion</h3>
+        <div id="market" class="ai-settings-hint"></div>
+        <div id="marketList" class="ai-settings-hint"></div>
+        <div id="auctionList" class="ai-settings-hint"></div>
+        <button id="bidAuction">🔨 Auksionda qatnashish</button>
+        <h3>Ayirboshlash (Trade)</h3>
+        <input id="tradeItem" placeholder="Buyum nomi">
+        <input id="tradePlayer" placeholder="O'yinchi nomi">
+        <button id="sendTrade">🔄 Ayirboshlashni taklif qilish</button>
+        <div id="tradeStatus" class="ai-settings-hint"></div>
+        <h3>Yuk (Inventory)</h3>
+        <div id="inventory" class="ai-settings-hint"></div>
+        <div id="weapons" class="ai-settings-hint"></div>
+        <div id="armors" class="ai-settings-hint"></div>
+        <div id="rareItems" class="ai-settings-hint"></div>
+        <h3>Pochta / Sovg'a</h3>
+        <div id="mailBox" class="ai-settings-hint"></div>
+        <button id="claimMail">📬 Pochtani olish</button>
+        <div id="chestReward" class="ai-settings-hint"></div>
+        <button id="openChest">🎁 Sandiqni ochish</button>
+        <div id="mysteryReward" class="ai-settings-hint"></div>
+        <button id="openMystery">❓ Sirli qutini ochish</button>
+        <h3>Kundalik topshiriqlar</h3>
+        <div id="dailyEvent" class="ai-settings-hint"></div>
+        <div id="sideQuest" class="ai-settings-hint"></div>
+        <button id="finishQuest">✅ Topshiriqni tugatish</button>
+        <h3>Ferma</h3>
+        <div id="farmCoins" class="ai-settings-hint"></div>
+        <button id="collectFarm">🌾 Hosil yig'ish</button>
+        <h3>Uy-hayvon (Pet)</h3>
+        <div id="petInfo" class="ai-settings-hint"></div>
+        <button id="feedPet">🍖 Ovqatlantirish</button>
+        <button id="trainPet">🏋️ Mashq qildirish</button>
+        <div id="eggResult" class="ai-settings-hint"></div>
+        <button id="hatchEgg">🥚 Tuxumni ochish</button>
+        <h3>Uy va Ot</h3>
+        <div id="houseInfo" class="ai-settings-hint"></div>
+        <button id="upgradeHouse">🏠 Uyni yangilash</button>
+        <div id="mountInfo" class="ai-settings-hint"></div>
+        <button id="rideMount">🐎 Otga minish</button>
+        <h3>Qasr / Qirollik</h3>
+        <div id="kingdomInfo" class="ai-settings-hint"></div>
+        <button id="upgradeCastle">🏯 Qasrni yangilash</button>
+        <div id="npcDialog" class="ai-settings-hint"></div>
+        <button id="talkNpc">🗣️ NPC bilan gaplashish</button>
+        <h3>VIP / Battle Pass</h3>
+        <div id="vipStatus" class="ai-settings-hint"></div>
+        <div id="battlePassStatus" class="ai-settings-hint"></div>
+        <button id="buyPass">💎 Pass sotib olish</button>
+        <h3>Kazino</h3>
+        <div id="slotDisplay" class="ai-settings-hint"></div>
+        <button id="playSlot">🎰 Slot o'ynash</button>
+        <div id="slotResult" class="ai-settings-hint"></div>
+        <button id="spinWheel">🎡 G'ildirakni aylantirish</button>
+        <div id="wheelResult" class="ai-settings-hint"></div>
+    </section>
+    <section id="aiToolsExtraPage" class="page tool-page">
+        <h2>🛠️ AI Vositalari (2-versiya)</h2>
+        <p class="ai-settings-hint">Tarjima, OCR, lug'at, talaffuz, QR va boshqa AI vositalarining kengaytirilgan
+            versiyasi.</p>
+        <h3>Tarjima</h3>
+        <input id="translateText" placeholder="Tarjima qilinadigan matn">
+        <button id="translateNow">🌍 Tarjima qilish</button>
+        <div id="translateOutput" class="ai-settings-hint"></div>
+        <button id="translateAI">🤖 AI tarjima</button>
+        <textarea id="translateInput2" placeholder="Matn yozing"></textarea>
+        <button id="translateBtn2">🌍 Tarjima qilish</button>
+        <div id="translateResult2" class="ai-settings-hint"></div>
+        <h3>Jonli tarjima (ovoz)</h3>
+        <input id="liveTranslateInput" placeholder="Gapiring yoki yozing">
+        <button id="startVoiceTranslate">🎙️ Ovozli tarjima boshlash</button>
+        <div id="liveTranslateResult" class="ai-settings-hint"></div>
+        <h3>OCR (rasmdan matn)</h3>
+        <input type="file" id="ocrFile" accept="image/*,.pdf" title="Rasm tanlash">
+        <button id="scanOCR">📷 Skanerlash</button>
+        <div id="ocrOutput" class="ai-settings-hint"></div>
+        <input type="file" id="ocrImage2" accept="image/*,.pdf" title="Rasm tanlash">
+        <button id="scanImage2">📷 Skanerlash</button>
+        <div id="ocrResult2" class="ai-settings-hint"></div>
+        <h3>Lug'at</h3>
+        <input id="dictionaryWord" placeholder="So'zni yozing">
+        <button id="searchWord">🔎 Qidirish</button>
+        <div id="dictionaryResult2" class="ai-settings-hint"></div>
+        <button id="generateWords2">🔀 Yangi so'zlar generatsiya qilish</button>
+        <div id="wordList" class="ai-settings-hint"></div>
+        <h3>Ovoz (TTS / Speech)</h3>
+        <textarea id="ttsText" placeholder="O'qiladigan matn"></textarea>
+        <button id="ttsBtn">🔊 Ovozda o'qish</button>
+        <button id="speechBtn">🎤 Nutqni matnga aylantirish</button>
+        <div id="speechResult2" class="ai-settings-hint"></div>
+        <h3>Talaffuz tekshiruvi</h3>
+        <button id="startPronunciation">🎤 Talaffuzni tekshirish</button>
+        <div id="pronunciationScore" class="ai-settings-hint"></div>
+        <button id="startPronunciation2">🎤 Talaffuzni tekshirish (2)</button>
+        <div id="pronunciationScore2" class="ai-settings-hint"></div>
+        <h3>QR kod</h3>
+        <input type="file" id="qrFile" accept="image/*,.pdf" title="QR rasm tanlash">
+        <button id="scanQR">🔳 QR skanerlash</button>
+        <div id="qrResult" class="ai-settings-hint"></div>
+        <h3>Kamera / Obyekt tanish</h3>
+        <div id="cameraView" class="ai-settings-hint"></div>
+        <button id="startCamera">📸 Kamerani yoqish</button>
+        <button id="captureFrame">📸 Suratga olish</button>
+        <div id="cameraResult" class="ai-settings-hint"></div>
+        <input type="file" id="imageRecognition" accept="image/*,.pdf" title="Rasm tanlash">
+        <button id="detectObject">🔍 Obyektni aniqlash</button>
+        <div id="objectResult" class="ai-settings-hint"></div>
+        <h3>PDF tarjima</h3>
+        <input type="file" id="pdfTranslate" accept="image/*,.pdf" title="PDF tanlash">
+        <button id="translatePDF">📄 PDFni tarjima qilish</button>
+        <div id="pdfTranslateResult" class="ai-settings-hint"></div>
+        <input type="file" id="pdfFile2" accept="image/*,.pdf" title="PDF tanlash">
+        <button id="openPDF">📄 PDFni ochish</button>
+        <div id="pdfStatus2" class="ai-settings-hint"></div>
+    </section>
+    <section id="aiCoachPage" class="page tool-page">
+        <h2>🎓 AI Murabbiy (Grammatika / Insho / Reja)</h2>
+        <p class="ai-settings-hint">Grammatikangizni va inshoingizni AI tekshirsin, shaxsiy mashq rejasi oling.</p>
+        <h3>Grammatika tekshiruvi</h3>
+        <textarea id="grammarText" placeholder="Gap yozing"></textarea>
+        <button id="grammarCheck">✅ Tekshirish</button>
+        <div id="grammarAnswer" class="ai-settings-hint"></div>
+        <h3>Insho tekshiruvi</h3>
+        <textarea id="essayText" placeholder="Inshoingizni yozing"></textarea>
+        <button id="essayScore">✅ Baholash</button>
+        <div id="essayResult2" class="ai-settings-hint"></div>
+        <h3>O'qish testi</h3>
+        <button id="readingTest">📖 Testni boshlash</button>
+        <div id="readingScore" class="ai-settings-hint"></div>
+        <h3>Shaxsiy mashq rejasi</h3>
+        <button id="generatePlan">🗓️ Reja tuzish</button>
+        <div id="studyPlanAI" class="ai-settings-hint"></div>
+        <h3>Ovozli o'qituvchi</h3>
+        <button id="startVoiceTeacher">🎙️ Ovozli darsni boshlash</button>
+        <div id="voiceTeacherResult" class="ai-settings-hint"></div>
+        <h3>Mentordan so'rash</h3>
+        <button id="askMentor">🙋 Savol berish</button>
+        <div id="mentorAnswer" class="ai-settings-hint"></div>
+    </section>
+    <section id="miniGamesExtraPage" class="page tool-page">
+        <h2>🎮 Qo'shimcha Mini O'yinlar</h2>
+        <p class="ai-settings-hint">So'zni topish (Hangman) va xotira o'yini, haftalik challenge.</p>
+        <h3>So'zni top (Hangman)</h3>
+        <button id="pickHangmanGame">🔀 Yangi so'z</button>
+        <button id="hangmanBtn">🔤 Harf tanlash</button>
+        <div id="hangmanResult" class="ai-settings-hint"></div>
+        <h3>Xotira o'yini (Memory)</h3>
+        <button id="pickMemoryGame">🔀 O'yinni boshlash</button>
+        <button id="memoryGameBtn">🃏 Kartani ochish</button>
+        <h3>Haftalik challenge</h3>
+        <button id="completeChallenge">✅ Challengeni bajarish</button>
+    </section>
+    <section id="cloudAccountPage" class="page tool-page">
+        <h2>☁️ Hisob, Zaxira va Bildirishnomalar</h2>
+        <p class="ai-settings-hint">Google orqali kiring, ma'lumotlaringizni zaxiralang yoki eksport qiling.</p>
+        <h3>Kirish</h3>
+        <button id="googleLogin">🔑 Google orqali kirish</button>
+        <button id="guestLogin">👤 Mehmon sifatida kirish</button>
+        <div id="loginStatus" class="ai-settings-hint"></div>
+        <h3>Bulutga sinxronlash</h3>
+        <button id="googleSync">☁️ Google bilan sinxronlash</button>
+        <div id="googleStatus" class="ai-settings-hint"></div>
+        <button id="syncCloud">🔄 Bulutga yuklash</button>
+        <div id="syncStatus" class="ai-settings-hint"></div>
+        <h3>Zaxira nusxa</h3>
+        <button id="backupBtn">💾 Zaxira yaratish</button>
+        <div id="backupStatus" class="ai-settings-hint"></div>
+        <button id="restoreBtn">♻️ Zaxiradan tiklash</button>
+        <h3>Eksport / Import</h3>
+        <button id="exportData">📤 Ma'lumotlarni eksport qilish</button>
+        <button id="importData">📥 Import qilish</button>
+        <input type="file" id="importFile" accept="image/*,.pdf" title="Fayl tanlash">
+        <div id="importStatus" class="ai-settings-hint"></div>
+        <h3>Bildirishnomalar / Kesh</h3>
+        <button id="enableNotification">🔔 Bildirishnomalarni yoqish</button>
+        <div id="notificationStatus" class="ai-settings-hint"></div>
+        <button id="clearCache">🗑️ Keshni tozalash</button>
+        <div id="cacheStatus" class="ai-settings-hint"></div>
+        <div id="offlineStatus" class="ai-settings-hint"></div>
+        <h3>Bitirish / Statistika</h3>
+        <button id="graduate">🎓 Kursni tugatish</button>
+        <div id="graduateStatus" class="ai-settings-hint"></div>
+        <div id="statistics" class="ai-settings-hint"></div>
+    </section>
+    <section id="immersivePage" class="page tool-page">
+        <h2>🌍 3D Globe / AR / VR / Maktab</h2>
+        <p class="ai-settings-hint">3D globus, kengaytirilgan va virtual reallik, onlayn dars va maktab paneli.</p>
+        <button id="openGlobe">🌍 3D Globusni ochish</button>
+        <h3>AR / VR</h3>
+        <button id="startAR">📱 AR rejimini boshlash</button>
+        <div id="arStatus" class="ai-settings-hint"></div>
+        <button id="startVR">🥽 VR rejimini boshlash</button>
+        <div id="vrStatus" class="ai-settings-hint"></div>
+        <h3>Onlayn dars</h3>
+        <button id="joinClass">🎓 Darsga qo'shilish</button>
+        <div id="classStatus" class="ai-settings-hint"></div>
+        <div id="teacherPanel" class="ai-settings-hint"></div>
+        <div id="schoolPanel" class="ai-settings-hint"></div>
+    </section>
+    <section id="ultimateAiPage" class="page tool-page">
+        <h2>🧠 Ultimate AI Yordamchi</h2>
+        <p class="ai-settings-hint">Shaxsiy AI yordamchi — ovozli qo'ng'iroq, uyga vazifa, karyera va universitetga
+            tayyorgarlik.</p>
+        <button id="aiAssistant">🤖 AI yordamchini chaqirish</button>
+        <button id="voiceCall">📞 Ovozli qo'ng'iroq</button>
+        <div id="voiceResult" class="ai-settings-hint"></div>
+        <button id="scanHomework">📚 Uy vazifasini skanerlash</button>
+        <button id="careerMode">💼 Karyera rejimi</button>
+        <button id="universityPrep">🎓 Universitetga tayyorgarlik</button>
+        <button id="jobInterview">🗣️ Ish suhbati mashqi</button>
+        <button id="smartRevision">🧠 Aqlli takrorlash</button>
+        <button id="lifeStatistics">📊 Hayotiy statistika</button>
+        <div id="ultimateResult" class="ai-settings-hint"></div>
+    </section>
+    <section id="lessonExtraPage" class="page tool-page">
+        <h2>📹 Video Dars / Mock Test / Tahlil</h2>
+        <p class="ai-settings-hint">Video darslar, sinov imtihoni va batafsil tahlil.</p>
+        <button id="nextLesson">▶️ Keyingi dars</button>
+        <button id="downloadLesson">⬇️ Darsni yuklab olish</button>
+        <div id="downloadStatus" class="ai-settings-hint"></div>
+        <h3>Mock imtihon</h3>
+        <button id="startMock">📝 Sinov imtihonini boshlash</button>
+        <div id="mockStatus" class="ai-settings-hint"></div>
+        <h3>Tahlil</h3>
+        <div id="analyticsBox" class="ai-settings-hint"></div>
+        <h3>Test yaratish</h3>
+        <input id="quizLevel" placeholder="Daraja (masalan: A2)">
+        <button id="createQuiz">🆕 Test yaratish</button>
+        <div id="quizOutput" class="ai-settings-hint"></div>
+        <button id="restartQuiz">🔁 Testni qayta boshlash</button>
+        <button id="restartGrammarQuiz">🔁 Grammatika testini qayta boshlash</button>
+    </section>
+
 
     <button id="scrollTopBtn" aria-label="Yuqoriga qaytish" title="Yuqoriga qaytish">
         <i class="fa-solid fa-arrow-up"></i>
@@ -1297,5 +1717,5 @@ Neon
     <script src="pro-payment.js"></script>
     <script src="pro-messenger.js"></script>
 </body>
- 
+
 </html>

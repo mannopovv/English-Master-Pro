@@ -193,6 +193,8 @@ function openNav() {
     burgerBtn.classList.add("active");
     burgerBtn.setAttribute("aria-expanded", "true");
     document.body.style.overflow = "hidden";
+    const searchInput = document.getElementById("navSearchInput");
+    if (searchInput) searchInput.focus({ preventScroll: true });
 }
 
 function closeNav() {
@@ -210,24 +212,46 @@ if (burgerBtn && mainNav && navOverlay) {
 
     navOverlay.addEventListener("click", closeNav);
 
-  
+
     mainNav.addEventListener("click", (e) => {
         if (e.target.tagName === "BUTTON") {
             closeNav();
         }
     });
 
-    
+
     window.addEventListener("resize", () => {
         if (window.innerWidth > 1024) {
             closeNav();
         }
     });
 
-  
+
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeNav();
     });
+
+    // ---- Menyu qidiruvi: 45+ tugma orasidan kerakli funksiyani tez topish ----
+    const navSearchInput = document.getElementById("navSearchInput");
+    if (navSearchInput) {
+        navSearchInput.addEventListener("input", () => {
+            const q = navSearchInput.value.trim().toLowerCase();
+            document.querySelectorAll("#mainNav .nav-group").forEach((group) => {
+                let anyVisible = false;
+                group.querySelectorAll("button").forEach((btn) => {
+                    const text = btn.textContent.trim().toLowerCase();
+                    const match = !q || text.includes(q);
+                    btn.classList.toggle("nav-btn-hidden", !match);
+                    if (match) anyVisible = true;
+                });
+                group.classList.toggle("nav-group-hidden", !anyVisible);
+            });
+        });
+        // Menyu yopilganda qidiruvni tozalash, keyingi safar hammasi ko'rinsin
+        navSearchInput.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") { navSearchInput.value = ""; navSearchInput.dispatchEvent(new Event("input")); }
+        });
+    }
 }
 
 
@@ -252,15 +276,15 @@ function openPage(id) {
         targetPage.classList.add("active");
     }
 
-    
+
     document.querySelectorAll("#mainNav button").forEach(btn => {
         btn.classList.toggle("active", menuButtons[btn.id] === id);
     });
 
-   
+
     syncBottomNav(id);
 
-   
+
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -300,7 +324,19 @@ const menuButtons = {
     "idiomsBtn": "idiomsPage",
     "myWordsBtn": "myWordsPage",
     "examBtn": "examPage",
-    "gamesBtn": "gamesPage"
+    "gamesBtn": "gamesPage",
+    "multiplayerBtn": "multiplayerPage",
+    "chatSocialBtn": "chatSocialPage",
+    "guildBtn": "guildPage",
+    "battleBtn": "battlePage",
+    "rpgWorldBtn": "rpgWorldPage",
+    "aiToolsExtraBtn": "aiToolsExtraPage",
+    "aiCoachBtn": "aiCoachPage",
+    "miniGamesExtraBtn": "miniGamesExtraPage",
+    "cloudAccountBtn": "cloudAccountPage",
+    "immersiveBtn": "immersivePage",
+    "ultimateAiBtn": "ultimateAiPage",
+    "lessonExtraBtn": "lessonExtraPage"
 };
 
 Object.keys(menuButtons).forEach(btnId => {
@@ -398,7 +434,7 @@ bottomNavButtons.forEach(btn => {
 syncBottomNav("homePage");
 
 const words = [
-    
+
     { en: "Family", uz: "Oila", example: "I love my family.", ru: "Семья", ruExample: "Я люблю свою семью.", ar: "عائلة", arExample: "أحب عائلتي.", category: "Oila" },
     { en: "Mother", uz: "Ona", example: "My mother is a doctor.", ru: "Мать", ruExample: "Моя мать врач.", ar: "أم", arExample: "أمي طبيبة.", category: "Oila" },
     { en: "Father", uz: "Ota", example: "My father works hard.", ru: "Отец", ruExample: "Мой отец много работает.", ar: "أب", arExample: "أبي يعمل بجد.", category: "Oila" },
@@ -411,7 +447,7 @@ const words = [
     { en: "Wife", uz: "Xotin", example: "His wife is a teacher.", ru: "Жена", ruExample: "Его жена учительница.", ar: "زوجة", arExample: "زوجته معلمة.", category: "Oila" },
     { en: "Husband", uz: "Er", example: "Her husband is an engineer.", ru: "Муж", ruExample: "Её муж инженер.", ar: "زوج", arExample: "زوجها مهندس.", category: "Oila" },
     { en: "Friend", uz: "Do'st", example: "He is my best friend.", ru: "Друг", ruExample: "Он мой лучший друг.", ar: "صديق", arExample: "هو أفضل صديق لي.", category: "Oila" },
-    
+
     { en: "Apple", uz: "Olma", example: "I eat an apple.", ru: "Яблоко", ruExample: "Я ем яблоко.", ar: "تفاحة", arExample: "آكل تفاحة.", category: "Ovqat" },
     { en: "Bread", uz: "Non", example: "We buy fresh bread.", ru: "Хлеб", ruExample: "Мы покупаем свежий хлеб.", ar: "خبز", arExample: "نشتري خبزا طازجا.", category: "Ovqat" },
     { en: "Water", uz: "Suv", example: "Drink water every day.", ru: "Вода", ruExample: "Пей воду каждый день.", ar: "ماء", arExample: "اشرب الماء كل يوم.", category: "Ovqat" },
@@ -426,7 +462,7 @@ const words = [
     { en: "Fruit", uz: "Meva", example: "Fruit is good for health.", ru: "Фрукты", ruExample: "Фрукты полезны для здоровья.", ar: "فاكهة", arExample: "الفاكهة مفيدة للصحة.", category: "Ovqat" },
     { en: "Vegetable", uz: "Sabzavot", example: "I eat vegetables daily.", ru: "Овощи", ruExample: "Я ем овощи каждый день.", ar: "خضار", arExample: "آكل الخضار يوميا.", category: "Ovqat" },
     { en: "Soup", uz: "Sho'rva", example: "This soup is delicious.", ru: "Суп", ruExample: "Этот суп вкусный.", ar: "حساء", arExample: "هذا الحساء لذيذ.", category: "Ovqat" },
-    
+
     { en: "House", uz: "Uy", example: "This is our new house.", ru: "Дом", ruExample: "Это наш новый дом.", ar: "بيت", arExample: "هذا بيتنا الجديد.", category: "Uy" },
     { en: "Room", uz: "Xona", example: "My room is clean.", ru: "Комната", ruExample: "Моя комната чистая.", ar: "غرفة", arExample: "غرفتي نظيفة.", category: "Uy" },
     { en: "Door", uz: "Eshik", example: "Please close the door.", ru: "Дверь", ruExample: "Пожалуйста, закрой дверь.", ar: "باب", arExample: "أغلق الباب من فضلك.", category: "Uy" },
@@ -439,7 +475,7 @@ const words = [
     { en: "Shoes", uz: "Poyabzal", example: "These shoes are new.", ru: "Обувь", ruExample: "Эта обувь новая.", ar: "حذاء", arExample: "هذا الحذاء جديد.", category: "Kiyim" },
     { en: "Hat", uz: "Shlyapa", example: "She wears a hat in summer.", ru: "Шляпа", ruExample: "Она носит шляпу летом.", ar: "قبعة", arExample: "هي ترتدي قبعة في الصيف.", category: "Kiyim" },
     { en: "Jacket", uz: "Kurtka", example: "Wear your jacket, it's cold.", ru: "Куртка", ruExample: "Надень куртку, холодно.", ar: "سترة", arExample: "البس سترتك، الجو بارد.", category: "Kiyim" },
-  
+
     { en: "School", uz: "Maktab", example: "I go to school.", ru: "Школа", ruExample: "Я хожу в школу.", ar: "مدرسة", arExample: "أذهب إلى المدرسة.", category: "Maktab" },
     { en: "Teacher", uz: "O'qituvchi", example: "My teacher is kind.", ru: "Учитель", ruExample: "Мой учитель добрый.", ar: "معلم", arExample: "معلمي لطيف.", category: "Maktab" },
     { en: "Student", uz: "O'quvchi", example: "She is a good student.", ru: "Ученик", ruExample: "Она хорошая ученица.", ar: "طالب", arExample: "هي طالبة مجتهدة.", category: "Maktab" },
@@ -455,7 +491,7 @@ const words = [
     { en: "Office", uz: "Ofis", example: "I work in an office.", ru: "Офис", ruExample: "Я работаю в офисе.", ar: "مكتب", arExample: "أعمل في مكتب.", category: "Ish" },
     { en: "Money", uz: "Pul", example: "He saves his money.", ru: "Деньги", ruExample: "Он копит деньги.", ar: "مال", arExample: "يوفر ماله.", category: "Ish" },
     { en: "Manager", uz: "Menejer", example: "The manager is busy today.", ru: "Менеджер", ruExample: "Менеджер сегодня занят.", ar: "مدير", arExample: "المدير مشغول اليوم.", category: "Ish" },
-   
+
     { en: "Car", uz: "Mashina", example: "My car is blue.", ru: "Машина", ruExample: "Моя машина синяя.", ar: "سيارة", arExample: "سيارتي زرقاء.", category: "Sayohat" },
     { en: "Bus", uz: "Avtobus", example: "We took the bus to school.", ru: "Автобус", ruExample: "Мы ехали в школу на автобусе.", ar: "حافلة", arExample: "ركبنا الحافلة إلى المدرسة.", category: "Sayohat" },
     { en: "Train", uz: "Poyezd", example: "The train is fast.", ru: "Поезд", ruExample: "Поезд быстрый.", ar: "قطار", arExample: "القطار سريع.", category: "Sayohat" },
@@ -466,7 +502,7 @@ const words = [
     { en: "Street", uz: "Ko'cha", example: "This street is busy.", ru: "Улица", ruExample: "Эта улица оживлённая.", ar: "شارع", arExample: "هذا الشارع مزدحم.", category: "Sayohat" },
     { en: "Map", uz: "Xarita", example: "Look at the map.", ru: "Карта", ruExample: "Посмотри на карту.", ar: "خريطة", arExample: "انظر إلى الخريطة.", category: "Sayohat" },
     { en: "Hotel", uz: "Mehmonxona", example: "We stayed at a hotel.", ru: "Гостиница", ruExample: "Мы остановились в гостинице.", ar: "فندق", arExample: "أقمنا في فندق.", category: "Sayohat" },
-   
+
     { en: "Dog", uz: "It", example: "The dog is running.", ru: "Собака", ruExample: "Собака бежит.", ar: "كلب", arExample: "الكلب يجري.", category: "Tabiat" },
     { en: "Cat", uz: "Mushuk", example: "The cat is sleeping.", ru: "Кошка", ruExample: "Кошка спит.", ar: "قطة", arExample: "القطة نائمة.", category: "Tabiat" },
     { en: "Bird", uz: "Qush", example: "The bird can fly.", ru: "Птица", ruExample: "Птица умеет летать.", ar: "طائر", arExample: "الطائر يستطيع الطيران.", category: "Tabiat" },
@@ -479,7 +515,7 @@ const words = [
     { en: "Wind", uz: "Shamol", example: "The wind is strong today.", ru: "Ветер", ruExample: "Сегодня сильный ветер.", ar: "رياح", arExample: "الرياح قوية اليوم.", category: "Ob-havo" },
     { en: "Cold", uz: "Sovuq", example: "It is cold in winter.", ru: "Холодно", ruExample: "Зимой холодно.", ar: "بارد", arExample: "الجو بارد في الشتاء.", category: "Ob-havo" },
     { en: "Hot", uz: "Issiq", example: "It is hot in summer.", ru: "Жарко", ruExample: "Летом жарко.", ar: "حار", arExample: "الجو حار في الصيف.", category: "Ob-havo" },
-    
+
     { en: "Today", uz: "Bugun", example: "Today is a good day.", ru: "Сегодня", ruExample: "Сегодня хороший день.", ar: "اليوم", arExample: "اليوم يوم جميل.", category: "Vaqt" },
     { en: "Tomorrow", uz: "Ertaga", example: "See you tomorrow.", ru: "Завтра", ruExample: "До завтра.", ar: "غدا", arExample: "أراك غدا.", category: "Vaqt" },
     { en: "Yesterday", uz: "Kecha", example: "I saw him yesterday.", ru: "Вчера", ruExample: "Я видел его вчера.", ar: "أمس", arExample: "رأيته أمس.", category: "Vaqt" },
@@ -492,7 +528,7 @@ const words = [
     { en: "Two", uz: "Ikki", example: "She has two sisters.", ru: "Два", ruExample: "У неё две сестры.", ar: "اثنان", arExample: "لديها أختان.", category: "Sonlar" },
     { en: "Three", uz: "Uch", example: "There are three chairs.", ru: "Три", ruExample: "Здесь три стула.", ar: "ثلاثة", arExample: "هناك ثلاثة كراسي.", category: "Sonlar" },
     { en: "Ten", uz: "O'n", example: "He counted to ten.", ru: "Десять", ruExample: "Он посчитал до десяти.", ar: "عشرة", arExample: "عد إلى عشرة.", category: "Sonlar" },
-   
+
     { en: "Happy", uz: "Baxtli", example: "She is very happy today.", ru: "Счастливый", ruExample: "Она сегодня очень счастлива.", ar: "سعيد", arExample: "هي سعيدة جدا اليوم.", category: "His-tuyg'u" },
     { en: "Sad", uz: "Xafa", example: "He looks sad.", ru: "Грустный", ruExample: "Он выглядит грустным.", ar: "حزين", arExample: "يبدو حزينا.", category: "His-tuyg'u" },
     { en: "Angry", uz: "Jahldor", example: "Don't be angry with me.", ru: "Злой", ruExample: "Не злись на меня.", ar: "غاضب", arExample: "لا تغضب مني.", category: "His-tuyg'u" },
@@ -505,7 +541,7 @@ const words = [
     { en: "Strong", uz: "Kuchli", example: "He is very strong.", ru: "Сильный", ruExample: "Он очень сильный.", ar: "قوي", arExample: "هو قوي جدا.", category: "Sifat" },
     { en: "Smart", uz: "Aqlli", example: "She is a smart student.", ru: "Умный", ruExample: "Она умная ученица.", ar: "ذكي", arExample: "هي طالبة ذكية.", category: "Sifat" },
     { en: "Kind", uz: "Mehribon", example: "My teacher is kind.", ru: "Добрый", ruExample: "Мой учитель добрый.", ar: "لطيف", arExample: "معلمي لطيف.", category: "Sifat" },
-   
+
     { en: "Run", uz: "Yugurmoq", example: "Children love to run.", ru: "Бегать", ruExample: "Дети любят бегать.", ar: "يجري", arExample: "الأطفال يحبون الجري.", category: "Fe'l" },
     { en: "Eat", uz: "Yemoq", example: "We eat lunch at noon.", ru: "Есть", ruExample: "Мы обедаем в полдень.", ar: "يأكل", arExample: "نأكل الغداء عند الظهر.", category: "Fe'l" },
     { en: "Drink", uz: "Ichmoq", example: "Drink water every day.", ru: "Пить", ruExample: "Пей воду каждый день.", ar: "يشرب", arExample: "اشرب الماء كل يوم.", category: "Fe'l" },
@@ -527,7 +563,7 @@ const words = [
     { en: "Clean", uz: "Tozalamoq", example: "I clean my room every week.", ru: "Убирать", ruExample: "Я убираю свою комнату каждую неделю.", ar: "ينظف", arExample: "أنظف غرفتي كل أسبوع.", category: "Fe'l" },
     { en: "Open", uz: "Ochmoq", example: "Please open the window.", ru: "Открывать", ruExample: "Пожалуйста, открой окно.", ar: "يفتح", arExample: "افتح النافذة من فضلك.", category: "Fe'l" },
     { en: "Close", uz: "Yopmoq", example: "Close the door, please.", ru: "Закрывать", ruExample: "Закрой дверь, пожалуйста.", ar: "يغلق", arExample: "أغلق الباب من فضلك.", category: "Fe'l" },
-    
+
     { en: "Computer", uz: "Kompyuter", example: "I use a computer for work.", ru: "Компьютер", ruExample: "Я использую компьютер для работы.", ar: "حاسوب", arExample: "أستخدم الحاسوب للعمل.", category: "Texnologiya" },
     { en: "Phone", uz: "Telefon", example: "My phone is new.", ru: "Телефон", ruExample: "Мой телефон новый.", ar: "هاتف", arExample: "هاتفي جديد.", category: "Texnologiya" },
     { en: "Internet", uz: "Internet", example: "I use the internet every day.", ru: "Интернет", ruExample: "Я пользуюсь интернетом каждый день.", ar: "إنترنت", arExample: "أستخدم الإنترنت كل يوم.", category: "Texnologiya" },
@@ -1162,7 +1198,7 @@ function getDailyProgress() {
     try {
         const raw = JSON.parse(localStorage.getItem("dailyGoalProgress"));
         if (raw && raw.date === getTodayStr()) return raw.count;
-    } catch (e) {}
+    } catch (e) { }
     return 0;
 }
 
@@ -1368,7 +1404,7 @@ function addBadge(name) {
 }
 
 
-const avatars = ["😀","😎","🤖","👨‍💻","👩‍🎓","🦁","🐼","🐯","🦅","🐺"];
+const avatars = ["😀", "😎", "🤖", "👨‍💻", "👩‍🎓", "🦁", "🐼", "🐯", "🦅", "🐺"];
 let avatar = localStorage.getItem("avatar") || avatars[0];
 
 function changeAvatar() {
@@ -1944,7 +1980,7 @@ if (statsBtnElement) {
     };
 }
 
-window.cloudSave = async function() {
+window.cloudSave = async function () {
     if (!window.auth || !window.auth.currentUser) {
         alert("Avval Firebase tizimiga login qiling!");
         return;
@@ -1964,7 +2000,7 @@ window.cloudSave = async function() {
     }
 };
 
-window.cloudLoad = async function() {
+window.cloudLoad = async function () {
     if (!window.auth || !window.auth.currentUser || !window.getDoc || !window.doc || !window.db) return;
     const user = window.auth.currentUser;
     const snap = await window.getDoc(window.doc(window.db, "users", user.uid));
@@ -2245,7 +2281,7 @@ function runOCR(file, outEl) {
         return;
     }
     outEl.innerHTML = "⏳ Rasm tahlil qilinmoqda...";
-    Tesseract.recognize(file, "eng+uzb", { logger: () => {} })
+    Tesseract.recognize(file, "eng+uzb", { logger: () => { } })
         .then(({ data: { text } }) => {
             outEl.innerHTML = text.trim() ? text.trim() : "Matn topilmadi.";
         })
@@ -4318,12 +4354,12 @@ function renderMemoryGame() {
         <p class="ai-settings-hint">Bir xil juftlikni (so'z va tarjimasi) toping. Harakatlar: <b id="memoryMoves">${memoryState.moves}</b></p>
         <div class="memory-grid">
             ${memoryState.cards.map((c, i) => {
-                const isMatched = memoryState.matched.includes(i);
-                const isFlipped = memoryState.flipped.includes(i) || isMatched;
-                return `<button class="memory-card${isFlipped ? " flipped" : ""}${isMatched ? " matched" : ""}" data-idx="${i}">
+        const isMatched = memoryState.matched.includes(i);
+        const isFlipped = memoryState.flipped.includes(i) || isMatched;
+        return `<button class="memory-card${isFlipped ? " flipped" : ""}${isMatched ? " matched" : ""}" data-idx="${i}">
                     <span class="memory-card-inner${c.side === 'target' && isRtl ? ' arabic-text' : ''}">${isFlipped ? c.text : "❓"}</span>
                 </button>`;
-            }).join("")}
+    }).join("")}
         </div>
     `;
     gameContainerEl.querySelectorAll(".memory-card").forEach(btn => {
@@ -4365,7 +4401,7 @@ function finishMemory() {
     xp += Math.round(reward / 2);
     saveGame();
     if (typeof celebrate === "function") celebrate();
-    if (gameContainerEl) gameContainerEl.innerHTML += `<p class="listening-result correct">🎉 Tabriklaymiz! ${memoryState.moves} harakatda tugatdingiz. +${reward} tanga, +${Math.round(reward/2)} XP</p>`;
+    if (gameContainerEl) gameContainerEl.innerHTML += `<p class="listening-result correct">🎉 Tabriklaymiz! ${memoryState.moves} harakatda tugatdingiz. +${reward} tanga, +${Math.round(reward / 2)} XP</p>`;
 }
 
 const memoryGameBtn = document.getElementById("memoryGameBtn"); // eski struktura bilan moslik uchun (ixtiyoriy)
@@ -4384,7 +4420,7 @@ function startHangmanGame() {
 
 function renderHangmanGame() {
     const display = hangmanState.word.split("").map(ch => hangmanState.guessed.includes(ch) ? ch : "_").join(" ");
-    const stages = ["🙂","😟","😧","😨","😰","😵","💀"];
+    const stages = ["🙂", "😟", "😧", "😨", "😰", "😵", "💀"];
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     gameContainerEl.innerHTML = `
         <h3>🔠 Hangman</h3>
@@ -4920,12 +4956,12 @@ const RUSSIAN_ALPHABET = [
     { letter: "Я", sound: "ya", word: "Яблоко", uz: "Olma" }
 ];
 
-const NUMBER_UZ = ["Nol","Bir","Ikki","Uch","To'rt","Besh","Olti","Yetti","Sakkiz","To'qqiz","O'n",
-    "O'n bir","O'n ikki","O'n uch","O'n to'rt","O'n besh","O'n olti","O'n yetti","O'n sakkiz","O'n to'qqiz","Yigirma"];
-const NUMBER_EN = ["Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten",
-    "Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen","Twenty"];
-const NUMBER_RU = ["Ноль","Один","Два","Три","Четыре","Пять","Шесть","Семь","Восемь","Девять","Десять",
-    "Одиннадцать","Двенадцать","Тринадцать","Четырнадцать","Пятнадцать","Шестнадцать","Семнадцать","Восемнадцать","Девятнадцать","Двадцать"];
+const NUMBER_UZ = ["Nol", "Bir", "Ikki", "Uch", "To'rt", "Besh", "Olti", "Yetti", "Sakkiz", "To'qqiz", "O'n",
+    "O'n bir", "O'n ikki", "O'n uch", "O'n to'rt", "O'n besh", "O'n olti", "O'n yetti", "O'n sakkiz", "O'n to'qqiz", "Yigirma"];
+const NUMBER_EN = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+    "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty"];
+const NUMBER_RU = ["Ноль", "Один", "Два", "Три", "Четыре", "Пять", "Шесть", "Семь", "Восемь", "Девять", "Десять",
+    "Одиннадцать", "Двенадцать", "Тринадцать", "Четырнадцать", "Пятнадцать", "Шестнадцать", "Семнадцать", "Восемнадцать", "Девятнадцать", "Двадцать"];
 
 const GREETINGS_EN = [
     { phrase: "Hello", uz: "Salom" },
@@ -5020,12 +5056,12 @@ const CHINESE_BASICS = [
     { letter: "水", sound: "shuǐ", word: "水 (shuǐ)", uz: "Suv" }
 ];
 
-const NUMBER_TR = ["Sıfır","Bir","İki","Üç","Dört","Beş","Altı","Yedi","Sekiz","Dokuz","On",
-    "On bir","On iki","On üç","On dört","On beş","On altı","On yedi","On sekiz","On dokuz","Yirmi"];
-const NUMBER_ZH = ["零 (líng)","一 (yī)","二 (èr)","三 (sān)","四 (sì)","五 (wǔ)","六 (liù)","七 (qī)","八 (bā)","九 (jiǔ)","十 (shí)",
-    "十一 (shí yī)","十二 (shí èr)","十三 (shí sān)","十四 (shí sì)","十五 (shí wǔ)","十六 (shí liù)","十七 (shí qī)","十八 (shí bā)","十九 (shí jiǔ)","二十 (èr shí)"];
-const NUMBER_AR = ["صفر (sifr)","واحد (wahid)","اثنان (ithnan)","ثلاثة (thalatha)","أربعة (arba'a)","خمسة (khamsa)","ستة (sitta)","سبعة (sab'a)","ثمانية (thamaniya)","تسعة (tis'a)","عشرة (ashara)",
-    "أحد عشر (ahada ashar)","اثنا عشر (ithna ashar)","ثلاثة عشر (thalathata ashar)","أربعة عشر (arba'ata ashar)","خمسة عشر (khamsata ashar)","ستة عشر (sittata ashar)","سبعة عشر (sab'ata ashar)","ثمانية عشر (thamaniyata ashar)","تسعة عشر (tis'ata ashar)","عشرون (ishrun)"];
+const NUMBER_TR = ["Sıfır", "Bir", "İki", "Üç", "Dört", "Beş", "Altı", "Yedi", "Sekiz", "Dokuz", "On",
+    "On bir", "On iki", "On üç", "On dört", "On beş", "On altı", "On yedi", "On sekiz", "On dokuz", "Yirmi"];
+const NUMBER_ZH = ["零 (líng)", "一 (yī)", "二 (èr)", "三 (sān)", "四 (sì)", "五 (wǔ)", "六 (liù)", "七 (qī)", "八 (bā)", "九 (jiǔ)", "十 (shí)",
+    "十一 (shí yī)", "十二 (shí èr)", "十三 (shí sān)", "十四 (shí sì)", "十五 (shí wǔ)", "十六 (shí liù)", "十七 (shí qī)", "十八 (shí bā)", "十九 (shí jiǔ)", "二十 (èr shí)"];
+const NUMBER_AR = ["صفر (sifr)", "واحد (wahid)", "اثنان (ithnan)", "ثلاثة (thalatha)", "أربعة (arba'a)", "خمسة (khamsa)", "ستة (sitta)", "سبعة (sab'a)", "ثمانية (thamaniya)", "تسعة (tis'a)", "عشرة (ashara)",
+    "أحد عشر (ahada ashar)", "اثنا عشر (ithna ashar)", "ثلاثة عشر (thalathata ashar)", "أربعة عشر (arba'ata ashar)", "خمسة عشر (khamsata ashar)", "ستة عشر (sittata ashar)", "سبعة عشر (sab'ata ashar)", "ثمانية عشر (thamaniyata ashar)", "تسعة عشر (tis'ata ashar)", "عشرون (ishrun)"];
 
 // Arab alifbosi — 28 harf, har biriga talaffuz ko'rsatmasi va misol so'z bilan.
 // Harflar bitta so'zning boshida turgan holatda (isolated form) berilgan.
@@ -6208,7 +6244,7 @@ function buildGrammarDeck() {
     const lvl = getUserLevel();
     const bank = grammarLang === "ru" ? GRAMMAR_QUESTIONS_RU
         : grammarLang === "ar" ? GRAMMAR_QUESTIONS_AR
-        : GRAMMAR_QUESTIONS_EN;
+            : GRAMMAR_QUESTIONS_EN;
     let pool = bank.filter(q => q.level === lvl);
     if (pool.length < 3) pool = bank;
 
