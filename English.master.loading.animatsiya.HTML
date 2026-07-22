@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Loading animatsiya — demo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+  html, body { margin:0; height:100%; background:#0f172a; font-family: system-ui, sans-serif; }
+
+  #loadingScreen{
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background:#0f172a; display:flex; flex-direction:column;
+    justify-content:center; align-items:center; z-index:9999;
+    color:white; transition: opacity .5s ease; gap:14px;
+  }
+  #loadingScreen.fade-out { opacity: 0; pointer-events: none; }
+
+  .loading-logo{
+    width:84px; height:84px; border-radius:22px; display:flex;
+    align-items:center; justify-content:center; font-size:38px;
+    background: linear-gradient(135deg, #6366f1, #22d3ee);
+    box-shadow: 0 12px 34px rgba(99,102,241,.45);
+    animation: loadingLogoPop .7s cubic-bezier(.34,1.56,.64,1) both,
+               loadingLogoFloat 2.6s ease-in-out .7s infinite;
+  }
+
+  .loading-title{
+    font-size:22px; font-weight:700; letter-spacing:.3px;
+    opacity:0; animation: loadingFadeUp .6s ease .25s both;
+  }
+  .loading-title span{
+    background: linear-gradient(90deg, #22d3ee, #a855f7);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+
+  .loading-progress-track{
+    width:180px; height:6px; border-radius:6px;
+    background: rgba(255,255,255,.12); overflow:hidden;
+    opacity:0; animation: loadingFadeUp .6s ease .4s both;
+  }
+  .loading-progress-fill{
+    height:100%; width:0%; border-radius:6px;
+    background: linear-gradient(90deg, #6366f1, #22d3ee, #a855f7);
+    background-size:200% 100%;
+    animation: loadingShimmer 1.4s linear infinite;
+    transition: width .35s ease;
+  }
+
+  #loadingStatusText{
+    font-size:13px; color: rgba(255,255,255,.65);
+    opacity:0; animation: loadingFadeUp .6s ease .5s both;
+  }
+
+  .loader{
+    width:46px; height:46px; border:5px solid #334155;
+    border-top:5px solid #3b82f6; border-radius:50%;
+    animation: spin 1s linear infinite, loadingFadeUp .6s ease .1s both;
+  }
+
+  @keyframes spin{ 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+  @keyframes loadingLogoPop{ 0%{transform:scale(.3) rotate(-25deg); opacity:0;} 100%{transform:scale(1) rotate(0); opacity:1;} }
+  @keyframes loadingLogoFloat{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+  @keyframes loadingFadeUp{ 0%{transform:translateY(10px); opacity:0;} 100%{transform:translateY(0); opacity:1;} }
+  @keyframes loadingShimmer{ 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+
+  #replayBtn{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    padding:10px 20px; border:none; border-radius:10px; cursor:pointer;
+    background: linear-gradient(135deg, #6366f1, #a855f7); color:#fff; font-weight:600;
+    z-index: 10000;
+  }
+  #appBody{ color:#94a3b8; display:flex; align-items:center; justify-content:center; height:100%; font-size:14px; }
+</style>
+</head>
+<body>
+
+  <div id="appBody">Ilova shu yerda ochiladi (loading ekran ostida)...</div>
+
+  <div id="loadingScreen">
+    <div class="loading-logo"><i class="fa-solid fa-graduation-cap"></i></div>
+    <div class="loading-title">English Master <span>AI</span></div>
+    <div class="loader"></div>
+    <div class="loading-progress-track"><div class="loading-progress-fill" id="loadingProgressFill"></div></div>
+    <p id="loadingStatusText">Yuklanmoqda...</p>
+  </div>
+
+  <button id="replayBtn">🔁 Animatsiyani qayta ko'rish</button>
+
+<script>
+  const loadingScreenEl = document.getElementById("loadingScreen");
+  const loadingProgressFillEl = document.getElementById("loadingProgressFill");
+  const loadingStatusTextEl = document.getElementById("loadingStatusText");
+  const loadingStatusMessages = ["Yuklanmoqda...", "Ma'lumotlar tayyorlanmoqda...", "Deyarli tayyor..."];
+
+  function playLoadingAnimation() {
+    loadingScreenEl.style.display = "flex";
+    loadingScreenEl.classList.remove("fade-out");
+    loadingProgressFillEl.style.width = "0%";
+    loadingStatusTextEl.textContent = loadingStatusMessages[0];
+
+    let step = 0;
+    const progressSteps = [30, 60, 85];
+    const timer = setInterval(() => {
+      loadingProgressFillEl.style.width = progressSteps[step] + "%";
+      loadingStatusTextEl.textContent = loadingStatusMessages[step];
+      step++;
+      if (step >= progressSteps.length) clearInterval(timer);
+    }, 350);
+
+    setTimeout(() => {
+      loadingProgressFillEl.style.width = "100%";
+      loadingScreenEl.classList.add("fade-out");
+      setTimeout(() => { loadingScreenEl.style.display = "none"; }, 500);
+    }, 1200);
+  }
+
+  window.addEventListener("load", playLoadingAnimation);
+  document.getElementById("replayBtn").onclick = playLoadingAnimation;
+</script>
+</body>
+</html>

@@ -3768,13 +3768,35 @@ if (playClickSoundBtn) {
 }
 
 const loadingScreenEl = document.getElementById("loadingScreen");
+const loadingProgressFillEl = document.getElementById("loadingProgressFill");
+const loadingStatusTextEl = document.getElementById("loadingStatusText");
+
+const loadingStatusMessages = [
+    "Yuklanmoqda...",
+    "Ma'lumotlar tayyorlanmoqda...",
+    "Deyarli tayyor..."
+];
+
+function hideLoadingScreen() {
+    if (!loadingScreenEl) return;
+    if (loadingProgressFillEl) loadingProgressFillEl.style.width = "100%";
+    loadingScreenEl.classList.add("fade-out");
+    setTimeout(() => { loadingScreenEl.style.display = "none"; }, 500);
+}
+
 window.addEventListener("load", () => {
-    setTimeout(() => {
-        if (loadingScreenEl) {
-            loadingScreenEl.classList.add("fade-out");
-            setTimeout(() => { loadingScreenEl.style.display = "none"; }, 500);
-        }
-    }, 1200);
+    // Progress-bar animatsiyasi — foydalanuvchiga ilova haqiqatan ham
+    // biror narsa qilayotgandek tuyulishi uchun, bosqichma-bosqich to'ldiramiz.
+    let step = 0;
+    const progressSteps = [30, 60, 85];
+    const progressTimer = setInterval(() => {
+        if (loadingProgressFillEl) loadingProgressFillEl.style.width = progressSteps[step] + "%";
+        if (loadingStatusTextEl) loadingStatusTextEl.textContent = loadingStatusMessages[step];
+        step++;
+        if (step >= progressSteps.length) clearInterval(progressTimer);
+    }, 350);
+
+    setTimeout(hideLoadingScreen, 1200);
 });
 
 // manifest.json'dagi "shortcuts" (masalan, uzoq bosib ilova belgisidan
