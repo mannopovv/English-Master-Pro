@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Header preview — burger tugma bilan</title>
+  <title>Header preview — tuzatilgan</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <style>
     body {
@@ -52,6 +52,12 @@
       filter: drop-shadow(0 0 8px rgba(34, 211, 238, .5));
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     .quick-theme-btn {
       width: 40px;
       height: 40px;
@@ -63,7 +69,6 @@
       border: 1px solid rgba(255, 255, 255, .1);
       background: rgba(255, 255, 255, .055);
       cursor: pointer;
-      margin-left: 8px;
     }
 
     .burger-btn {
@@ -76,7 +81,6 @@
       border: none;
       cursor: pointer;
       padding: 0;
-      margin-left: 14px;
     }
 
     .burger-btn span {
@@ -99,12 +103,12 @@
 <body>
   <header>
     <div class="logo"><i class="fa-solid fa-graduation-cap"></i>English Master AI</div>
-    <div style="display:flex; align-items:center;">
+    <div class="header-actions">
       <button class="quick-theme-btn">🌙</button>
       <button class="burger-btn" title="Menyu"><span></span><span></span><span></span></button>
     </div>
   </header>
-  <p class="hint">👈 Endi burger (☰) tugma doim oy (🌙) tugmasining yonida ko'rinadi — istalgan ekran o'lchamida.</p>
+  <p class="hint">✅ Endi 🌙 va ☰ bir-biriga yopishib, birga o'ng burchakda turadi.</p>
 </body>
 
 </html>

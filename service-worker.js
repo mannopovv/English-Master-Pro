@@ -1,4 +1,4 @@
-const CACHE_NAME = "english-master-ai-v20";
+const CACHE_NAME = "english-master-ai-v23";
 
 // Ilovaning o'z fayllari — bular bo'lmasa ilova umuman ochilmaydi.
 const ASSETS = [

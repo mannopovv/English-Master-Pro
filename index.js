@@ -1,3 +1,38 @@
+// =========================================================================
+// GLOBAL XATO KO'RSATKICHI — agar biror joyda kutilmagan JS xatosi yuz
+// bersa (masalan bironta funksiya ishlamay qolsa), bu endi jim
+// "ishlamay qolish" o'rniga ekranda ko'rinadigan qisqa xabar chiqaradi.
+// Shu orqali "tugma ishlamayapti" degan holatlarning ANIQ sababini
+// (fayl nomi, qator raqami) darhol ko'rish mumkin bo'ladi.
+// =========================================================================
+(function () {
+    let lastShown = 0;
+    function showErrorBanner(message) {
+        const now = Date.now();
+        if (now - lastShown < 1500) return; // ketma-ket bir xil xatolarni spam qilmaslik
+        lastShown = now;
+        let banner = document.getElementById("globalErrorBanner");
+        if (!banner) {
+            banner = document.createElement("div");
+            banner.id = "globalErrorBanner";
+            banner.style.cssText = "position:fixed;left:12px;right:12px;bottom:12px;z-index:99999;" +
+                "background:#dc2626;color:#fff;padding:12px 16px;border-radius:12px;" +
+                "font-size:13px;line-height:1.4;box-shadow:0 8px 24px rgba(0,0,0,.4);" +
+                "max-height:35vh;overflow:auto;font-family:system-ui,sans-serif;";
+            document.body.appendChild(banner);
+        }
+        banner.innerHTML = `⚠️ <b>Kod xatosi topildi:</b><br>${message}` +
+            `<div style="margin-top:6px;opacity:.85;">Bu xabarni suratga olib yuboring — aniq sababini topamiz.</div>` +
+            `<button style="margin-top:8px;padding:6px 12px;border:none;border-radius:8px;background:#fff;color:#dc2626;font-weight:700;cursor:pointer;" onclick="this.parentElement.remove()">Yopish</button>`;
+    }
+    window.addEventListener("error", (e) => {
+        showErrorBanner(`${e.message}<br><small>${(e.filename || "").split("/").pop()}:${e.lineno}:${e.colno}</small>`);
+    });
+    window.addEventListener("unhandledrejection", (e) => {
+        showErrorBanner(`Promise xatosi: ${e.reason && e.reason.message ? e.reason.message : e.reason}`);
+    });
+})();
+
 const onboardingModal = document.getElementById("onboardingModal");
 if (onboardingModal) {
     const savedLevel = localStorage.getItem("userLevel");
@@ -343,69 +378,74 @@ Object.keys(menuButtons).forEach(btnId => {
     const btn = document.getElementById(btnId);
     if (btn) {
         btn.onclick = () => {
-            openPage(menuButtons[btnId]);
-            if (btnId === "quizBtn") {
-                loadQuiz();
-                startTimer();
+            try {
+                openPage(menuButtons[btnId]);
+                if (btnId === "quizBtn") {
+                    loadQuiz();
+                    startTimer();
+                }
+                if (btnId === "matchBtn" && typeof startMatchRound === "function") {
+                    startMatchRound();
+                }
+                if (btnId === "scrambleBtn" && typeof pickScrambleWord === "function") {
+                    pickScrambleWord();
+                }
+                if (btnId === "fillBlankBtn" && typeof pickFillBlank === "function") {
+                    pickFillBlank();
+                }
+                if (btnId === "bossBattleBtn" && typeof initBossBattle === "function") {
+                    initBossBattle();
+                }
+                if (btnId === "beginnerBtn" && typeof renderBeginnerContent === "function") {
+                    renderBeginnerContent();
+                }
+                if (btnId === "sentenceBtn" && typeof pickSentence === "function") {
+                    pickSentence();
+                }
+                if (btnId === "grammarQuizBtn" && typeof buildGrammarDeck === "function") {
+                    buildGrammarDeck();
+                }
+                if (btnId === "speedBtn" && typeof resetSpeedUI === "function") {
+                    resetSpeedUI();
+                }
+                if (btnId === "mistakeBtn" && typeof renderMistakeNotebook === "function") {
+                    renderMistakeNotebook();
+                }
+                if (btnId === "statsBtn" && typeof renderExtraStats === "function") {
+                    renderExtraStats();
+                }
+                if (btnId === "premiumBtn" && typeof renderPremiumStatus === "function") {
+                    renderPremiumStatus();
+                }
+                if (btnId === "adminBtn" && typeof renderAdminPanel === "function") {
+                    renderAdminPanel();
+                }
+                if (btnId === "roleplayBtn" && typeof renderRoleplayScenarios === "function") {
+                    renderRoleplayScenarios();
+                }
+                if (btnId === "duelBtn" && typeof renderDuelPage === "function") {
+                    renderDuelPage();
+                }
+                if (btnId === "grammarLibraryBtn" && typeof renderGrammarLibrary === "function") {
+                    renderGrammarLibrary();
+                }
+                if (btnId === "idiomsBtn" && typeof renderIdiomsPage === "function") {
+                    renderIdiomsPage();
+                }
+                if (btnId === "myWordsBtn" && typeof renderMyWordsPage === "function") {
+                    renderMyWordsPage();
+                }
+                if (btnId === "examBtn" && typeof renderExamPage === "function") {
+                    renderExamPage();
+                }
+                if (btnId === "gamesBtn" && typeof showGamesMenu === "function") {
+                    showGamesMenu();
+                }
+                syncBottomNav(menuButtons[btnId]);
+            } catch (err) {
+                console.error(`Nav tugmasi "${btnId}" bosilganda xato:`, err);
+                openPage(menuButtons[btnId]); // sahifa hali ham ochilsin, faqat qo'shimcha render qismi ishlamadi
             }
-            if (btnId === "matchBtn" && typeof startMatchRound === "function") {
-                startMatchRound();
-            }
-            if (btnId === "scrambleBtn" && typeof pickScrambleWord === "function") {
-                pickScrambleWord();
-            }
-            if (btnId === "fillBlankBtn" && typeof pickFillBlank === "function") {
-                pickFillBlank();
-            }
-            if (btnId === "bossBattleBtn" && typeof initBossBattle === "function") {
-                initBossBattle();
-            }
-            if (btnId === "beginnerBtn" && typeof renderBeginnerContent === "function") {
-                renderBeginnerContent();
-            }
-            if (btnId === "sentenceBtn" && typeof pickSentence === "function") {
-                pickSentence();
-            }
-            if (btnId === "grammarQuizBtn" && typeof buildGrammarDeck === "function") {
-                buildGrammarDeck();
-            }
-            if (btnId === "speedBtn" && typeof resetSpeedUI === "function") {
-                resetSpeedUI();
-            }
-            if (btnId === "mistakeBtn" && typeof renderMistakeNotebook === "function") {
-                renderMistakeNotebook();
-            }
-            if (btnId === "statsBtn" && typeof renderExtraStats === "function") {
-                renderExtraStats();
-            }
-            if (btnId === "premiumBtn" && typeof renderPremiumStatus === "function") {
-                renderPremiumStatus();
-            }
-            if (btnId === "adminBtn" && typeof renderAdminPanel === "function") {
-                renderAdminPanel();
-            }
-            if (btnId === "roleplayBtn" && typeof renderRoleplayScenarios === "function") {
-                renderRoleplayScenarios();
-            }
-            if (btnId === "duelBtn" && typeof renderDuelPage === "function") {
-                renderDuelPage();
-            }
-            if (btnId === "grammarLibraryBtn" && typeof renderGrammarLibrary === "function") {
-                renderGrammarLibrary();
-            }
-            if (btnId === "idiomsBtn" && typeof renderIdiomsPage === "function") {
-                renderIdiomsPage();
-            }
-            if (btnId === "myWordsBtn" && typeof renderMyWordsPage === "function") {
-                renderMyWordsPage();
-            }
-            if (btnId === "examBtn" && typeof renderExamPage === "function") {
-                renderExamPage();
-            }
-            if (btnId === "gamesBtn" && typeof showGamesMenu === "function") {
-                showGamesMenu();
-            }
-            syncBottomNav(menuButtons[btnId]);
         };
     }
 });
@@ -7401,7 +7441,8 @@ function startRoleplay(id) {
     roleplayScenario = scenario;
     roleplayHistory = [{ role: "system", content: roleplaySystemPrompt(scenario) }];
 
-    document.getElementById("roleplayScenarios").style.display = "none";
+    const scenariosEl = document.getElementById("roleplayScenarios");
+    if (scenariosEl) scenariosEl.style.display = "none";
     const chatWrap = document.getElementById("roleplayChatWrap");
     if (chatWrap) chatWrap.style.display = "";
     const label = document.getElementById("roleplayActiveLabel");
@@ -7421,8 +7462,10 @@ function startRoleplay(id) {
 const roleplayEndBtn = document.getElementById("roleplayEndBtn");
 if (roleplayEndBtn) {
     roleplayEndBtn.addEventListener("click", () => {
-        document.getElementById("roleplayChatWrap").style.display = "none";
-        document.getElementById("roleplayScenarios").style.display = "";
+        const chatWrapEl = document.getElementById("roleplayChatWrap");
+        if (chatWrapEl) chatWrapEl.style.display = "none";
+        const scenariosEl = document.getElementById("roleplayScenarios");
+        if (scenariosEl) scenariosEl.style.display = "";
         roleplayScenario = null;
         roleplayHistory = [];
     });

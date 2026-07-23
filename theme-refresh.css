@@ -672,3 +672,118 @@ button:active {
     scrollbar-color: var(--em-primary) transparent;
     scrollbar-width: thin;
 }
+
+/* =========================================================================
+   BOSH SAHIFA — yakuniy dizayn darajasi. Har bir karta endi o'ziga xos
+   rangli chap chiziq (accent bar) bilan ajralib turadi, shu orqali ko'z
+   tezroq bir qarashda "bu qaysi karta" ekanini ilg'ay oladi.
+   ========================================================================= */
+#homePage h1 {
+    font-size: 30px;
+    letter-spacing: -.01em;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+#homePage>p#homeSubtitle {
+    text-align: center;
+    opacity: .75;
+    margin-bottom: 22px;
+    font-size: 14px;
+}
+
+#homePage>div {
+    border-left: 3px solid transparent;
+    position: relative;
+}
+
+.daily-goal-card {
+    border-left-color: var(--em-accent, #22d3ee);
+}
+
+.review-due-card {
+    border-left-color: #f59e0b;
+}
+
+.weekly-challenge-card {
+    border-left-color: var(--em-primary-2, #a855f7);
+}
+
+.idiom-of-day-card {
+    border-left-color: #f472b6;
+}
+
+.daily-plan-card {
+    border-left-color: var(--em-success, #10b981);
+}
+
+.wotd-card {
+    border-left-color: #38bdf8;
+}
+
+.quote-card {
+    border-left-color: #818cf8;
+}
+
+.qa-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.qa-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(255, 255, 255, .08), transparent 60%);
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+
+.qa-btn:hover::before {
+    opacity: 1;
+}
+
+.qa-btn:active {
+    transform: scale(.95) !important;
+}
+
+.qa-icon {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .3);
+    transition: transform .25s ease;
+}
+
+.qa-btn:hover .qa-icon {
+    transform: scale(1.1) rotate(-4deg);
+}
+
+#startBtn {
+    display: block;
+    margin: 26px auto 12px;
+    font-size: 15px;
+    padding: 14px 34px;
+}
+
+.share-app-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 auto;
+    background: transparent !important;
+    border: 1px solid var(--em-glass-border);
+    color: inherit;
+    opacity: .85;
+}
+
+.share-app-btn:hover {
+    opacity: 1;
+}
+
+/* ---- Header o'ng tomondagi tugmalar (dark-mode + burger) endi bir-biriga
+   yopishib, birgalikda joylashadi — header'ning "space-between"i endi
+   ularni ikkiga bo'lib yubormaydi. ---- */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
